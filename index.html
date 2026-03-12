@@ -5,477 +5,492 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>elyne HR</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --white: #ffffff;
-    --off-white: #faf9f7;
-    --cream: #f5f2ed;
-    --sage: #8a9e7e;
-    --sage-light: #b8c9ae;
-    --sage-dark: #6b7d61;
-    --charcoal: #2c2c2c;
-    --mid: #6b6b6b;
-    --light: #b0b0b0;
-    --border: #e8e4de;
-    --error: #c0614a;
-    --success: #6b9e6b;
-    --radius: 16px;
-    --radius-sm: 10px;
-  }
+:root {
+  --bg: #13131a;
+  --bg2: #1c1c27;
+  --bg3: #242433;
+  --card: #1e1e2e;
+  --card2: #252538;
+  --purple: #7c5cbf;
+  --purple2: #9b7fe8;
+  --purple3: #b39ddb;
+  --grad: linear-gradient(135deg, #7c5cbf 0%, #9b7fe8 100%);
+  --grad2: linear-gradient(135deg, #6a4aad 0%, #8b6fd8 100%);
+  --white: #ffffff;
+  --text: #f0f0f8;
+  --text2: #a0a0c0;
+  --text3: #606080;
+  --border: #2a2a3e;
+  --success: #4ecb8d;
+  --success-bg: rgba(78,203,141,0.12);
+  --warning: #f5a623;
+  --warning-bg: rgba(245,166,35,0.12);
+  --error: #e05c7a;
+  --error-bg: rgba(224,92,122,0.12);
+  --info: #5b8def;
+  --info-bg: rgba(91,141,239,0.12);
+  --radius: 20px;
+  --radius-sm: 14px;
+  --radius-xs: 10px;
+}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
-  body {
-    font-family: 'Jost', sans-serif;
-    background: var(--off-white);
-    color: var(--charcoal);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-  /* ── SCREENS ── */
-  .screen { display: none; flex-direction: column; min-height: 100vh; animation: fadeIn 0.3s ease; }
-  .screen.active { display: flex; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+/* ── SCREENS ── */
+.screen { display:none; flex-direction:column; min-height:100vh; animation: fadeUp .25s ease; }
+.screen.active { display:flex; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
 
-  /* ── HEADER ── */
-  .header {
-    padding: 20px 24px 16px;
-    background: var(--white);
-    border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; z-index: 10;
-  }
-  .header-top { display: flex; align-items: center; justify-content: space-between; }
-  .logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 300;
-    letter-spacing: 0.12em;
-    color: var(--charcoal);
-  }
-  .logo span { color: var(--sage); }
-  .header-date {
-    font-size: 11px;
-    font-weight: 300;
-    color: var(--mid);
-    letter-spacing: 0.05em;
-    margin-top: 4px;
-  }
-  .back-btn {
-    background: none; border: none; cursor: pointer;
-    font-family: 'Jost', sans-serif;
-    font-size: 13px; color: var(--sage);
-    display: flex; align-items: center; gap: 6px;
-    padding: 4px 0;
-  }
+/* ── TOP BAR ── */
+.top-bar {
+  padding: 20px 20px 16px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.top-logo {
+  font-size:18px; font-weight:800; letter-spacing:0.06em;
+  background: var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.back-btn {
+  background:var(--bg3); border:none; cursor:pointer;
+  font-family:'Montserrat',sans-serif; font-size:13px; font-weight:600;
+  color:var(--purple2); padding:8px 14px; border-radius:10px;
+  display:flex; align-items:center; gap:6px;
+}
 
-  /* ── BODY ── */
-  .body { flex: 1; padding: 24px; overflow-y: auto; }
+/* ── BODY ── */
+.body { flex:1; padding:0 20px 20px; overflow-y:auto; }
+.body.has-nav { padding-bottom:90px; }
 
-  /* ── GREETING ── */
-  .greeting {
-    margin-bottom: 28px;
-  }
-  .greeting-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 32px;
-    font-weight: 300;
-    line-height: 1.1;
-    color: var(--charcoal);
-  }
-  .greeting-name em { font-style: italic; color: var(--sage); }
-  .greeting-sub {
-    font-size: 13px;
-    font-weight: 300;
-    color: var(--mid);
-    margin-top: 6px;
-    letter-spacing: 0.02em;
-  }
+/* ── SECTION LABEL ── */
+.section-label {
+  font-size:11px; font-weight:700; letter-spacing:0.1em;
+  text-transform:uppercase; color:var(--text3);
+  margin-bottom:12px; margin-top:24px;
+}
 
-  /* ── STATUS CARD ── */
-  .status-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-    margin-bottom: 24px;
-    position: relative;
-    overflow: hidden;
-  }
-  .status-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 4px; height: 100%;
-    background: var(--sage-light);
-    border-radius: 4px 0 0 4px;
-  }
-  .status-card.checked-in::before { background: var(--success); }
-  .status-card.late::before { background: #d4a843; }
-  .status-card.absent::before { background: var(--error); }
+/* ── PROFILE HEADER ── */
+.profile-header {
+  padding: 20px 20px 0;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.profile-info { display:flex; align-items:center; gap:12px; }
+.profile-avatar-sm {
+  width:46px; height:46px; border-radius:15px;
+  background: var(--grad);
+  display:flex; align-items:center; justify-content:center;
+  font-size:17px; font-weight:800; color:white; flex-shrink:0;
+}
+.profile-name-sm { font-size:15px; font-weight:700; color:var(--text); }
+.profile-role-sm { font-size:12px; color:var(--text2); margin-top:2px; font-weight:400; }
 
-  .status-label {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--light);
-    margin-bottom: 8px;
-  }
-  .status-time {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 38px;
-    font-weight: 300;
-    color: var(--charcoal);
-    letter-spacing: -0.01em;
-  }
-  .status-detail {
-    font-size: 12px;
-    color: var(--mid);
-    margin-top: 4px;
-  }
+/* ── OVERVIEW CARD (purple gradient big card) ── */
+.overview-card {
+  background: var(--grad);
+  border-radius: var(--radius);
+  padding: 22px 20px;
+  margin-bottom: 0;
+  position:relative; overflow:hidden;
+}
+.overview-card::before {
+  content:''; position:absolute;
+  top:-40px; right:-30px;
+  width:140px; height:140px;
+  background:rgba(255,255,255,0.07); border-radius:50%;
+}
+.overview-card::after {
+  content:''; position:absolute;
+  bottom:-20px; left:20px;
+  width:90px; height:90px;
+  background:rgba(255,255,255,0.05); border-radius:50%;
+}
+.ov-date-row {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:16px; position:relative; z-index:1;
+}
+.ov-date { font-size:20px; font-weight:800; color:white; }
+.ov-time-badge {
+  background:rgba(255,255,255,0.25);
+  padding:6px 14px; border-radius:20px;
+  font-size:13px; font-weight:700; color:white;
+  backdrop-filter:blur(10px);
+}
+.ov-times {
+  background:rgba(255,255,255,0.15);
+  border-radius:var(--radius-sm);
+  padding:16px 18px;
+  display:flex; align-items:center;
+  position:relative; z-index:1;
+  backdrop-filter:blur(10px);
+}
+.ov-time-block { flex:1; }
+.ov-time-label { font-size:11px; color:rgba(255,255,255,0.7); font-weight:500; margin-bottom:4px; }
+.ov-time-val { font-size:22px; font-weight:800; color:white; letter-spacing:-0.01em; }
+.ov-divider { width:1px; background:rgba(255,255,255,0.3); height:36px; margin:0 18px; }
 
-  /* ── ACTION GRID ── */
-  .action-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-  .action-btn {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px 16px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: left;
-    display: flex; flex-direction: column; gap: 10px;
-  }
-  .action-btn:active { transform: scale(0.97); background: var(--cream); }
-  .action-btn.primary {
-    background: var(--charcoal);
-    border-color: var(--charcoal);
-    color: var(--white);
-  }
-  .action-btn.primary:active { background: #3d3d3d; }
-  .action-btn.sage {
-    background: var(--sage);
-    border-color: var(--sage);
-    color: var(--white);
-  }
-  .action-icon { font-size: 22px; }
-  .action-label {
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-  }
-  .action-btn.primary .action-label,
-  .action-btn.sage .action-label { color: var(--white); }
-  .action-sub {
-    font-size: 11px;
-    font-weight: 300;
-    color: var(--mid);
-  }
-  .action-btn.primary .action-sub { color: rgba(255,255,255,0.6); }
-  .action-btn.sage .action-sub { color: rgba(255,255,255,0.7); }
-  .action-btn.full { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 14px; }
-  .action-btn.full .action-icon { font-size: 20px; }
+/* ── STAT CHIPS GRID ── */
+.stat-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:12px; margin-top:14px;
+}
+.stat-chip {
+  background:var(--card);
+  border-radius:var(--radius-sm);
+  padding:16px 16px;
+  display:flex; align-items:center; gap:12px;
+  border:1px solid var(--border);
+}
+.stat-chip-icon {
+  width:40px; height:40px; border-radius:12px;
+  display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;
+}
+.stat-chip-val { font-size:22px; font-weight:800; color:var(--text); }
+.stat-chip-label { font-size:11px; color:var(--text2); font-weight:500; margin-top:2px; }
 
-  /* ── SECTION TITLE ── */
-  .section-title {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--light);
-    margin-bottom: 12px;
-  }
+/* ── ACTION CARDS ── */
+.action-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.action-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:18px 16px;
+  cursor:pointer; transition:all 0.2s ease;
+  display:flex; flex-direction:column; gap:12px;
+}
+.action-card:active { transform:scale(0.97); border-color:var(--purple); }
+.action-card.full { grid-column:1/-1; flex-direction:row; align-items:center; }
+.action-card.grad-card {
+  background:var(--grad); border:none;
+  box-shadow:0 8px 24px rgba(124,92,191,0.35);
+}
+.action-icon-box {
+  width:44px; height:44px; border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px; background:var(--bg3); flex-shrink:0;
+}
+.action-card.grad-card .action-icon-box { background:rgba(255,255,255,0.2); }
+.action-label { font-size:13px; font-weight:700; color:var(--text); }
+.action-sub { font-size:11px; color:var(--text2); margin-top:2px; }
+.action-card.grad-card .action-label,
+.action-card.grad-card .action-sub { color:white; }
+.action-card.grad-card .action-sub { opacity:0.8; }
 
-  /* ── ATTENDANCE LIST ── */
-  .attendance-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
-  .att-row {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 14px 16px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .att-date { font-size: 13px; font-weight: 400; }
-  .att-times { font-size: 11px; color: var(--mid); margin-top: 2px; }
-  .att-badge {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    padding: 4px 10px;
-    border-radius: 20px;
-    text-transform: uppercase;
-  }
-  .badge-present { background: #e8f4e8; color: var(--success); }
-  .badge-late { background: #fdf3dc; color: #b8882a; }
-  .badge-half { background: #fde8e4; color: var(--error); }
-  .badge-leave { background: #e8eef8; color: #4a6fa5; }
-  .badge-absent { background: #fde8e4; color: var(--error); }
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position:fixed; bottom:0; left:0; right:0;
+  background:var(--bg2);
+  border-top:1px solid var(--border);
+  display:flex; padding:10px 0 24px;
+  z-index:40;
+}
+.nav-item {
+  flex:1; display:flex; flex-direction:column;
+  align-items:center; gap:5px;
+  padding:4px; cursor:pointer; background:none; border:none;
+}
+.nav-icon { font-size:20px; transition:transform 0.2s; }
+.nav-label { font-size:10px; font-weight:600; color:var(--text3); letter-spacing:0.03em; }
+.nav-item.active .nav-label { color:var(--purple2); }
+.nav-item.active .nav-icon { transform:translateY(-2px); }
 
-  /* ── LOCATION SCREEN ── */
-  .location-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 32px 24px;
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .location-icon {
-    width: 72px; height: 72px;
-    background: var(--cream);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 32px;
-    margin: 0 auto 20px;
-  }
-  .location-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 26px;
-    font-weight: 300;
-    margin-bottom: 8px;
-  }
-  .location-sub { font-size: 13px; color: var(--mid); line-height: 1.6; }
-  .distance-bar {
-    background: var(--cream);
-    border-radius: 8px;
-    padding: 14px 16px;
-    display: flex; align-items: center; justify-content: space-between;
-    margin-top: 20px;
-  }
-  .distance-label { font-size: 12px; color: var(--mid); }
-  .distance-value { font-size: 14px; font-weight: 500; color: var(--charcoal); }
-  .distance-value.ok { color: var(--success); }
-  .distance-value.far { color: var(--error); }
+/* ── ATTENDANCE ROW ── */
+.att-list { background:var(--card); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; }
+.att-row {
+  display:flex; align-items:center; gap:14px;
+  padding:14px 18px; border-bottom:1px solid var(--border);
+}
+.att-row:last-child { border-bottom:none; }
+.att-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.att-info { flex:1; }
+.att-date { font-size:13px; font-weight:600; }
+.att-times { font-size:11px; color:var(--text2); margin-top:3px; }
+.badge {
+  font-size:10px; font-weight:700; padding:5px 11px;
+  border-radius:20px; letter-spacing:0.04em; white-space:nowrap;
+}
+.badge-present { background:var(--success-bg); color:var(--success); }
+.badge-late { background:var(--warning-bg); color:var(--warning); }
+.badge-half { background:var(--error-bg); color:var(--error); }
+.badge-leave { background:var(--info-bg); color:var(--info); }
+.badge-absent { background:var(--error-bg); color:var(--error); }
 
-  /* ── LEAVE SCREEN ── */
-  .leave-type-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
-  .leave-type-btn {
-    background: var(--white);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 16px 12px;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s ease;
-  }
-  .leave-type-btn.selected {
-    border-color: var(--sage);
-    background: #f0f4ee;
-  }
-  .leave-type-btn:active { transform: scale(0.97); }
-  .leave-type-icon { font-size: 24px; margin-bottom: 8px; }
-  .leave-type-label { font-size: 12px; font-weight: 500; }
+/* ── LOCATION CARD ── */
+.loc-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:32px 24px;
+  text-align:center; margin-bottom:20px;
+}
+.loc-ring {
+  width:84px; height:84px; border-radius:50%;
+  background:var(--bg3); border:3px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:36px; margin:0 auto 20px;
+}
+.loc-ring.ok { background:var(--success-bg); border-color:rgba(78,203,141,0.3); }
+.loc-ring.fail { background:var(--error-bg); border-color:rgba(224,92,122,0.3); }
+.loc-title { font-size:20px; font-weight:800; margin-bottom:8px; }
+.loc-sub { font-size:13px; color:var(--text2); line-height:1.6; }
+.dist-pill {
+  background:var(--bg3); border-radius:12px; padding:12px 16px;
+  display:flex; justify-content:space-between; align-items:center;
+  margin-top:18px;
+}
+.dist-label { font-size:12px; color:var(--text3); font-weight:500; }
+.dist-val { font-size:13px; font-weight:700; }
+.dist-val.ok { color:var(--success); }
+.dist-val.far { color:var(--error); }
 
-  /* ── CALENDAR ── */
-  .calendar {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-    margin-bottom: 20px;
-  }
-  .cal-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 16px;
-  }
-  .cal-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 18px; font-weight: 400;
-  }
-  .cal-nav { background: none; border: none; cursor: pointer; font-size: 18px; color: var(--mid); padding: 4px 8px; }
-  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-  .cal-day-name {
-    text-align: center; font-size: 10px; font-weight: 500;
-    color: var(--light); letter-spacing: 0.05em;
-    padding: 4px 0 8px;
-  }
-  .cal-day {
-    text-align: center; padding: 8px 4px;
-    font-size: 13px; border-radius: 8px;
-    cursor: pointer; transition: all 0.15s ease;
-    color: var(--charcoal);
-  }
-  .cal-day:empty { cursor: default; }
-  .cal-day.other-month { color: var(--light); }
-  .cal-day.today { font-weight: 500; color: var(--sage-dark); }
-  .cal-day.selected {
-    background: var(--charcoal);
-    color: var(--white);
-    font-weight: 500;
-  }
-  .cal-day.past { color: var(--light); cursor: default; }
-  .cal-day:not(.past):not(:empty):active { background: var(--cream); }
+/* ── BUTTONS ── */
+.btn {
+  width:100%; padding:17px; border:none; border-radius:var(--radius);
+  font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700;
+  letter-spacing:0.06em; text-transform:uppercase;
+  cursor:pointer; transition:all 0.2s; margin-bottom:12px;
+}
+.btn:last-child { margin-bottom:0; }
+.btn-primary { background:var(--grad); color:white; box-shadow:0 6px 20px rgba(124,92,191,0.4); }
+.btn-primary:active { transform:scale(0.98); }
+.btn-primary:disabled { background:var(--bg3); color:var(--text3); box-shadow:none; }
+.btn-ghost { background:var(--bg3); color:var(--text2); }
+.btn-ghost:active { background:var(--bg2); }
 
-  /* ── INPUT ── */
-  .input-group { margin-bottom: 20px; }
-  .input-label {
-    font-size: 11px; font-weight: 500;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--mid); margin-bottom: 8px; display: block;
-  }
-  textarea, input {
-    width: 100%;
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 14px 16px;
-    font-family: 'Jost', sans-serif;
-    font-size: 14px;
-    color: var(--charcoal);
-    outline: none;
-    transition: border-color 0.2s;
-    resize: none;
-  }
-  textarea:focus, input:focus { border-color: var(--sage); }
-  textarea { min-height: 100px; line-height: 1.6; }
+/* ── INPUTS ── */
+.input-group { margin-bottom:16px; }
+.input-label {
+  font-size:11px; font-weight:700; letter-spacing:0.08em;
+  text-transform:uppercase; color:var(--text3);
+  margin-bottom:8px; display:block;
+}
+input, textarea {
+  width:100%; background:var(--card2);
+  border:1.5px solid var(--border);
+  border-radius:var(--radius-sm); padding:14px 16px;
+  font-family:'Montserrat',sans-serif; font-size:14px;
+  color:var(--text); outline:none; transition:border-color 0.2s;
+  resize:none;
+}
+input::placeholder, textarea::placeholder { color:var(--text3); }
+input:focus, textarea:focus { border-color:var(--purple2); }
+textarea { min-height:90px; line-height:1.6; }
 
-  /* ── SUBMIT BTN ── */
-  .submit-btn {
-    width: 100%;
-    background: var(--charcoal);
-    color: var(--white);
-    border: none;
-    border-radius: var(--radius);
-    padding: 18px;
-    font-family: 'Jost', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  .submit-btn:active { transform: scale(0.98); background: #3d3d3d; }
-  .submit-btn:disabled { background: var(--light); cursor: not-allowed; }
-  .submit-btn.sage-btn { background: var(--sage); }
-  .submit-btn.sage-btn:active { background: var(--sage-dark); }
+/* ── RADIO ── */
+.radio-group { display:flex; gap:10px; }
+.radio-btn {
+  flex:1; padding:13px 10px; background:var(--card);
+  border:1.5px solid var(--border); border-radius:var(--radius-sm);
+  text-align:center; cursor:pointer; font-size:12px; font-weight:500;
+  color:var(--text2); transition:all 0.2s; line-height:1.5;
+}
+.radio-btn.selected { border-color:var(--purple2); background:rgba(155,127,232,0.12); color:var(--purple2); font-weight:700; }
 
-  /* ── TOAST ── */
-  .toast {
-    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(80px);
-    background: var(--charcoal); color: var(--white);
-    padding: 14px 24px; border-radius: 40px;
-    font-size: 13px; font-weight: 400;
-    white-space: nowrap;
-    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-    z-index: 100;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-  .toast.success { background: var(--success); }
-  .toast.error { background: var(--error); }
+/* ── LEAVE TYPE ── */
+.leave-type-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.leave-type-btn {
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:var(--radius-sm); padding:18px 12px;
+  cursor:pointer; text-align:center; transition:all 0.2s;
+}
+.leave-type-btn.selected { border-color:var(--purple2); background:rgba(155,127,232,0.12); }
+.leave-type-btn:active { transform:scale(0.97); }
+.leave-type-icon { font-size:26px; margin-bottom:8px; }
+.leave-type-label { font-size:12px; font-weight:600; color:var(--text2); }
+.leave-type-btn.selected .leave-type-label { color:var(--purple2); }
 
-  /* ── LOADING ── */
-  .loading {
-    display: flex; align-items: center; justify-content: center;
-    gap: 8px; padding: 40px; color: var(--mid); font-size: 13px;
-  }
-  .spinner {
-    width: 18px; height: 18px;
-    border: 2px solid var(--border);
-    border-top-color: var(--sage);
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
+/* ── CALENDAR ── */
+.calendar {
+  background:var(--card); border-radius:var(--radius);
+  border:1px solid var(--border); padding:20px; margin-bottom:16px;
+}
+.cal-nav-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.cal-month { font-size:15px; font-weight:700; }
+.cal-nav-btn {
+  background:var(--bg3); border:none; cursor:pointer;
+  width:34px; height:34px; border-radius:10px;
+  font-size:16px; color:var(--text2);
+  display:flex; align-items:center; justify-content:center;
+}
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+.cal-day-name { text-align:center; font-size:10px; font-weight:700; color:var(--text3); padding:4px 0 10px; }
+.cal-day {
+  text-align:center; padding:9px 2px;
+  font-size:13px; font-weight:500; color:var(--text2);
+  border-radius:10px; cursor:pointer; transition:all 0.15s;
+}
+.cal-day.today { color:var(--purple2); font-weight:700; }
+.cal-day.selected { background:var(--grad); color:white; font-weight:700; box-shadow:0 4px 12px rgba(124,92,191,0.4); }
+.cal-day.past { color:var(--text3); cursor:default; }
+.cal-day:not(.past):not(:empty):not(.selected):active { background:var(--bg3); }
+.sel-date-chip {
+  background:rgba(155,127,232,0.12); border:1px solid rgba(155,127,232,0.25);
+  border-radius:var(--radius-xs); padding:12px 16px;
+  margin-bottom:16px; display:flex; align-items:center; gap:10px;
+}
+.sel-date-chip-text { font-size:13px; font-weight:600; color:var(--purple2); }
 
-  /* ── DIVIDER ── */
-  .divider { height: 1px; background: var(--border); margin: 24px 0; }
+/* ── TOAST ── */
+.toast {
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(60px);
+  background:var(--card2); color:var(--text);
+  padding:12px 22px; border-radius:40px;
+  font-size:13px; font-weight:600; white-space:nowrap; z-index:200;
+  transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+  border:1px solid var(--border);
+}
+.toast.show { transform:translateX(-50%) translateY(0); }
+.toast.success { background:var(--success-bg); color:var(--success); border-color:rgba(78,203,141,0.3); }
+.toast.error { background:var(--error-bg); color:var(--error); border-color:rgba(224,92,122,0.3); }
 
-  /* ── EMPTY STATE ── */
-  .empty {
-    text-align: center; padding: 40px 24px;
-    color: var(--mid); font-size: 13px;
-  }
-  .empty-icon { font-size: 36px; margin-bottom: 12px; opacity: 0.4; }
+/* ── LOADING / EMPTY ── */
+.loading { display:flex; align-items:center; justify-content:center; gap:10px; padding:48px; color:var(--text3); font-size:13px; }
+.spinner { width:20px; height:20px; border:2.5px solid var(--border); border-top-color:var(--purple2); border-radius:50%; animation:spin .7s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.empty { text-align:center; padding:48px 24px; color:var(--text3); }
+.empty-icon { font-size:42px; margin-bottom:14px; opacity:0.3; }
+.empty-text { font-size:13px; font-weight:500; }
 
-  /* ── REGISTER FORM ── */
-  .register-hero {
-    text-align: center; padding: 32px 0 24px;
-  }
-  .register-hero .hero-icon {
-    font-size: 48px; margin-bottom: 16px;
-  }
-  .register-hero h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px; font-weight: 300;
-    margin-bottom: 8px;
-  }
-  .register-hero p { font-size: 13px; color: var(--mid); line-height: 1.6; }
+/* ── PROFILE CARD ── */
+.profile-big-card {
+  background:var(--grad); border-radius:var(--radius);
+  padding:28px 22px; text-align:center; margin-bottom:16px;
+  position:relative; overflow:hidden;
+}
+.profile-big-card::before {
+  content:''; position:absolute; top:-30px; right:-30px;
+  width:120px; height:120px; background:rgba(255,255,255,0.08); border-radius:50%;
+}
+.pf-avatar {
+  width:72px; height:72px; border-radius:22px;
+  background:rgba(255,255,255,0.2); border:2px solid rgba(255,255,255,0.3);
+  display:flex; align-items:center; justify-content:center;
+  font-size:26px; font-weight:800; color:white;
+  margin:0 auto 14px; position:relative; z-index:1;
+}
+.pf-name { font-size:20px; font-weight:800; color:white; margin-bottom:4px; position:relative; z-index:1; }
+.pf-role { font-size:13px; color:rgba(255,255,255,0.75); position:relative; z-index:1; }
 
-  .radio-group { display: flex; gap: 10px; margin-top: 4px; }
-  .radio-btn {
-    flex: 1; padding: 12px;
-    background: var(--white);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    text-align: center;
-    cursor: pointer;
-    font-size: 13px; font-weight: 400;
-    transition: all 0.2s;
-  }
-  .radio-btn.selected { border-color: var(--sage); background: #f0f4ee; color: var(--sage-dark); font-weight: 500; }
+.info-card { background:var(--card); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; }
+.info-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:16px 18px; border-bottom:1px solid var(--border);
+}
+.info-row:last-child { border-bottom:none; }
+.info-key { font-size:12px; color:var(--text3); font-weight:500; }
+.info-val { font-size:13px; font-weight:700; }
 
-  /* ── BOTTOM NAV ── */
-  .bottom-nav {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    background: var(--white);
-    border-top: 1px solid var(--border);
-    display: flex;
-    padding: 8px 0 20px;
-    z-index: 20;
-  }
-  .nav-item {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; gap: 4px;
-    padding: 8px 4px;
-    cursor: pointer; background: none; border: none;
-    transition: all 0.2s;
-  }
-  .nav-icon { font-size: 20px; }
-  .nav-label { font-size: 10px; font-weight: 400; color: var(--light); letter-spacing: 0.04em; }
-  .nav-item.active .nav-label { color: var(--sage-dark); font-weight: 500; }
-  .nav-item.active .nav-icon { transform: translateY(-1px); }
+/* ── REGISTER ── */
+.register-hero {
+  background:var(--grad); padding:48px 24px 36px;
+  text-align:center; position:relative; overflow:hidden;
+}
+.register-hero::before {
+  content:''; position:absolute; top:-50px; right:-50px;
+  width:200px; height:200px; background:rgba(255,255,255,0.07); border-radius:50%;
+}
+.register-hero::after {
+  content:''; position:absolute; bottom:-30px; left:-20px;
+  width:130px; height:130px; background:rgba(255,255,255,0.05); border-radius:50%;
+}
+.reg-title { font-size:26px; font-weight:800; color:white; margin-bottom:8px; position:relative; z-index:1; }
+.reg-sub { font-size:13px; color:rgba(255,255,255,0.8); line-height:1.6; position:relative; z-index:1; }
 
-  .has-nav { padding-bottom: 80px; }
+/* ── MANAGER STYLES ── */
+.mgr-stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.mgr-stat-card {
+  background:var(--card); border-radius:var(--radius-sm);
+  border:1px solid var(--border); padding:16px;
+}
+.mgr-stat-icon { font-size:22px; margin-bottom:8px; }
+.mgr-stat-val { font-size:26px; font-weight:800; }
+.mgr-stat-label { font-size:11px; color:var(--text2); font-weight:500; margin-top:2px; }
+
+.emp-list { background:var(--card); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; }
+.emp-row {
+  display:flex; align-items:center; gap:14px;
+  padding:14px 18px; border-bottom:1px solid var(--border);
+}
+.emp-row:last-child { border-bottom:none; }
+.emp-avatar {
+  width:44px; height:44px; border-radius:14px;
+  background:rgba(155,127,232,0.15);
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px; font-weight:800; color:var(--purple2); flex-shrink:0;
+}
+.emp-name { font-size:13px; font-weight:700; }
+.emp-role { font-size:11px; color:var(--text2); margin-top:2px; }
+
+.leave-req-card {
+  background:var(--card); border-radius:var(--radius);
+  border:1px solid var(--border); padding:18px;
+  margin-bottom:12px;
+  border-left:4px solid var(--purple2);
+}
+.leave-req-name { font-size:14px; font-weight:700; margin-bottom:2px; }
+.leave-req-meta { font-size:12px; color:var(--text2); margin-bottom:10px; }
+.leave-req-reason { font-size:12px; color:var(--text2); line-height:1.6; margin-bottom:14px; }
+.leave-actions { display:flex; gap:10px; }
+.btn-approve {
+  flex:1; padding:11px; border:none; border-radius:var(--radius-xs);
+  background:var(--success-bg); color:var(--success);
+  font-family:'Montserrat',sans-serif; font-size:12px; font-weight:700;
+  cursor:pointer; border:1px solid rgba(78,203,141,0.2);
+}
+.btn-reject {
+  flex:1; padding:11px; border:none; border-radius:var(--radius-xs);
+  background:var(--error-bg); color:var(--error);
+  font-family:'Montserrat',sans-serif; font-size:12px; font-weight:700;
+  cursor:pointer; border:1px solid rgba(224,92,122,0.2);
+}
+
+.report-emp-card {
+  background:var(--card); border-radius:var(--radius-sm);
+  border:1px solid var(--border); padding:16px 18px; margin-bottom:10px;
+}
+.report-emp-name { font-size:13px; font-weight:700; margin-bottom:12px; }
+.report-chips { display:flex; flex-wrap:wrap; gap:8px; }
+.report-chip {
+  padding:5px 10px; border-radius:8px;
+  font-size:11px; font-weight:600;
+}
+
+.month-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+.month-btn {
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:var(--radius-sm); padding:12px 6px;
+  text-align:center; cursor:pointer; transition:all 0.2s;
+  font-family:'Montserrat',sans-serif; font-size:11px; font-weight:600; color:var(--text2);
+}
+.month-btn.selected { background:var(--grad); color:white; border-color:transparent; }
+.month-btn:active { opacity:0.8; }
+
+/* ── DIVIDER ── */
+.divider { height:1px; background:var(--border); margin:4px 0; }
 </style>
 </head>
 <body>
 
-<!-- LOADING SCREEN -->
+<!-- LOADING -->
 <div class="screen active" id="screen-loading">
-  <div class="body" style="display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:16px;">
-    <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;letter-spacing:0.12em;">elyne <span style="color:var(--sage)">hr</span></div>
-    <div class="spinner" style="width:24px;height:24px;"></div>
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:20px;">
+    <div style="font-size:26px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:0.06em;">elyne HR</div>
+    <div class="spinner" style="width:28px;height:28px;"></div>
   </div>
 </div>
 
-<!-- REGISTER SCREEN -->
+<!-- REGISTER -->
 <div class="screen" id="screen-register">
-  <div class="header">
-    <div class="header-top">
-      <div class="logo">elyne <span>hr</span></div>
-    </div>
+  <div class="register-hero">
+    <div class="reg-title">Welcome to elyne HR</div>
+    <div class="reg-sub">Set up your profile to start<br>tracking attendance</div>
   </div>
-  <div class="body">
-    <div class="register-hero">
-      <div class="hero-icon">🌿</div>
-      <h2>Welcome to elyne HR</h2>
-      <p>Set up your profile to get started with attendance tracking.</p>
-    </div>
-
+  <div class="body" style="padding-top:24px;">
     <div class="input-group">
       <label class="input-label">Full Name</label>
       <input type="text" id="reg-name" placeholder="e.g. Sokha Rin" autocomplete="off">
@@ -488,242 +503,338 @@
       <label class="input-label">Employment Type</label>
       <div class="radio-group">
         <div class="radio-btn selected" id="type-fulltime" onclick="selectType('fulltime')">
-          Full Time<br><span style="font-size:11px;color:var(--mid)">9AM – 5PM</span>
+          Full Time<br><span style="font-size:10px;opacity:0.7">9AM – 5PM</span>
         </div>
         <div class="radio-btn" id="type-parttime" onclick="selectType('parttime')">
-          Part Time<br><span style="font-size:11px;color:var(--mid)">1PM – 5PM</span>
+          Part Time<br><span style="font-size:10px;opacity:0.7">1PM – 5PM</span>
         </div>
       </div>
     </div>
-    <button class="submit-btn sage-btn" onclick="submitRegistration()">Create Profile</button>
+    <button class="btn btn-primary" onclick="submitRegistration()">Create My Profile</button>
   </div>
 </div>
 
-<!-- MAIN SCREEN -->
+<!-- STAFF MAIN -->
 <div class="screen" id="screen-main">
-  <div class="header">
-    <div class="header-top">
-      <div class="logo">elyne <span>hr</span></div>
-      <div style="font-size:12px;color:var(--mid)" id="main-emp-type"></div>
+  <div class="profile-header">
+    <div class="profile-info">
+      <div class="profile-avatar-sm" id="main-avatar">—</div>
+      <div>
+        <div class="profile-name-sm" id="main-name">—</div>
+        <div class="profile-role-sm" id="main-role">—</div>
+      </div>
     </div>
-    <div class="header-date" id="main-date"></div>
+    <div style="font-size:22px;">👋</div>
   </div>
-  <div class="body has-nav">
 
-    <div class="greeting">
-      <div class="greeting-name" id="main-greeting">Good morning, <em>—</em></div>
-      <div class="greeting-sub" id="main-shift"></div>
+  <div class="body has-nav" style="padding-top:16px;">
+    <div style="font-size:22px;font-weight:800;margin-bottom:4px;" id="main-welcome-line">Welcome!</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:20px;" id="main-tagline">Great brands are built by great people.</div>
+
+    <!-- Today's Overview -->
+    <div class="section-label" style="margin-top:0;">Today's Overview</div>
+    <div class="overview-card" style="margin-bottom:14px;">
+      <div class="ov-date-row">
+        <div class="ov-date" id="ov-date">—</div>
+        <div class="ov-time-badge" id="ov-now">—</div>
+      </div>
+      <div class="ov-times">
+        <div class="ov-time-block">
+          <div class="ov-time-label">Clock In</div>
+          <div class="ov-time-val" id="ov-checkin">--:--</div>
+        </div>
+        <div class="ov-divider"></div>
+        <div class="ov-time-block">
+          <div class="ov-time-label">Clock Out</div>
+          <div class="ov-time-val" id="ov-checkout">--:--</div>
+        </div>
+      </div>
     </div>
 
-    <div class="status-card" id="today-status-card">
-      <div class="status-label">Today's Status</div>
-      <div class="status-time" id="today-status-time">—</div>
-      <div class="status-detail" id="today-status-detail">Not checked in yet</div>
-    </div>
-
+    <!-- Quick Actions -->
+    <div class="section-label">Quick Actions</div>
     <div class="action-grid">
-      <button class="action-btn primary" onclick="goCheckIn()">
-        <div class="action-icon">✅</div>
+      <div class="action-card grad-card" onclick="goCheckIn()">
+        <div class="action-icon-box">✅</div>
         <div>
           <div class="action-label">Check In</div>
-          <div class="action-sub">Verify location</div>
+          <div class="action-sub">Clock in for today</div>
         </div>
-      </button>
-      <button class="action-btn" onclick="goCheckOut()">
-        <div class="action-icon">🚪</div>
+      </div>
+      <div class="action-card" onclick="goCheckOut()">
+        <div class="action-icon-box">🚪</div>
         <div>
           <div class="action-label">Check Out</div>
-          <div class="action-sub">End your day</div>
+          <div class="action-sub">End your shift</div>
         </div>
-      </button>
-      <button class="action-btn full" onclick="showScreen('screen-leave')">
-        <div class="action-icon">📅</div>
-        <div>
+      </div>
+      <div class="action-card full" onclick="switchTab('leave')">
+        <div class="action-icon-box" style="background:rgba(155,127,232,0.12);">📅</div>
+        <div style="flex:1;">
           <div class="action-label">Apply for Leave</div>
-          <div class="action-sub">Annual, sick, emergency & more</div>
+          <div class="action-sub">Annual · Sick · Emergency · Unpaid</div>
         </div>
-      </button>
+        <div style="color:var(--text3);font-size:18px;">›</div>
+      </div>
     </div>
-
   </div>
+
   <div class="bottom-nav">
-    <button class="nav-item active" onclick="showScreen('screen-main')">
-      <div class="nav-icon">🏠</div>
-      <div class="nav-label">Home</div>
-    </button>
-    <button class="nav-item" onclick="goAttendance()">
-      <div class="nav-icon">📊</div>
-      <div class="nav-label">History</div>
-    </button>
-    <button class="nav-item" onclick="goProfile()">
-      <div class="nav-icon">👤</div>
-      <div class="nav-label">Profile</div>
-    </button>
+    <button class="nav-item active" onclick="switchTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Overview</div></button>
+    <button class="nav-item" onclick="switchTab('attendance')"><div class="nav-icon">📊</div><div class="nav-label">History</div></button>
+    <button class="nav-item" onclick="switchTab('leave')"><div class="nav-icon">📅</div><div class="nav-label">Leave</div></button>
+    <button class="nav-item" onclick="switchTab('profile')"><div class="nav-icon">👤</div><div class="nav-label">Profile</div></button>
   </div>
 </div>
 
-<!-- CHECK IN SCREEN -->
+<!-- CHECK IN -->
 <div class="screen" id="screen-checkin">
-  <div class="header">
-    <div class="header-top">
-      <button class="back-btn" onclick="showScreen('screen-main')">← Back</button>
-      <div class="logo">elyne <span>hr</span></div>
-    </div>
+  <div class="top-bar">
+    <button class="back-btn" onclick="showScreen('screen-main')">‹ Back</button>
+    <div class="top-logo">elyne HR</div>
+    <div></div>
   </div>
   <div class="body">
-    <div class="location-card" id="checkin-card">
-      <div class="location-icon" id="checkin-icon">📍</div>
-      <div class="location-title" id="checkin-title">Verifying Location</div>
-      <div class="location-sub" id="checkin-sub">Getting your GPS coordinates...</div>
-      <div class="distance-bar" id="checkin-distance-bar" style="display:none;">
-        <div class="distance-label">Distance from office</div>
-        <div class="distance-value" id="checkin-distance">—</div>
+    <div class="loc-card" id="ci-card">
+      <div class="loc-ring" id="ci-ring">📍</div>
+      <div class="loc-title" id="ci-title">Locating You...</div>
+      <div class="loc-sub" id="ci-sub">Getting your GPS. Please wait.</div>
+      <div class="dist-pill" id="ci-pill" style="display:none;">
+        <div class="dist-label">Distance from office</div>
+        <div class="dist-val" id="ci-dist">—</div>
       </div>
     </div>
-    <button class="submit-btn" id="checkin-btn" style="display:none;" onclick="confirmCheckIn()">Confirm Check In</button>
-    <button class="submit-btn sage-btn" id="checkin-retry" style="display:none;" onclick="startCheckin()">Try Again</button>
+    <button class="btn btn-primary" id="ci-btn" style="display:none;" onclick="confirmCheckIn()">Confirm Check In</button>
+    <button class="btn btn-ghost" id="ci-retry" style="display:none;" onclick="startCheckin()">Try Again</button>
   </div>
 </div>
 
-<!-- CHECK OUT SCREEN -->
+<!-- CHECK OUT -->
 <div class="screen" id="screen-checkout">
-  <div class="header">
-    <div class="header-top">
-      <button class="back-btn" onclick="showScreen('screen-main')">← Back</button>
-      <div class="logo">elyne <span>hr</span></div>
-    </div>
+  <div class="top-bar">
+    <button class="back-btn" onclick="showScreen('screen-main')">‹ Back</button>
+    <div class="top-logo">elyne HR</div>
+    <div></div>
   </div>
   <div class="body">
-    <div class="location-card" id="checkout-card">
-      <div class="location-icon" id="checkout-icon">📍</div>
-      <div class="location-title" id="checkout-title">Verifying Location</div>
-      <div class="location-sub" id="checkout-sub">Getting your GPS coordinates...</div>
-      <div class="distance-bar" id="checkout-distance-bar" style="display:none;">
-        <div class="distance-label">Distance from office</div>
-        <div class="distance-value" id="checkout-distance">—</div>
+    <div class="loc-card">
+      <div class="loc-ring" id="co-ring">📍</div>
+      <div class="loc-title" id="co-title">Locating You...</div>
+      <div class="loc-sub" id="co-sub">Getting your GPS. Please wait.</div>
+      <div class="dist-pill" id="co-pill" style="display:none;">
+        <div class="dist-label">Distance from office</div>
+        <div class="dist-val" id="co-dist">—</div>
       </div>
     </div>
-
-    <div id="early-reason-section" style="display:none;">
+    <div id="early-section" style="display:none;">
       <div class="input-group">
         <label class="input-label">Reason for Early Leave</label>
         <textarea id="early-reason" placeholder="Please explain why you are leaving early..."></textarea>
       </div>
     </div>
-
-    <button class="submit-btn" id="checkout-btn" style="display:none;" onclick="confirmCheckOut()">Confirm Check Out</button>
-    <button class="submit-btn sage-btn" id="checkout-retry" style="display:none;" onclick="startCheckout()">Try Again</button>
+    <button class="btn btn-primary" id="co-btn" style="display:none;" onclick="confirmCheckOut()">Confirm Check Out</button>
+    <button class="btn btn-ghost" id="co-retry" style="display:none;" onclick="startCheckout()">Try Again</button>
   </div>
 </div>
 
-<!-- LEAVE SCREEN -->
+<!-- LEAVE -->
 <div class="screen" id="screen-leave">
-  <div class="header">
-    <div class="header-top">
-      <button class="back-btn" onclick="showScreen('screen-main')">← Back</button>
-      <div class="logo">elyne <span>hr</span></div>
-    </div>
+  <div class="top-bar">
+    <div class="top-logo">elyne HR</div>
+    <div></div>
   </div>
-  <div class="body">
-    <div class="greeting" style="margin-bottom:20px;">
-      <div class="greeting-name">Apply for <em>Leave</em></div>
-    </div>
+  <div class="body has-nav" style="padding-top:0;">
+    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">Leave Request</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Apply for time off</div>
 
-    <div class="section-title">Leave Type</div>
-    <div class="leave-type-grid" style="margin-bottom:24px;">
-      <div class="leave-type-btn selected" onclick="selectLeaveType('annual', this)">
+    <div class="section-label" style="margin-top:0;">Leave Type</div>
+    <div class="leave-type-grid" style="margin-bottom:0;">
+      <div class="leave-type-btn selected" onclick="selectLeaveType('annual',this)">
         <div class="leave-type-icon">🏖️</div>
         <div class="leave-type-label">Annual</div>
       </div>
-      <div class="leave-type-btn" onclick="selectLeaveType('sick', this)">
+      <div class="leave-type-btn" onclick="selectLeaveType('sick',this)">
         <div class="leave-type-icon">🤒</div>
         <div class="leave-type-label">Sick</div>
       </div>
-      <div class="leave-type-btn" onclick="selectLeaveType('emergency', this)">
+      <div class="leave-type-btn" onclick="selectLeaveType('emergency',this)">
         <div class="leave-type-icon">🚨</div>
         <div class="leave-type-label">Emergency</div>
       </div>
-      <div class="leave-type-btn" onclick="selectLeaveType('unpaid', this)">
+      <div class="leave-type-btn" onclick="selectLeaveType('unpaid',this)">
         <div class="leave-type-icon">💸</div>
         <div class="leave-type-label">Unpaid</div>
       </div>
     </div>
 
-    <div class="section-title">Select Date</div>
+    <div class="section-label">Select Date</div>
     <div class="calendar">
-      <div class="cal-header">
-        <button class="cal-nav" onclick="changeMonth(-1)">‹</button>
-        <div class="cal-title" id="cal-title"></div>
-        <button class="cal-nav" onclick="changeMonth(1)">›</button>
+      <div class="cal-nav-row">
+        <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
+        <div class="cal-month" id="cal-title">—</div>
+        <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
       </div>
       <div class="cal-grid" id="cal-grid"></div>
     </div>
 
-    <div id="selected-date-display" style="display:none;background:var(--cream);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:20px;">
-      <div style="font-size:11px;color:var(--mid);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.08em;font-weight:500;">Selected Date</div>
-      <div style="font-size:15px;font-weight:500;" id="selected-date-text"></div>
+    <div id="sel-date-chip" style="display:none;" class="sel-date-chip">
+      <div style="font-size:18px;">📆</div>
+      <div class="sel-date-chip-text" id="sel-date-text">—</div>
     </div>
 
     <div class="input-group">
       <label class="input-label">Reason</label>
-      <textarea id="leave-reason" placeholder="Please describe your reason for leave..."></textarea>
+      <textarea id="leave-reason" placeholder="Please describe your reason for this leave..."></textarea>
     </div>
+    <button class="btn btn-primary" onclick="submitLeave()">Submit Leave Request</button>
+  </div>
 
-    <button class="submit-btn sage-btn" onclick="submitLeave()">Submit Leave Request</button>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="switchTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Overview</div></button>
+    <button class="nav-item" onclick="switchTab('attendance')"><div class="nav-icon">📊</div><div class="nav-label">History</div></button>
+    <button class="nav-item active" onclick="switchTab('leave')"><div class="nav-icon">📅</div><div class="nav-label">Leave</div></button>
+    <button class="nav-item" onclick="switchTab('profile')"><div class="nav-icon">👤</div><div class="nav-label">Profile</div></button>
   </div>
 </div>
 
-<!-- ATTENDANCE SCREEN -->
+<!-- ATTENDANCE HISTORY -->
 <div class="screen" id="screen-attendance">
-  <div class="header">
-    <div class="header-top">
-      <div class="logo">elyne <span>hr</span></div>
-    </div>
-    <div class="header-date">Attendance History</div>
+  <div class="top-bar">
+    <div class="top-logo">elyne HR</div>
+    <div></div>
   </div>
-  <div class="body has-nav" id="attendance-body">
-    <div class="loading"><div class="spinner"></div> Loading...</div>
+  <div class="body has-nav" style="padding-top:0;">
+    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">Attendance</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Your recent records</div>
+    <div id="att-body"><div class="loading"><div class="spinner"></div> Loading...</div></div>
   </div>
   <div class="bottom-nav">
-    <button class="nav-item" onclick="showScreen('screen-main')">
-      <div class="nav-icon">🏠</div>
-      <div class="nav-label">Home</div>
-    </button>
-    <button class="nav-item active" onclick="goAttendance()">
-      <div class="nav-icon">📊</div>
-      <div class="nav-label">History</div>
-    </button>
-    <button class="nav-item" onclick="goProfile()">
-      <div class="nav-icon">👤</div>
-      <div class="nav-label">Profile</div>
-    </button>
+    <button class="nav-item" onclick="switchTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Overview</div></button>
+    <button class="nav-item active" onclick="switchTab('attendance')"><div class="nav-icon">📊</div><div class="nav-label">History</div></button>
+    <button class="nav-item" onclick="switchTab('leave')"><div class="nav-icon">📅</div><div class="nav-label">Leave</div></button>
+    <button class="nav-item" onclick="switchTab('profile')"><div class="nav-icon">👤</div><div class="nav-label">Profile</div></button>
   </div>
 </div>
 
-<!-- PROFILE SCREEN -->
+<!-- PROFILE -->
 <div class="screen" id="screen-profile">
-  <div class="header">
-    <div class="header-top">
-      <div class="logo">elyne <span>hr</span></div>
-    </div>
-    <div class="header-date">My Profile</div>
-  </div>
-  <div class="body has-nav" id="profile-body">
+  <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
+  <div class="body has-nav" style="padding-top:0;" id="profile-body">
     <div class="loading"><div class="spinner"></div> Loading...</div>
   </div>
   <div class="bottom-nav">
-    <button class="nav-item" onclick="showScreen('screen-main')">
-      <div class="nav-icon">🏠</div>
-      <div class="nav-label">Home</div>
-    </button>
-    <button class="nav-item" onclick="goAttendance()">
-      <div class="nav-icon">📊</div>
-      <div class="nav-label">History</div>
-    </button>
-    <button class="nav-item active" onclick="goProfile()">
-      <div class="nav-icon">👤</div>
-      <div class="nav-label">Profile</div>
-    </button>
+    <button class="nav-item" onclick="switchTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Overview</div></button>
+    <button class="nav-item" onclick="switchTab('attendance')"><div class="nav-icon">📊</div><div class="nav-label">History</div></button>
+    <button class="nav-item" onclick="switchTab('leave')"><div class="nav-icon">📅</div><div class="nav-label">Leave</div></button>
+    <button class="nav-item active" onclick="switchTab('profile')"><div class="nav-icon">👤</div><div class="nav-label">Profile</div></button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- MANAGER SCREENS -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<!-- MGR MAIN -->
+<div class="screen" id="screen-mgr-main">
+  <div class="profile-header">
+    <div class="profile-info">
+      <div class="profile-avatar-sm" style="font-size:14px;">KV</div>
+      <div>
+        <div class="profile-name-sm">Kevin</div>
+        <div class="profile-role-sm">Managing Director</div>
+      </div>
+    </div>
+    <div style="font-size:22px;">👔</div>
+  </div>
+
+  <div class="body has-nav" style="padding-top:16px;">
+    <div style="font-size:22px;font-weight:800;margin-bottom:4px;" id="mgr-welcome">Good morning.</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Great companies are built by great people.</div>
+
+    <div class="section-label" style="margin-top:0;">Today's Overview</div>
+    <div class="overview-card" style="margin-bottom:14px;">
+      <div class="ov-date-row">
+        <div class="ov-date" id="mgr-ov-date">—</div>
+        <div class="ov-time-badge" id="mgr-ov-now">—</div>
+      </div>
+      <div class="stat-grid" style="margin-top:0;">
+        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px;backdrop-filter:blur(10px);">
+          <div style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;margin-bottom:4px;">TOTAL PRESENT</div>
+          <div style="font-size:26px;font-weight:800;color:white;" id="mgr-stat-present">—</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px;backdrop-filter:blur(10px);">
+          <div style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;margin-bottom:4px;">TOTAL LATE</div>
+          <div style="font-size:26px;font-weight:800;color:white;" id="mgr-stat-late">—</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px;backdrop-filter:blur(10px);">
+          <div style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;margin-bottom:4px;">ON LEAVE</div>
+          <div style="font-size:26px;font-weight:800;color:white;" id="mgr-stat-leave">—</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px;backdrop-filter:blur(10px);">
+          <div style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;margin-bottom:4px;">ABSENT</div>
+          <div style="font-size:26px;font-weight:800;color:white;" id="mgr-stat-absent">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="mgr-main-list"><div class="loading"><div class="spinner"></div> Loading...</div></div>
+  </div>
+
+  <div class="bottom-nav">
+    <button class="nav-item active" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
+    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div></button>
+    <button class="nav-item" onclick="switchMgrTab('report')"><div class="nav-icon">📋</div><div class="nav-label">Report</div></button>
+    <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
+  </div>
+</div>
+
+<!-- MGR LEAVES -->
+<div class="screen" id="screen-mgr-leaves">
+  <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
+  <div class="body has-nav" style="padding-top:0;">
+    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">Leave Requests</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Pending approvals</div>
+    <div id="mgr-leaves-body"><div class="loading"><div class="spinner"></div> Loading...</div></div>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
+    <button class="nav-item active" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div></button>
+    <button class="nav-item" onclick="switchMgrTab('report')"><div class="nav-icon">📋</div><div class="nav-label">Report</div></button>
+    <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
+  </div>
+</div>
+
+<!-- MGR REPORT -->
+<div class="screen" id="screen-mgr-report">
+  <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
+  <div class="body has-nav" style="padding-top:0;">
+    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">Monthly Report</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Attendance breakdown by employee</div>
+    <div class="section-label" style="margin-top:0;">Select Month</div>
+    <div class="month-grid" id="month-picker-grid" style="margin-bottom:20px;"></div>
+    <div id="report-results"></div>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
+    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div></button>
+    <button class="nav-item active" onclick="switchMgrTab('report')"><div class="nav-icon">📋</div><div class="nav-label">Report</div></button>
+    <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
+  </div>
+</div>
+
+<!-- MGR EMPLOYEES -->
+<div class="screen" id="screen-mgr-employees">
+  <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
+  <div class="body has-nav" style="padding-top:0;">
+    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">Team</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">All registered employees</div>
+    <div id="mgr-employees-body"><div class="loading"><div class="spinner"></div> Loading...</div></div>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
+    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div></button>
+    <button class="nav-item" onclick="switchMgrTab('report')"><div class="nav-icon">📋</div><div class="nav-label">Report</div></button>
+    <button class="nav-item active" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
   </div>
 </div>
 
@@ -731,506 +842,433 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ── CONFIG ──────────────────────────────────────────────────────────────────
-const BOT_TOKEN = 'STAFF_TOKEN_PLACEHOLDER';
 const API_BASE = 'https://elyne-hr-bot-production.up.railway.app';
 const OFFICE_LAT = 11.5764427;
 const OFFICE_LNG = 104.8966103;
 const OFFICE_RADIUS = 5000;
+const MANAGER_ID = 315830657;
 
-// ── STATE ────────────────────────────────────────────────────────────────────
 let tg = window.Telegram?.WebApp;
 let currentUser = null;
 let employeeData = null;
+let isManager = false;
 let selectedLeaveType = 'annual';
 let selectedLeaveDate = null;
 let calYear, calMonth;
 let userLat = null, userLng = null;
-let checkinMode = 'in'; // 'in' or 'out'
 
-// ── INIT ─────────────────────────────────────────────────────────────────────
 window.onload = async () => {
   if (tg) {
-    tg.ready();
-    tg.expand();
-    tg.setBackgroundColor('#faf9f7');
-    tg.setHeaderColor('#ffffff');
+    tg.ready(); tg.expand();
+    tg.setBackgroundColor('#13131a');
+    tg.setHeaderColor('#13131a');
     currentUser = tg.initDataUnsafe?.user;
   }
-
-  // For testing without Telegram, use a mock user
-  if (!currentUser) {
-    currentUser = { id: 999999, first_name: 'Test', last_name: 'User' };
-  }
-
-  initCalendar();
-
-  // Check if registered
+  if (!currentUser) currentUser = { id: 999999, first_name: 'Test', last_name: 'User' };
+  isManager = (currentUser.id === MANAGER_ID);
+  initCalendar(); initMonthPicker();
   try {
-    const resp = await apiCall('check_employee', { telegram_id: currentUser.id });
-    if (resp.registered) {
-      employeeData = resp.employee;
-      await loadMainScreen();
-      showScreen('screen-main');
-    } else {
-      showScreen('screen-register');
-    }
-  } catch(e) {
-    // If API not connected yet, show main for demo
-    showScreen('screen-register');
-  }
+    const r = await api('check_employee', {});
+    if (r.registered) {
+      employeeData = r.employee;
+      if (isManager) { await loadMgrDashboard(); showScreen('screen-mgr-main'); }
+      else { await loadMainScreen(); showScreen('screen-main'); }
+    } else { showScreen('screen-register'); }
+  } catch(e) { showScreen('screen-register'); }
 };
 
-// ── API ───────────────────────────────────────────────────────────────────────
-async function apiCall(action, data) {
-  // This will call your Railway backend
-  const url = `${API_BASE}/miniapp/${action}`;
-  const resp = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...data, telegram_id: currentUser?.id })
+async function api(action, data) {
+  const r = await fetch(`${API_BASE}/miniapp/${action}`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({...data, telegram_id: currentUser?.id})
   });
-  if (!resp.ok) throw new Error(await resp.text());
-  return resp.json();
+  const j = await r.json();
+  if (!j.ok) throw new Error(j.error || 'Error');
+  return j;
 }
 
-// ── HELPERS ──────────────────────────────────────────────────────────────────
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  window.scrollTo(0, 0);
+  window.scrollTo(0,0);
 }
 
-function showToast(msg, type = '') {
+function toast(msg, type='') {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = `toast ${type} show`;
-  setTimeout(() => t.className = 'toast', 3000);
+  t.textContent = msg; t.className = `toast ${type} show`;
+  setTimeout(() => t.className='toast', 3000);
 }
 
-function haversineDistance(lat1, lng1, lat2, lng2) {
-  const R = 6371000;
-  const phi1 = lat1 * Math.PI / 180, phi2 = lat2 * Math.PI / 180;
-  const dphi = (lat2 - lat1) * Math.PI / 180;
-  const dlambda = (lng2 - lng1) * Math.PI / 180;
-  const a = Math.sin(dphi/2)**2 + Math.cos(phi1)*Math.cos(phi2)*Math.sin(dlambda/2)**2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+function dist(lat1,lng1,lat2,lng2) {
+  const R=6371000, p1=lat1*Math.PI/180, p2=lat2*Math.PI/180;
+  const dp=(lat2-lat1)*Math.PI/180, dl=(lng2-lng1)*Math.PI/180;
+  const a=Math.sin(dp/2)**2+Math.cos(p1)*Math.cos(p2)*Math.sin(dl/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
 
-function formatTime(dt) {
-  if (!dt) return '--';
-  const d = new Date(dt);
-  return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+function fmtTime(iso) {
+  if (!iso) return '--:--';
+  return new Date(iso).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
+}
+function fmtDate(iso) {
+  if (!iso) return '--';
+  return new Date(iso).toLocaleDateString('en-US',{weekday:'short',day:'numeric',month:'short'});
+}
+function fmtTimeStr(t) {
+  if (!t) return '--';
+  const [h,m]=t.split(':'); const hr=parseInt(h);
+  return `${hr>12?hr-12:hr||12}:${m} ${hr>=12?'PM':'AM'}`;
+}
+function initials(name) { return name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(); }
+function greet() { const h=new Date().getHours(); return h<12?'Good morning':h<17?'Good afternoon':'Good evening'; }
+
+function switchTab(tab) {
+  const m={main:'screen-main',attendance:'screen-attendance',leave:'screen-leave',profile:'screen-profile'};
+  showScreen(m[tab]);
+  if (tab==='attendance') loadAttendance();
+  if (tab==='profile') loadProfile();
+}
+function switchMgrTab(tab) {
+  const m={main:'screen-mgr-main',leaves:'screen-mgr-leaves',report:'screen-mgr-report',employees:'screen-mgr-employees'};
+  showScreen(m[tab]);
+  if (tab==='main') loadMgrDashboard();
+  if (tab==='leaves') loadMgrLeaves();
+  if (tab==='employees') loadMgrEmployees();
 }
 
-function formatDate(dt) {
-  if (!dt) return '--';
-  const d = new Date(dt);
-  return d.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' });
+// ── REGISTER ──
+let selType = 'fulltime';
+function selectType(t) {
+  selType = t;
+  document.getElementById('type-fulltime').className='radio-btn'+(t==='fulltime'?' selected':'');
+  document.getElementById('type-parttime').className='radio-btn'+(t==='parttime'?' selected':'');
+}
+async function submitRegistration() {
+  const name=document.getElementById('reg-name').value.trim();
+  const title=document.getElementById('reg-title').value.trim();
+  if (!name||!title) { toast('Please fill in all fields','error'); return; }
+  try {
+    await api('register',{full_name:name,job_title:title,employment_type:selType});
+    employeeData={full_name:name,job_title:title,employment_type:selType,work_start:selType==='fulltime'?'09:00:00':'13:00:00',work_end:'17:00:00'};
+    toast('Profile created!','success');
+    if (isManager) { await loadMgrDashboard(); showScreen('screen-mgr-main'); }
+    else { await loadMainScreen(); showScreen('screen-main'); }
+  } catch(e) { toast(e.message||'Failed','error'); }
 }
 
-function getGreeting() {
-  const h = new Date().getHours();
-  if (h < 12) return 'Good morning';
-  if (h < 17) return 'Good afternoon';
-  return 'Good evening';
-}
-
-// ── MAIN SCREEN ───────────────────────────────────────────────────────────────
+// ── MAIN ──
 async function loadMainScreen() {
   const now = new Date();
-  document.getElementById('main-date').textContent =
-    now.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-
-  if (employeeData) {
-    const first = employeeData.full_name.split(' ')[0];
-    document.getElementById('main-greeting').innerHTML =
-      `${getGreeting()}, <em>${first}</em>`;
-    document.getElementById('main-emp-type').textContent =
-      employeeData.employment_type === 'fulltime' ? 'Full Time' : 'Part Time';
-    const ws = employeeData.work_start || '09:00:00';
-    const we = employeeData.work_end || '17:00:00';
-    document.getElementById('main-shift').textContent =
-      `Shift: ${formatTimeStr(ws)} – ${formatTimeStr(we)}`;
-  }
-
-  // Load today's attendance
+  const name = employeeData?.full_name || '';
+  const first = name.split(' ')[0];
+  const av = initials(name||'?');
+  document.getElementById('main-avatar').textContent = av;
+  document.getElementById('main-name').textContent = name;
+  document.getElementById('main-role').textContent = employeeData?.job_title || '';
+  document.getElementById('main-welcome-line').textContent = `${greet()}, ${first}!`;
+  document.getElementById('ov-date').textContent = now.toLocaleDateString('en-US',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('ov-now').textContent = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
   try {
-    const resp = await apiCall('today_status', {});
-    updateStatusCard(resp);
-  } catch(e) {
-    document.getElementById('today-status-time').textContent = '--:--';
-    document.getElementById('today-status-detail').textContent = 'Tap Check In to start your day';
-  }
+    const r = await api('today_status',{});
+    document.getElementById('ov-checkin').textContent = r.check_in_time ? fmtTime(r.check_in_time) : '--:--';
+    document.getElementById('ov-checkout').textContent = r.check_out_time ? fmtTime(r.check_out_time) : '--:--';
+  } catch(e) {}
 }
 
-function formatTimeStr(t) {
-  if (!t) return '--';
-  const [h, m] = t.split(':');
-  const hr = parseInt(h);
-  const ampm = hr >= 12 ? 'PM' : 'AM';
-  return `${hr > 12 ? hr-12 : hr || 12}:${m} ${ampm}`;
+// ── CHECK IN / OUT ──
+function goCheckIn() { showScreen('screen-checkin'); resetLoc('ci'); startCheckin(); }
+function goCheckOut() { showScreen('screen-checkout'); resetLoc('co'); startCheckout(); }
+
+function resetLoc(p) {
+  document.getElementById(`${p}-ring`).className='loc-ring';
+  document.getElementById(`${p}-ring`).textContent='📍';
+  document.getElementById(`${p}-title`).textContent='Locating You...';
+  document.getElementById(`${p}-sub`).textContent='Getting your GPS. Please wait.';
+  document.getElementById(`${p}-pill`).style.display='none';
+  document.getElementById(`${p}-btn`).style.display='none';
+  document.getElementById(`${p}-retry`).style.display='none';
+  if (p==='co') document.getElementById('early-section').style.display='none';
 }
+function startCheckin() { resetLoc('ci'); gps('ci'); }
+function startCheckout() { resetLoc('co'); gps('co'); }
 
-function updateStatusCard(data) {
-  const card = document.getElementById('today-status-card');
-  const timeEl = document.getElementById('today-status-time');
-  const detailEl = document.getElementById('today-status-detail');
-
-  card.className = 'status-card';
-
-  if (data.on_leave) {
-    timeEl.textContent = '🏖️';
-    detailEl.textContent = `On ${data.leave_type || 'Leave'} today`;
-    return;
-  }
-
-  if (data.check_in_time) {
-    const checkinTime = formatTime(data.check_in_time);
-    timeEl.textContent = checkinTime;
-    card.classList.add(data.status === 'late' || data.status === 'half_day_unpaid' ? 'late' : 'checked-in');
-
-    let detail = `Checked in`;
-    if (data.status === 'late') detail += ` · Late by ${data.late_minutes} min`;
-    if (data.status === 'half_day_unpaid') detail += ` · Half day unpaid`;
-    if (data.check_out_time) detail += ` · Out: ${formatTime(data.check_out_time)}`;
-    detailEl.textContent = detail;
-  } else {
-    timeEl.textContent = '--:--';
-    detailEl.textContent = 'Not checked in yet';
-    card.classList.add('absent');
-  }
-}
-
-// ── REGISTRATION ──────────────────────────────────────────────────────────────
-let selectedEmpType = 'fulltime';
-function selectType(type) {
-  selectedEmpType = type;
-  document.getElementById('type-fulltime').className = 'radio-btn' + (type === 'fulltime' ? ' selected' : '');
-  document.getElementById('type-parttime').className = 'radio-btn' + (type === 'parttime' ? ' selected' : '');
-}
-
-async function submitRegistration() {
-  const name = document.getElementById('reg-name').value.trim();
-  const title = document.getElementById('reg-title').value.trim();
-  if (!name || !title) { showToast('Please fill in all fields', 'error'); return; }
-
-  try {
-    await apiCall('register', { full_name: name, job_title: title, employment_type: selectedEmpType });
-    showToast('Profile created!', 'success');
-    employeeData = { full_name: name, job_title: title, employment_type: selectedEmpType, work_start: selectedEmpType === 'fulltime' ? '09:00:00' : '13:00:00', work_end: '17:00:00' };
-    await loadMainScreen();
-    showScreen('screen-main');
-  } catch(e) {
-    showToast('Registration failed. Try again.', 'error');
-  }
-}
-
-// ── CHECK IN / OUT ────────────────────────────────────────────────────────────
-function goCheckIn() {
-  checkinMode = 'in';
-  showScreen('screen-checkin');
-  resetLocationScreen('checkin');
-  startCheckin();
-}
-
-function goCheckOut() {
-  checkinMode = 'out';
-  showScreen('screen-checkout');
-  resetLocationScreen('checkout');
-  startCheckout();
-}
-
-function resetLocationScreen(mode) {
-  document.getElementById(`${mode}-icon`).textContent = '📍';
-  document.getElementById(`${mode}-title`).textContent = 'Verifying Location';
-  document.getElementById(`${mode}-sub`).textContent = 'Getting your GPS coordinates...';
-  document.getElementById(`${mode}-distance-bar`).style.display = 'none';
-  document.getElementById(`${mode}-btn`).style.display = 'none';
-  if (document.getElementById(`${mode}-retry`)) document.getElementById(`${mode}-retry`).style.display = 'none';
-  if (mode === 'checkout') document.getElementById('early-reason-section').style.display = 'none';
-}
-
-function startCheckin() {
-  resetLocationScreen('checkin');
-  getLocation('checkin');
-}
-
-function startCheckout() {
-  resetLocationScreen('checkout');
-  getLocation('checkout');
-}
-
-function getLocation(mode) {
-  if (!navigator.geolocation) {
-    setLocationError(mode, 'GPS not available on this device.');
-    return;
-  }
+function gps(p) {
+  if (!navigator.geolocation) { locErr(p,'GPS not available.'); return; }
   navigator.geolocation.getCurrentPosition(
-    pos => handleLocationSuccess(mode, pos),
-    err => setLocationError(mode, 'Could not get your location. Please enable GPS.'),
-    { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+    pos => onGPS(p,pos),
+    () => locErr(p,'Could not get location. Enable GPS and try again.'),
+    {enableHighAccuracy:true,timeout:15000,maximumAge:0}
   );
 }
-
-function handleLocationSuccess(mode, pos) {
-  userLat = pos.coords.latitude;
-  userLng = pos.coords.longitude;
-  const dist = haversineDistance(userLat, userLng, OFFICE_LAT, OFFICE_LNG);
-  const distBar = document.getElementById(`${mode}-distance-bar`);
-  const distEl = document.getElementById(`${mode}-distance`);
-
-  distBar.style.display = 'flex';
-  distEl.textContent = `${Math.round(dist)}m away`;
-
-  if (dist <= OFFICE_RADIUS) {
-    distEl.className = 'distance-value ok';
-    document.getElementById(`${mode}-icon`).textContent = '✅';
-    document.getElementById(`${mode}-title`).textContent = 'You\'re at the office';
-    document.getElementById(`${mode}-sub`).textContent = `Within ${Math.round(dist)}m of the office. Ready to ${mode === 'checkin' ? 'check in' : 'check out'}.`;
-
-    if (mode === 'checkout') {
-      // Check if early leave
-      const now = new Date();
-      const workEnd = employeeData?.work_end || '17:00:00';
-      const [wh, wm] = workEnd.split(':');
-      const endTime = new Date(); endTime.setHours(parseInt(wh), parseInt(wm), 0);
-      if (now < new Date(endTime.getTime() - 15*60*1000)) {
-        document.getElementById('early-reason-section').style.display = 'block';
-      }
+function onGPS(p,pos) {
+  userLat=pos.coords.latitude; userLng=pos.coords.longitude;
+  const d=dist(userLat,userLng,OFFICE_LAT,OFFICE_LNG);
+  document.getElementById(`${p}-pill`).style.display='flex';
+  const dv=document.getElementById(`${p}-dist`);
+  dv.textContent=`${Math.round(d)}m away`;
+  if (d<=OFFICE_RADIUS) {
+    dv.className='dist-val ok';
+    document.getElementById(`${p}-ring`).className='loc-ring ok';
+    document.getElementById(`${p}-ring`).textContent='✅';
+    document.getElementById(`${p}-title`).textContent="You're at the office";
+    document.getElementById(`${p}-sub`).textContent=`Confirmed — ${Math.round(d)}m from office.`;
+    if (p==='co') {
+      const now=new Date(); const we=employeeData?.work_end||'17:00:00';
+      const [wh,wm]=we.split(':'); const end=new Date(); end.setHours(parseInt(wh),parseInt(wm),0);
+      if (now<new Date(end.getTime()-15*60*1000)) document.getElementById('early-section').style.display='block';
     }
-
-    document.getElementById(`${mode}-btn`).style.display = 'block';
+    document.getElementById(`${p}-btn`).style.display='block';
   } else {
-    distEl.className = 'distance-value far';
-    setLocationError(mode, `You are ${Math.round(dist)}m from the office. You must be within ${OFFICE_RADIUS}m to check ${mode === 'checkin' ? 'in' : 'out'}.`);
-    document.getElementById(`${mode}-retry`).style.display = 'block';
+    dv.className='dist-val far';
+    locErr(p,`You are ${Math.round(d)}m from office. Must be within ${OFFICE_RADIUS}m.`);
+    document.getElementById(`${p}-retry`).style.display='block';
   }
 }
-
-function setLocationError(mode, msg) {
-  document.getElementById(`${mode}-icon`).textContent = '❌';
-  document.getElementById(`${mode}-title`).textContent = 'Location Error';
-  document.getElementById(`${mode}-sub`).textContent = msg;
+function locErr(p,msg) {
+  document.getElementById(`${p}-ring`).className='loc-ring fail';
+  document.getElementById(`${p}-ring`).textContent='❌';
+  document.getElementById(`${p}-title`).textContent='Location Error';
+  document.getElementById(`${p}-sub`).textContent=msg;
 }
-
 async function confirmCheckIn() {
-  document.getElementById('checkin-btn').disabled = true;
-  document.getElementById('checkin-btn').textContent = 'Checking in...';
+  const btn=document.getElementById('ci-btn'); btn.disabled=true; btn.textContent='CHECKING IN...';
   try {
-    const resp = await apiCall('checkin', { lat: userLat, lng: userLng });
-    showToast(resp.message || 'Checked in!', 'success');
-    await loadMainScreen();
-    showScreen('screen-main');
-  } catch(e) {
-    showToast(e.message || 'Check-in failed', 'error');
-    document.getElementById('checkin-btn').disabled = false;
-    document.getElementById('checkin-btn').textContent = 'Confirm Check In';
-  }
+    const r=await api('checkin',{lat:userLat,lng:userLng});
+    toast(r.message||'Checked in!','success');
+    await loadMainScreen(); showScreen('screen-main');
+  } catch(e) { toast(e.message,'error'); btn.disabled=false; btn.textContent='CONFIRM CHECK IN'; }
 }
-
 async function confirmCheckOut() {
-  const earlyReason = document.getElementById('early-reason').value.trim();
-  const earlySection = document.getElementById('early-reason-section');
-
-  if (earlySection.style.display !== 'none' && !earlyReason) {
-    showToast('Please provide a reason for early leave', 'error');
-    return;
-  }
-
-  document.getElementById('checkout-btn').disabled = true;
-  document.getElementById('checkout-btn').textContent = 'Checking out...';
-
+  const er=document.getElementById('early-reason').value.trim();
+  if (document.getElementById('early-section').style.display!=='none'&&!er) { toast('Please provide early leave reason','error'); return; }
+  const btn=document.getElementById('co-btn'); btn.disabled=true; btn.textContent='CHECKING OUT...';
   try {
-    const resp = await apiCall('checkout', { lat: userLat, lng: userLng, early_reason: earlyReason || null });
-    showToast(resp.message || 'Checked out!', 'success');
-    await loadMainScreen();
-    showScreen('screen-main');
-  } catch(e) {
-    showToast(e.message || 'Check-out failed', 'error');
-    document.getElementById('checkout-btn').disabled = false;
-    document.getElementById('checkout-btn').textContent = 'Confirm Check Out';
-  }
+    const r=await api('checkout',{lat:userLat,lng:userLng,early_reason:er||null});
+    toast(r.message||'Checked out!','success');
+    await loadMainScreen(); showScreen('screen-main');
+  } catch(e) { toast(e.message,'error'); btn.disabled=false; btn.textContent='CONFIRM CHECK OUT'; }
 }
 
-// ── CALENDAR ──────────────────────────────────────────────────────────────────
-function initCalendar() {
-  const now = new Date();
-  calYear = now.getFullYear();
-  calMonth = now.getMonth();
-  renderCalendar();
-}
-
-function changeMonth(dir) {
-  calMonth += dir;
-  if (calMonth > 11) { calMonth = 0; calYear++; }
-  if (calMonth < 0) { calMonth = 11; calYear--; }
-  renderCalendar();
-}
-
+// ── CALENDAR ──
+function initCalendar() { const n=new Date(); calYear=n.getFullYear(); calMonth=n.getMonth(); renderCalendar(); }
+function changeMonth(d) { calMonth+=d; if(calMonth>11){calMonth=0;calYear++;} if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
 function renderCalendar() {
-  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('cal-title').textContent = `${months[calMonth]} ${calYear}`;
-
-  const grid = document.getElementById('cal-grid');
-  grid.innerHTML = '';
-
-  ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(d => {
-    const el = document.createElement('div');
-    el.className = 'cal-day-name';
-    el.textContent = d;
-    grid.appendChild(el);
-  });
-
-  const firstDay = new Date(calYear, calMonth, 1).getDay();
-  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
-  const today = new Date();
-
-  for (let i = 0; i < firstDay; i++) {
-    grid.appendChild(document.createElement('div'));
-  }
-
-  for (let d = 1; d <= daysInMonth; d++) {
-    const el = document.createElement('div');
-    el.className = 'cal-day';
-    el.textContent = d;
-
-    const thisDate = new Date(calYear, calMonth, d);
-    const isToday = thisDate.toDateString() === today.toDateString();
-    const isPast = thisDate < new Date(today.setHours(0,0,0,0));
-    const isSelected = selectedLeaveDate &&
-      thisDate.toDateString() === new Date(selectedLeaveDate).toDateString();
-
-    if (isToday) el.classList.add('today');
-    if (isPast) el.classList.add('past');
-    if (isSelected) el.classList.add('selected');
-
-    if (!isPast) {
-      el.onclick = () => selectDate(calYear, calMonth, d);
-    }
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-title').textContent=`${months[calMonth]} ${calYear}`;
+  const grid=document.getElementById('cal-grid'); grid.innerHTML='';
+  ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(d=>{const e=document.createElement('div');e.className='cal-day-name';e.textContent=d;grid.appendChild(e);});
+  const first=new Date(calYear,calMonth,1).getDay();
+  const dim=new Date(calYear,calMonth+1,0).getDate();
+  const today=new Date(); today.setHours(0,0,0,0);
+  for(let i=0;i<first;i++) grid.appendChild(document.createElement('div'));
+  for(let d=1;d<=dim;d++) {
+    const el=document.createElement('div'); el.className='cal-day'; el.textContent=d;
+    const td=new Date(calYear,calMonth,d);
+    if(td.toDateString()===new Date().toDateString()) el.classList.add('today');
+    if(td<today) el.classList.add('past');
+    if(selectedLeaveDate&&td.toDateString()===new Date(selectedLeaveDate).toDateString()) el.classList.add('selected');
+    if(td>=today) el.onclick=()=>selDate(calYear,calMonth,d);
     grid.appendChild(el);
   }
 }
-
-function selectDate(y, m, d) {
-  selectedLeaveDate = new Date(y, m, d);
-  renderCalendar();
-
-  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  document.getElementById('selected-date-text').textContent =
-    `${days[selectedLeaveDate.getDay()]}, ${d} ${months[m]} ${y}`;
-  document.getElementById('selected-date-display').style.display = 'block';
+function selDate(y,m,d) {
+  selectedLeaveDate=new Date(y,m,d); renderCalendar();
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  document.getElementById('sel-date-text').textContent=`${days[selectedLeaveDate.getDay()]}, ${d} ${months[m]} ${y}`;
+  document.getElementById('sel-date-chip').style.display='flex';
 }
-
-function selectLeaveType(type, el) {
-  selectedLeaveType = type;
-  document.querySelectorAll('.leave-type-btn').forEach(b => b.classList.remove('selected'));
+function selectLeaveType(t,el) {
+  selectedLeaveType=t;
+  document.querySelectorAll('.leave-type-btn').forEach(b=>b.classList.remove('selected'));
   el.classList.add('selected');
 }
-
 async function submitLeave() {
-  if (!selectedLeaveDate) { showToast('Please select a date', 'error'); return; }
-  const reason = document.getElementById('leave-reason').value.trim();
-  if (!reason) { showToast('Please provide a reason', 'error'); return; }
-
-  const dateStr = selectedLeaveDate.toISOString().split('T')[0];
-
+  if(!selectedLeaveDate){toast('Please select a date','error');return;}
+  const reason=document.getElementById('leave-reason').value.trim();
+  if(!reason){toast('Please provide a reason','error');return;}
   try {
-    await apiCall('apply_leave', { leave_type: selectedLeaveType, date: dateStr, reason });
-    showToast('Leave request submitted!', 'success');
-    selectedLeaveDate = null;
-    document.getElementById('leave-reason').value = '';
-    document.getElementById('selected-date-display').style.display = 'none';
-    renderCalendar();
-    setTimeout(() => showScreen('screen-main'), 1500);
-  } catch(e) {
-    showToast('Failed to submit. Try again.', 'error');
-  }
+    await api('apply_leave',{leave_type:selectedLeaveType,date:selectedLeaveDate.toISOString().split('T')[0],reason});
+    toast('Leave request submitted!','success');
+    selectedLeaveDate=null; document.getElementById('leave-reason').value='';
+    document.getElementById('sel-date-chip').style.display='none'; renderCalendar();
+    setTimeout(()=>switchTab('main'),1500);
+  } catch(e){toast(e.message||'Failed','error');}
 }
 
-// ── ATTENDANCE HISTORY ────────────────────────────────────────────────────────
-async function goAttendance() {
-  showScreen('screen-attendance');
-  const body = document.getElementById('attendance-body');
-  body.innerHTML = '<div class="loading"><div class="spinner"></div> Loading...</div>';
-
+// ── ATTENDANCE ──
+async function loadAttendance() {
+  const body=document.getElementById('att-body');
+  body.innerHTML='<div class="loading"><div class="spinner"></div> Loading...</div>';
   try {
-    const resp = await apiCall('attendance_history', {});
-    const records = resp.records || [];
-
-    if (records.length === 0) {
-      body.innerHTML = '<div class="empty"><div class="empty-icon">📊</div>No attendance records yet.</div>';
-      return;
-    }
-
-    const badgeMap = {
-      present: ['badge-present', 'Present'],
-      late: ['badge-late', 'Late'],
-      half_day_unpaid: ['badge-half', 'Half Day'],
-      on_leave: ['badge-leave', 'On Leave'],
-      absent: ['badge-absent', 'Absent'],
-    };
-
-    let html = '<div class="section-title">Recent Attendance</div><div class="attendance-list">';
-    records.forEach(r => {
-      const [cls, label] = badgeMap[r.status] || ['badge-absent', 'Unknown'];
-      const checkin = r.check_in_time ? formatTime(r.check_in_time) : '--';
-      const checkout = r.check_out_time ? formatTime(r.check_out_time) : '--';
-      html += `
-        <div class="att-row">
-          <div>
-            <div class="att-date">${formatDate(r.date)}</div>
-            <div class="att-times">In: ${checkin} · Out: ${checkout}</div>
-          </div>
-          <div class="att-badge ${cls}">${label}</div>
-        </div>`;
+    const r=await api('attendance_history',{});
+    const records=r.records||[];
+    if(!records.length){body.innerHTML='<div class="empty"><div class="empty-icon">📊</div><div class="empty-text">No records yet.</div></div>';return;}
+    const bmap={present:['badge-present','Present','#4ecb8d'],late:['badge-late','Late','#f5a623'],half_day_unpaid:['badge-half','Half Day','#e05c7a'],on_leave:['badge-leave','On Leave','#5b8def'],absent:['badge-absent','Absent','#e05c7a']};
+    let html='<div class="att-list">';
+    records.forEach(r=>{
+      const [cls,label,color]=bmap[r.status]||['badge-absent','Unknown','#888'];
+      html+=`<div class="att-row"><div class="att-dot" style="background:${color};"></div><div class="att-info"><div class="att-date">${fmtDate(r.date)}</div><div class="att-times">In: ${fmtTime(r.check_in_time)} · Out: ${fmtTime(r.check_out_time)}</div></div><span class="badge ${cls}">${label}</span></div>`;
     });
-    html += '</div>';
-    body.innerHTML = html;
-  } catch(e) {
-    body.innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div>Could not load records.</div>';
-  }
+    html+='</div>'; body.innerHTML=html;
+  } catch(e){body.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load records.</div></div>';}
 }
 
-// ── PROFILE ───────────────────────────────────────────────────────────────────
-async function goProfile() {
-  showScreen('screen-profile');
-  const body = document.getElementById('profile-body');
+// ── PROFILE ──
+async function loadProfile() {
+  const body=document.getElementById('profile-body');
+  if(!employeeData){body.innerHTML='<div class="empty"><div class="empty-icon">👤</div><div class="empty-text">Not registered.</div></div>';return;}
+  const ws=fmtTimeStr(employeeData.work_start||'09:00:00');
+  const we=fmtTimeStr(employeeData.work_end||'17:00:00');
+  body.innerHTML=`
+    <div class="profile-big-card">
+      <div class="pf-avatar">${initials(employeeData.full_name)}</div>
+      <div class="pf-name">${employeeData.full_name}</div>
+      <div class="pf-role">${employeeData.job_title}</div>
+    </div>
+    <div class="info-card">
+      <div class="info-row"><div class="info-key">Employment Type</div><div class="info-val">${employeeData.employment_type==='fulltime'?'Full Time':'Part Time'}</div></div>
+      <div class="info-row"><div class="info-key">Work Hours</div><div class="info-val">${ws} – ${we}</div></div>
+      <div class="info-row"><div class="info-key">Work Days</div><div class="info-val">Mon – Fri</div></div>
+      <div class="info-row"><div class="info-key">Telegram ID</div><div class="info-val" style="font-size:12px;font-family:monospace;color:var(--text2);">${currentUser?.id}</div></div>
+    </div>`;
+}
 
-  if (!employeeData) {
-    body.innerHTML = '<div class="empty"><div class="empty-icon">👤</div>Not registered yet.</div>';
-    return;
+// ── MANAGER DASHBOARD ──
+async function loadMgrDashboard() {
+  const now=new Date();
+  document.getElementById('mgr-welcome').textContent=`${greet()}.`;
+  document.getElementById('mgr-ov-date').textContent=now.toLocaleDateString('en-US',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('mgr-ov-now').textContent=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
+  const list=document.getElementById('mgr-main-list');
+  list.innerHTML='<div class="loading"><div class="spinner"></div> Loading...</div>';
+  try {
+    const r=await api('mgr_today_status',{});
+    const {present=[],late=[],absent=[],on_leave=[]}=r;
+    document.getElementById('mgr-stat-present').textContent=present.length;
+    document.getElementById('mgr-stat-late').textContent=late.length;
+    document.getElementById('mgr-stat-leave').textContent=on_leave.length;
+    document.getElementById('mgr-stat-absent').textContent=absent.length;
+    const sections=[
+      {label:'✅ Present',list:present,color:'var(--success)',bg:'var(--success-bg)'},
+      {label:'⏰ Late',list:late,color:'var(--warning)',bg:'var(--warning-bg)'},
+      {label:'🏖️ On Leave',list:on_leave,color:'var(--info)',bg:'var(--info-bg)'},
+      {label:'❌ Absent',list:absent,color:'var(--error)',bg:'var(--error-bg)'},
+    ];
+    let html='';
+    sections.forEach(s=>{
+      if(!s.list.length) return;
+      html+=`<div class="section-label">${s.label}</div><div class="emp-list">`;
+      s.list.forEach(e=>{
+        html+=`<div class="emp-row"><div class="emp-avatar" style="background:${s.bg};color:${s.color};">${initials(e.full_name)}</div><div class="emp-info"><div class="emp-name">${e.full_name}</div><div class="emp-role">${e.job_title}</div></div>${e.check_in_time?`<div style="font-size:12px;font-weight:700;color:${s.color};">${fmtTime(e.check_in_time)}</div>`:''}</div>`;
+      });
+      html+='</div>';
+    });
+    if(!html) html='<div class="empty"><div class="empty-icon">🌿</div><div class="empty-text">No employees yet.</div></div>';
+    list.innerHTML=html;
+  } catch(e){list.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load.</div></div>';}
+}
+
+// ── MANAGER LEAVES ──
+async function loadMgrLeaves() {
+  const body=document.getElementById('mgr-leaves-body');
+  body.innerHTML='<div class="loading"><div class="spinner"></div> Loading...</div>';
+  try {
+    const r=await api('mgr_pending_leaves',{});
+    const leaves=r.leaves||[];
+    if(!leaves.length){body.innerHTML='<div class="empty"><div class="empty-icon">✅</div><div class="empty-text">No pending requests.</div></div>';return;}
+    let html='';
+    leaves.forEach(l=>{
+      html+=`<div class="leave-req-card">
+        <div class="leave-req-name">${l.full_name}</div>
+        <div class="leave-req-meta">${l.leave_type.charAt(0).toUpperCase()+l.leave_type.slice(1)} Leave · ${fmtDate(l.date)}</div>
+        <div class="leave-req-reason">📝 ${l.reason}</div>
+        <div class="leave-actions">
+          <button class="btn-approve" onclick="processLeave(${l.id},'approved')">✅ Approve</button>
+          <button class="btn-reject" onclick="processLeave(${l.id},'rejected')">❌ Reject</button>
+        </div>
+      </div>`;
+    });
+    body.innerHTML=html;
+  } catch(e){body.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load.</div></div>';}
+}
+async function processLeave(id,action) {
+  try {
+    await api('mgr_process_leave',{leave_id:id,action});
+    toast(action==='approved'?'Leave approved ✅':'Leave rejected','');
+    loadMgrLeaves();
+  } catch(e){toast(e.message||'Failed','error');}
+}
+
+// ── MANAGER REPORT ──
+function initMonthPicker() {
+  const grid=document.getElementById('month-picker-grid');
+  const today=new Date();
+  for(let i=0;i<6;i++){
+    const d=new Date(today.getFullYear(),today.getMonth()-i,1);
+    const ms=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    const btn=document.createElement('div'); btn.className='month-btn'+(i===0?' selected':'');
+    btn.textContent=d.toLocaleDateString('en-US',{month:'short',year:'numeric'});
+    btn.onclick=()=>{document.querySelectorAll('.month-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');loadMgrReport(ms);};
+    grid.appendChild(btn);
   }
+  const cur=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+  loadMgrReport(cur);
+}
+async function loadMgrReport(monthStr) {
+  const res=document.getElementById('report-results');
+  res.innerHTML='<div class="loading"><div class="spinner"></div> Loading...</div>';
+  try {
+    const r=await api('mgr_monthly_report',{month:monthStr});
+    const employees=r.employees||[];
+    if(!employees.length){res.innerHTML='<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">No data.</div></div>';return;}
+    let html=`<div class="section-label">Results — ${monthStr}</div>`;
+    employees.forEach(e=>{
+      html+=`<div class="report-emp-card">
+        <div class="report-emp-name">${e.full_name} <span style="font-size:11px;color:var(--text3);font-weight:400;">${e.job_title}</span></div>
+        <div class="report-chips">
+          <div class="report-chip" style="background:var(--success-bg);color:var(--success);">✅ ${e.present} Present</div>
+          <div class="report-chip" style="background:var(--warning-bg);color:var(--warning);">⏰ ${e.late} Late</div>
+          <div class="report-chip" style="background:var(--error-bg);color:var(--error);">⚠️ ${e.half_day} Half</div>
+          <div class="report-chip" style="background:var(--info-bg);color:var(--info);">🏖️ ${e.leave} Leave</div>
+          <div class="report-chip" style="background:var(--error-bg);color:var(--error);">❌ ${e.absent} Absent</div>
+        </div>
+      </div>`;
+    });
+    res.innerHTML=html;
+  } catch(e){res.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load.</div></div>';}
+}
 
-  const ws = formatTimeStr(employeeData.work_start || '09:00:00');
-  const we = formatTimeStr(employeeData.work_end || '17:00:00');
-
-  body.innerHTML = `
-    <div style="text-align:center;padding:32px 0 24px;">
-      <div style="width:72px;height:72px;background:var(--cream);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;">🌿</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;">${employeeData.full_name}</div>
-      <div style="font-size:13px;color:var(--mid);margin-top:4px;">${employeeData.job_title}</div>
-    </div>
-    <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:24px;">
-      <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-        <div style="font-size:12px;color:var(--mid);">Employment Type</div>
-        <div style="font-size:13px;font-weight:500;">${employeeData.employment_type === 'fulltime' ? 'Full Time' : 'Part Time'}</div>
-      </div>
-      <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-        <div style="font-size:12px;color:var(--mid);">Work Hours</div>
-        <div style="font-size:13px;font-weight:500;">${ws} – ${we}</div>
-      </div>
-      <div style="padding:16px 20px;display:flex;justify-content:space-between;align-items:center;">
-        <div style="font-size:12px;color:var(--mid);">Work Days</div>
-        <div style="font-size:13px;font-weight:500;">Mon – Fri</div>
-      </div>
-    </div>
-    <div style="background:var(--cream);border-radius:var(--radius);padding:16px 20px;text-align:center;">
-      <div style="font-size:12px;color:var(--mid);margin-bottom:4px;">Telegram ID</div>
-      <div style="font-size:13px;font-family:monospace;color:var(--charcoal);">${currentUser?.id}</div>
-    </div>
-  `;
+// ── MANAGER EMPLOYEES ──
+async function loadMgrEmployees() {
+  const body=document.getElementById('mgr-employees-body');
+  body.innerHTML='<div class="loading"><div class="spinner"></div> Loading...</div>';
+  try {
+    const r=await api('mgr_employees',{});
+    const employees=r.employees||[];
+    if(!employees.length){body.innerHTML='<div class="empty"><div class="empty-icon">👥</div><div class="empty-text">No employees yet.</div></div>';return;}
+    let html=`<div class="section-label">${employees.length} member${employees.length>1?'s':''}</div><div class="emp-list">`;
+    employees.forEach(e=>{
+      html+=`<div class="emp-row">
+        <div class="emp-avatar">${initials(e.full_name)}</div>
+        <div class="emp-info">
+          <div class="emp-name">${e.full_name}</div>
+          <div class="emp-role">${e.job_title} · ${e.employment_type==='fulltime'?'Full Time':'Part Time'}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+          <span class="badge ${e.is_active?'badge-present':'badge-absent'}">${e.is_active?'Active':'Inactive'}</span>
+          ${e.is_active?`<button onclick="removeEmp(${e.telegram_id},'${e.full_name}')" style="font-size:10px;background:none;border:none;color:var(--error);font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;">Remove</button>`:''}
+        </div>
+      </div>`;
+    });
+    html+='</div>';
+    body.innerHTML=html;
+  } catch(e){body.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load.</div></div>';}
+}
+async function removeEmp(tid,name) {
+  if(!confirm(`Remove ${name}?`)) return;
+  try { await api('mgr_remove_employee',{target_telegram_id:tid}); toast(`${name} removed`,''); loadMgrEmployees(); }
+  catch(e){toast(e.message||'Failed','error');}
 }
 </script>
 </body>
