@@ -8,21 +8,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #13131a;
-  --bg2: #1c1c27;
-  --bg3: #242433;
-  --card: #1e1e2e;
-  --card2: #252538;
+  --bg: #f7f8fc;
+  --bg2: #ffffff;
+  --bg3: #f0f0f8;
+  --card: #ffffff;
+  --card2: #f5f5ff;
   --purple: #7c5cbf;
   --purple2: #9b7fe8;
   --purple3: #b39ddb;
   --grad: linear-gradient(135deg, #7c5cbf 0%, #9b7fe8 100%);
   --grad2: linear-gradient(135deg, #6a4aad 0%, #8b6fd8 100%);
   --white: #ffffff;
-  --text: #f0f0f8;
-  --text2: #a0a0c0;
-  --text3: #606080;
-  --border: #2a2a3e;
+  --text: #1a1a2e;
+  --text2: #5a5a7a;
+  --text3: #9898b8;
+  --border: #eeeef5;
   --success: #4ecb8d;
   --success-bg: rgba(78,203,141,0.12);
   --warning: #f5a623;
@@ -845,7 +845,7 @@ textarea { min-height:90px; line-height:1.6; }
 const API_BASE = 'https://elyne-hr-bot-production.up.railway.app';
 const OFFICE_LAT = 11.5764427;
 const OFFICE_LNG = 104.8966103;
-const OFFICE_RADIUS = 5000;
+const OFFICE_RADIUS = 100;
 const MANAGER_ID = 315830657;
 
 let tg = window.Telegram?.WebApp;
@@ -860,8 +860,8 @@ let userLat = null, userLng = null;
 window.onload = async () => {
   if (tg) {
     tg.ready(); tg.expand();
-    tg.setBackgroundColor('#13131a');
-    tg.setHeaderColor('#13131a');
+    tg.setBackgroundColor('#f7f8fc');
+    tg.setHeaderColor('#ffffff');
     currentUser = tg.initDataUnsafe?.user;
   }
   if (!currentUser) currentUser = { id: 999999, first_name: 'Test', last_name: 'User' };
