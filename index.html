@@ -385,6 +385,84 @@ textarea { min-height:90px; line-height:1.6; }
 .info-key { font-size:12px; color:var(--text3); font-weight:500; }
 .info-val { font-size:13px; font-weight:700; }
 
+
+/* ── EMPLOYEE DETAIL ── */
+.emp-detail-hero {
+  background: var(--grad); border-radius: var(--radius);
+  padding: 22px 20px; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 16px;
+  position: relative; overflow: hidden;
+}
+.emp-detail-hero::after {
+  content:''; position:absolute; top:-20px; right:-20px;
+  width:100px; height:100px; background:rgba(255,255,255,0.07); border-radius:50%;
+}
+.emp-detail-avatar {
+  width: 56px; height: 56px; border-radius: 18px;
+  background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 800; color: white; flex-shrink: 0;
+}
+.emp-detail-name { font-size: 17px; font-weight: 800; color: white; }
+.emp-detail-role { font-size: 12px; color: rgba(255,255,255,0.75); margin-top: 3px; }
+
+.mgr-action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.mgr-action-btn {
+  background: var(--card); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); padding: 14px 12px;
+  cursor: pointer; text-align: center; transition: all 0.2s;
+  font-family: 'Montserrat', sans-serif;
+}
+.mgr-action-btn:active { transform: scale(0.97); border-color: var(--purple2); background: rgba(155,127,232,0.08); }
+.mgr-action-btn-icon { font-size: 22px; margin-bottom: 6px; }
+.mgr-action-btn-label { font-size: 11px; font-weight: 700; color: var(--text); letter-spacing: 0.03em; }
+.mgr-action-btn-sub { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+/* ── BADGE NOTIFICATION ── */
+.nav-badge {
+  position: absolute; top: 2px; right: 8px;
+  background: var(--error); color: white;
+  font-size: 9px; font-weight: 800;
+  min-width: 16px; height: 16px;
+  border-radius: 8px; padding: 0 4px;
+  display: flex; align-items: center; justify-content: center;
+}
+.nav-item { position: relative; }
+
+/* ── MODAL OVERLAY ── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  z-index: 100; display: flex; align-items: flex-end;
+  animation: fadeIn .2s ease;
+}
+.modal-sheet {
+  background: var(--bg2); border-radius: 24px 24px 0 0;
+  padding: 24px 20px 40px; width: 100%;
+  max-height: 85vh; overflow-y: auto;
+  animation: slideUp .25s ease;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.modal-title { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+.modal-sub { font-size: 13px; color: var(--text2); margin-bottom: 20px; }
+.modal-close {
+  position: absolute; top: 16px; right: 20px;
+  background: var(--bg3); border: none; cursor: pointer;
+  width: 32px; height: 32px; border-radius: 10px;
+  font-size: 16px; color: var(--text2);
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── AL BALANCE BAR ── */
+.al-bar-wrap { background: var(--bg3); border-radius: 8px; height: 8px; overflow: hidden; margin: 8px 0 4px; }
+.al-bar-fill { height: 100%; border-radius: 8px; background: var(--grad); transition: width 0.5s; }
+
+/* ── DISABLED LEAVE TYPE ── */
+.leave-type-btn.disabled {
+  opacity: 0.4; cursor: not-allowed;
+  border-color: var(--border) !important;
+  background: var(--bg3) !important;
+}
+.leave-type-btn.disabled .leave-type-label { color: var(--text3) !important; }
 /* ── REGISTER ── */
 .register-hero {
   background:var(--grad); padding:48px 24px 36px;
@@ -648,20 +726,22 @@ textarea { min-height:90px; line-height:1.6; }
     <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Apply for time off</div>
 
     <div class="section-label" style="margin-top:0;">Leave Type</div>
-    <div class="leave-type-grid" style="margin-bottom:0;">
-      <div class="leave-type-btn selected" onclick="selectLeaveType('annual',this)">
+    <div id="leave-balance-notice" style="display:none;background:var(--warning-bg);border:1px solid rgba(245,166,35,0.25);border-radius:var(--radius-xs);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--warning);font-weight:600;"></div>
+    <div class="leave-type-grid" style="margin-bottom:0;" id="leave-type-grid">
+      <div class="leave-type-btn selected" id="lt-annual" onclick="selectLeaveType('annual',this)">
         <div class="leave-type-icon">🏖️</div>
         <div class="leave-type-label">Annual</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:3px;" id="lt-annual-bal"></div>
       </div>
-      <div class="leave-type-btn" onclick="selectLeaveType('sick',this)">
+      <div class="leave-type-btn" id="lt-sick" onclick="selectLeaveType('sick',this)">
         <div class="leave-type-icon">🤒</div>
         <div class="leave-type-label">Sick</div>
       </div>
-      <div class="leave-type-btn" onclick="selectLeaveType('emergency',this)">
+      <div class="leave-type-btn" id="lt-emergency" onclick="selectLeaveType('emergency',this)">
         <div class="leave-type-icon">🚨</div>
         <div class="leave-type-label">Emergency</div>
       </div>
-      <div class="leave-type-btn" onclick="selectLeaveType('unpaid',this)">
+      <div class="leave-type-btn" id="lt-unpaid" onclick="selectLeaveType('unpaid',this)">
         <div class="leave-type-icon">💸</div>
         <div class="leave-type-label">Unpaid</div>
       </div>
@@ -782,7 +862,7 @@ textarea { min-height:90px; line-height:1.6; }
 
   <div class="bottom-nav">
     <button class="nav-item active" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
-    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div></button>
+    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
     <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
     <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
   </div>
@@ -798,7 +878,7 @@ textarea { min-height:90px; line-height:1.6; }
   </div>
   <div class="bottom-nav">
     <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
-    <button class="nav-item active" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div></button>
+    <button class="nav-item active" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
     <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
     <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
   </div>
@@ -816,7 +896,7 @@ textarea { min-height:90px; line-height:1.6; }
   </div>
   <div class="bottom-nav">
     <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
-    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div></button>
+    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
     <button class="nav-item active" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
     <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
   </div>
@@ -832,7 +912,7 @@ textarea { min-height:90px; line-height:1.6; }
   </div>
   <div class="bottom-nav">
     <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
-    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div></button>
+    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
     <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
     <button class="nav-item active" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
   </div>
@@ -867,7 +947,7 @@ textarea { min-height:90px; line-height:1.6; }
   </div>
   <div class="bottom-nav">
     <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
-    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div></button>
+    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
     <button class="nav-item active" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
     <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
   </div>
@@ -887,7 +967,7 @@ textarea { min-height:90px; line-height:1.6; }
   </div>
   <div class="bottom-nav">
     <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
-    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div></button>
+    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
     <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
     <button class="nav-item active" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
   </div>
@@ -901,9 +981,35 @@ textarea { min-height:90px; line-height:1.6; }
   </div>
   <div class="bottom-nav">
     <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
-    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div></button>
+    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
     <button class="nav-item" onclick="switchMgrTab('report')"><div class="nav-icon">📋</div><div class="nav-label">Report</div></button>
     <button class="nav-item active" onclick="switchMgrTab('profile')"><div class="nav-icon">👤</div><div class="nav-label">Profile</div></button>
+  </div>
+</div>
+
+<!-- EMPLOYEE DETAIL SCREEN -->
+<div class="screen" id="screen-emp-detail">
+  <div class="top-bar">
+    <button class="back-btn" onclick="switchMgrTab('employees')">‹ Back</button>
+    <div class="top-logo">elyne HR</div>
+    <div></div>
+  </div>
+  <div class="body has-nav" style="padding-top:0;" id="emp-detail-body">
+    <div class="loading"><div class="spinner"></div> Loading...</div>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
+    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
+    <button class="nav-item" onclick="switchMgrTab('report')"><div class="nav-icon">📋</div><div class="nav-label">Report</div></button>
+    <button class="nav-item active" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
+  </div>
+</div>
+
+<!-- MODAL CONTAINER -->
+<div class="modal-overlay" id="modal-overlay" style="display:none;" onclick="closeModal(event)">
+  <div class="modal-sheet" id="modal-sheet">
+    <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    <div id="modal-content"></div>
   </div>
 </div>
 
@@ -935,6 +1041,7 @@ window.onload = async () => {
   }
   if (!currentUser) currentUser = { id: 999999, first_name: 'Test', last_name: 'User' };
   isManager = (currentUser.id === MANAGER_ID);
+  if (isManager) setInterval(refreshLeaveBadge, 30000);
   initCalendar(); initMonthPicker();
   try {
     const r = await api('check_employee', {});
@@ -1003,6 +1110,7 @@ function switchMgrTab(tab) {
   if (tab==='payroll') { showScreen('screen-mgr-payroll'); initPayrollPicker(); return; }
   if (tab==='announce') { showScreen('screen-mgr-announce'); return; }
   if (tab==='profile') { showScreen('screen-mgr-profile'); loadMgrProfile(); return; }
+  if (tab==='emp-detail') { showScreen('screen-emp-detail'); return; }
   const m={main:'screen-mgr-main',leaves:'screen-mgr-leaves',report:'screen-mgr-report',employees:'screen-mgr-employees'};
   if (!m[tab]) return;
   showScreen(m[tab]);
@@ -1324,15 +1432,16 @@ async function loadMgrEmployees() {
     if(!employees.length){body.innerHTML='<div class="empty"><div class="empty-icon">👥</div><div class="empty-text">No employees yet.</div></div>';return;}
     let html=`<div class="section-label">${employees.length} member${employees.length>1?'s':''}</div><div class="emp-list">`;
     employees.forEach(e=>{
-      html+=`<div class="emp-row">
+      const bal = e.leave_balance || {remaining:0,total:0};
+      html+=`<div class="emp-row" onclick="openEmpDetail(${e.telegram_id},'${e.full_name}')" style="cursor:pointer;">
         <div class="emp-avatar">${initials(e.full_name)}</div>
         <div class="emp-info">
           <div class="emp-name">${e.full_name}</div>
-          <div class="emp-role">${e.job_title} · ${e.employment_type==='fulltime'?'Full Time':'Part Time'}</div>
+          <div class="emp-role">${e.job_title} · ${e.employment_type==='fulltime'?'FT':'PT'} · AL: ${bal.remaining}/${bal.total}</div>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
           <span class="badge ${e.is_active?'badge-present':'badge-absent'}">${e.is_active?'Active':'Inactive'}</span>
-          ${e.is_active?`<button onclick="removeEmp(${e.telegram_id},'${e.full_name}')" style="font-size:10px;background:none;border:none;color:var(--error);font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;">Remove</button>`:''}
+          <div style="font-size:10px;color:var(--text3);">Tap to manage ›</div>
         </div>
       </div>`;
     });
@@ -1348,6 +1457,7 @@ async function removeEmp(tid,name) {
 
 // ── MY LEAVES ──
 async function loadMyLeaves() {
+  initLeaveTypes();
   showScreen('screen-my-leaves');
   const body=document.getElementById('my-leaves-body');
   const balCard=document.getElementById('leave-balance-card');
@@ -1486,6 +1596,291 @@ async function loadMgrProfile() {
 }
 
 
+
+// ── MODAL SYSTEM ──
+function openModal(html) {
+  document.getElementById('modal-content').innerHTML = html;
+  document.getElementById('modal-overlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModalDirect();
+}
+function closeModalDirect() {
+  document.getElementById('modal-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// ── PENDING LEAVE BADGE ──
+async function refreshLeaveBadge() {
+  if (!isManager) return;
+  try {
+    const r = await api('mgr_pending_count', {});
+    const badge = document.getElementById('leaves-badge');
+    if (badge) {
+      if (r.count > 0) { badge.textContent = r.count; badge.style.display = 'flex'; }
+      else { badge.style.display = 'none'; }
+    }
+  } catch(e) {}
+}
+
+// ── SMART LEAVE TYPE SELECTION ──
+let leaveBalance = { remaining: 0, total: 0 };
+async function initLeaveTypes() {
+  try {
+    const r = await api('leave_balance', {});
+    leaveBalance = r;
+    const hasAL = r.remaining > 0;
+    const annualBtn = document.getElementById('lt-annual');
+    const balEl = document.getElementById('lt-annual-bal');
+    const notice = document.getElementById('leave-balance-notice');
+    if (balEl) balEl.textContent = `${r.remaining} days left`;
+    if (!hasAL) {
+      // Disable AL, auto-select unpaid
+      if (annualBtn) { annualBtn.classList.add('disabled'); annualBtn.onclick = null; annualBtn.classList.remove('selected'); }
+      const unpaidBtn = document.getElementById('lt-unpaid');
+      if (unpaidBtn) { unpaidBtn.classList.add('selected'); selectedLeaveType = 'unpaid'; }
+      if (notice) { notice.style.display = 'block'; notice.textContent = '⚠️ Annual leave balance is 0. Annual leave is disabled — please select Unpaid leave.'; }
+    } else {
+      if (annualBtn) { annualBtn.classList.remove('disabled'); annualBtn.onclick = () => selectLeaveType('annual', annualBtn); }
+      if (notice) notice.style.display = 'none';
+    }
+  } catch(e) {}
+}
+
+// ── EMPLOYEE DETAIL ──
+let currentEmpDetail = null;
+async function openEmpDetail(tid, name) {
+  currentEmpDetail = tid;
+  showScreen('screen-emp-detail');
+  const body = document.getElementById('emp-detail-body');
+  body.innerHTML = '<div class="loading"><div class="spinner"></div> Loading...</div>';
+  try {
+    const r = await api('mgr_employee_detail', { target_telegram_id: tid });
+    const e = r.employee; const bal = r.leave_balance; const m = r.this_month;
+    const pct = bal.total > 0 ? Math.round((bal.used / bal.total) * 100) : 0;
+    let html = `
+      <div class="emp-detail-hero">
+        <div class="emp-detail-avatar">${initials(e.full_name)}</div>
+        <div>
+          <div class="emp-detail-name">${e.full_name}</div>
+          <div class="emp-detail-role">${e.job_title} · ${e.employment_type === 'fulltime' ? 'Full Time' : 'Part Time'}</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-top:4px;">${e.monthly_salary > 0 ? '$' + parseFloat(e.monthly_salary).toLocaleString() + '/mo' : 'No salary set'}</div>
+        </div>
+      </div>
+      <div class="section-label" style="margin-top:0;">This Month</div>
+      <div class="mgr-stat-grid" style="margin-bottom:20px;">
+        <div class="mgr-stat-card"><div class="mgr-stat-icon">✅</div><div class="mgr-stat-val" style="color:var(--success);">${m.present}</div><div class="mgr-stat-label">Present</div></div>
+        <div class="mgr-stat-card"><div class="mgr-stat-icon">⏰</div><div class="mgr-stat-val" style="color:var(--warning);">${m.late}</div><div class="mgr-stat-label">Late</div></div>
+        <div class="mgr-stat-card"><div class="mgr-stat-icon">❌</div><div class="mgr-stat-val" style="color:var(--error);">${m.absent}</div><div class="mgr-stat-label">Absent</div></div>
+        <div class="mgr-stat-card"><div class="mgr-stat-icon">⏱</div><div class="mgr-stat-val" style="font-size:16px;">${m.total_hours}</div><div class="mgr-stat-label">Total Hours</div></div>
+      </div>
+      <div class="section-label">Annual Leave Balance</div>
+      <div class="card" style="margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div style="font-size:22px;font-weight:800;">${bal.remaining} <span style="font-size:13px;color:var(--text3);font-weight:400;">/ ${bal.total} days</span></div>
+          <span class="badge ${bal.remaining > 0 ? 'badge-present' : 'badge-absent'}">${bal.remaining > 0 ? 'Has Balance' : 'Empty'}</span>
+        </div>
+        <div class="al-bar-wrap"><div class="al-bar-fill" style="width:${100-pct}%;"></div></div>
+        <div style="font-size:11px;color:var(--text3);">${bal.used} used · ${bal.remaining} remaining · earns 1.5/month</div>
+      </div>
+      <div class="section-label">Manager Actions</div>
+      <div class="mgr-action-grid">
+        <div class="mgr-action-btn" onclick="openAdjustAttendance(${tid},'${e.full_name}')">
+          <div class="mgr-action-btn-icon">📋</div>
+          <div class="mgr-action-btn-label">Adjust Attendance</div>
+          <div class="mgr-action-btn-sub">Mark present/absent for a day</div>
+        </div>
+        <div class="mgr-action-btn" onclick="openAddLeave(${tid},'${e.full_name}')">
+          <div class="mgr-action-btn-icon">📅</div>
+          <div class="mgr-action-btn-label">Add Leave</div>
+          <div class="mgr-action-btn-sub">Assign leave directly</div>
+        </div>
+        <div class="mgr-action-btn" onclick="openAdjustAL(${tid},'${e.full_name}',${bal.remaining},${bal.total})">
+          <div class="mgr-action-btn-icon">📊</div>
+          <div class="mgr-action-btn-label">Adjust AL Balance</div>
+          <div class="mgr-action-btn-sub">Add or deduct days</div>
+        </div>
+        <div class="mgr-action-btn" onclick="openSetSalary(${tid},'${e.full_name}',${e.monthly_salary||0})">
+          <div class="mgr-action-btn-icon">💰</div>
+          <div class="mgr-action-btn-label">Set Salary</div>
+          <div class="mgr-action-btn-sub">${e.monthly_salary > 0 ? '$' + parseFloat(e.monthly_salary).toLocaleString() + '/mo' : 'Not set'}</div>
+        </div>
+      </div>`;
+
+    // Recent attendance
+    if (r.recent_attendance && r.recent_attendance.length > 0) {
+      html += '<div class="section-label">Recent Attendance</div><div class="att-list">';
+      const bmap = {present:['badge-present','Present','var(--success)'],late:['badge-late','Late','var(--warning)'],half_day_unpaid:['badge-half','Half Day','var(--error)'],on_leave:['badge-leave','On Leave','var(--info)'],absent:['badge-absent','Absent','var(--error)']};
+      r.recent_attendance.forEach(rec => {
+        const [cls,label,color] = bmap[rec.status] || ['badge-absent','—','#888'];
+        html += `<div class="att-row">
+          <div class="att-dot" style="background:${color};"></div>
+          <div class="att-info">
+            <div class="att-date">${fmtDate(rec.date)}</div>
+            <div class="att-times">In: ${fmtTime(rec.check_in_time)} · Out: ${fmtTime(rec.check_out_time)}${rec.note ? ' · ' + rec.note : ''}</div>
+          </div>
+          <span class="badge ${cls}">${label}</span>
+        </div>`;
+      });
+      html += '</div>';
+    }
+    body.innerHTML = html;
+  } catch(e) { body.innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load.</div></div>'; }
+}
+
+// ── ADJUST ATTENDANCE MODAL ──
+function openAdjustAttendance(tid, name) {
+  const today = new Date().toISOString().split('T')[0];
+  openModal(`
+    <div class="modal-title">Adjust Attendance</div>
+    <div class="modal-sub">For ${name}</div>
+    <div class="input-group">
+      <label class="input-label">Date</label>
+      <input type="date" id="adj-date" value="${today}" max="${today}">
+    </div>
+    <div class="input-group">
+      <label class="input-label">Status</label>
+      <div class="radio-group" style="flex-wrap:wrap;gap:8px;">
+        <div class="radio-btn selected" id="adj-present" onclick="selectAdjStatus('present')" style="flex:none;padding:10px 14px;">✅ Present</div>
+        <div class="radio-btn" id="adj-late" onclick="selectAdjStatus('late')" style="flex:none;padding:10px 14px;">⏰ Late</div>
+        <div class="radio-btn" id="adj-absent" onclick="selectAdjStatus('absent')" style="flex:none;padding:10px 14px;">❌ Absent</div>
+      </div>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Note / Reason</label>
+      <input type="text" id="adj-note" placeholder="e.g. Off-site shoot, Client visit" value="Off-site work">
+    </div>
+    <button class="btn btn-primary" onclick="submitAdjAttendance(${tid},'${name}')">Save Attendance</button>
+  `);
+}
+let adjStatus = 'present';
+function selectAdjStatus(s) {
+  adjStatus = s;
+  ['present','late','absent'].forEach(x => {
+    document.getElementById('adj-'+x)?.classList.toggle('selected', x===s);
+  });
+}
+async function submitAdjAttendance(tid, name) {
+  const d = document.getElementById('adj-date').value;
+  const note = document.getElementById('adj-note').value.trim() || 'Adjusted by manager';
+  if (!d) { toast('Please select a date','error'); return; }
+  try {
+    await api('mgr_adjust_attendance', { target_telegram_id: tid, date: d, status: adjStatus, note });
+    toast(`Attendance updated for ${name}`, 'success');
+    closeModalDirect();
+    openEmpDetail(tid, name);
+  } catch(e) { toast(e.message||'Failed','error'); }
+}
+
+// ── ADD LEAVE MODAL ──
+function openAddLeave(tid, name) {
+  const today = new Date().toISOString().split('T')[0];
+  openModal(`
+    <div class="modal-title">Add Leave</div>
+    <div class="modal-sub">Assign leave for ${name}</div>
+    <div class="input-group">
+      <label class="input-label">Date</label>
+      <input type="date" id="addlv-date" value="${today}">
+    </div>
+    <div class="input-group">
+      <label class="input-label">Leave Type</label>
+      <div class="radio-group" style="flex-wrap:wrap;gap:8px;">
+        <div class="radio-btn selected" id="addlv-annual" onclick="selectAddLeaveType('annual')" style="flex:none;padding:10px 14px;">🏖️ Annual</div>
+        <div class="radio-btn" id="addlv-sick" onclick="selectAddLeaveType('sick')" style="flex:none;padding:10px 14px;">🤒 Sick</div>
+        <div class="radio-btn" id="addlv-emergency" onclick="selectAddLeaveType('emergency')" style="flex:none;padding:10px 14px;">🚨 Emergency</div>
+        <div class="radio-btn" id="addlv-unpaid" onclick="selectAddLeaveType('unpaid')" style="flex:none;padding:10px 14px;">💸 Unpaid</div>
+      </div>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Reason / Note</label>
+      <input type="text" id="addlv-reason" placeholder="e.g. Off-site shoot approved by manager">
+    </div>
+    <button class="btn btn-primary" onclick="submitAddLeave(${tid},'${name}')">Add Leave</button>
+  `);
+}
+let addLeaveType = 'annual';
+function selectAddLeaveType(t) {
+  addLeaveType = t;
+  ['annual','sick','emergency','unpaid'].forEach(x => {
+    document.getElementById('addlv-'+x)?.classList.toggle('selected', x===t);
+  });
+}
+async function submitAddLeave(tid, name) {
+  const d = document.getElementById('addlv-date').value;
+  const reason = document.getElementById('addlv-reason').value.trim() || 'Added by manager';
+  if (!d) { toast('Please select a date','error'); return; }
+  try {
+    await api('mgr_add_leave', { target_telegram_id: tid, date: d, leave_type: addLeaveType, reason });
+    toast(`Leave added for ${name}`, 'success');
+    closeModalDirect();
+    openEmpDetail(tid, name);
+  } catch(e) { toast(e.message||'Failed','error'); }
+}
+
+// ── ADJUST AL BALANCE MODAL ──
+function openAdjustAL(tid, name, remaining, total) {
+  openModal(`
+    <div class="modal-title">Adjust AL Balance</div>
+    <div class="modal-sub">${name} — Current: ${remaining}/${total} days</div>
+    <div class="input-group">
+      <label class="input-label">Action</label>
+      <div class="radio-group">
+        <div class="radio-btn selected" id="al-add" onclick="selectALAction('add')">➕ Add Days</div>
+        <div class="radio-btn" id="al-deduct" onclick="selectALAction('deduct')">➖ Deduct Days</div>
+      </div>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Number of Days</label>
+      <input type="number" id="al-days" placeholder="e.g. 1.5" step="0.5" min="0.5" value="1">
+    </div>
+    <div class="input-group">
+      <label class="input-label">Reason</label>
+      <input type="text" id="al-note" placeholder="e.g. Carry-over from last year, Bonus days">
+    </div>
+    <button class="btn btn-primary" onclick="submitAdjAL(${tid},'${name}')">Update Balance</button>
+  `);
+}
+let alAction = 'add';
+function selectALAction(a) {
+  alAction = a;
+  document.getElementById('al-add')?.classList.toggle('selected', a==='add');
+  document.getElementById('al-deduct')?.classList.toggle('selected', a==='deduct');
+}
+async function submitAdjAL(tid, name) {
+  const days = parseFloat(document.getElementById('al-days').value);
+  const note = document.getElementById('al-note').value.trim() || 'Manual adjustment';
+  if (!days || days <= 0) { toast('Enter valid days','error'); return; }
+  try {
+    const r = await api('mgr_adjust_al_balance', { target_telegram_id: tid, action: alAction, days, note });
+    toast(`Balance updated for ${name}`, 'success');
+    closeModalDirect();
+    openEmpDetail(tid, name);
+  } catch(e) { toast(e.message||'Failed','error'); }
+}
+
+// ── SET SALARY MODAL ──
+function openSetSalary(tid, name, current) {
+  openModal(`
+    <div class="modal-title">Set Monthly Salary</div>
+    <div class="modal-sub">${name}${current > 0 ? ' — Current: $' + current.toLocaleString() : ''}</div>
+    <div class="input-group">
+      <label class="input-label">Monthly Salary (USD)</label>
+      <input type="number" id="sal-amount" placeholder="e.g. 350" value="${current || ''}" min="0">
+    </div>
+    <button class="btn btn-primary" onclick="submitSetSalary(${tid},'${name}')">Save Salary</button>
+  `);
+}
+async function submitSetSalary(tid, name) {
+  const salary = parseFloat(document.getElementById('sal-amount').value);
+  if (!salary || salary < 0) { toast('Enter valid salary','error'); return; }
+  try {
+    await api('mgr_set_salary', { target_telegram_id: tid, salary });
+    toast(`Salary updated for ${name}`, 'success');
+    closeModalDirect();
+    openEmpDetail(tid, name);
+  } catch(e) { toast(e.message||'Failed','error'); }
+}
 </script>
 </body>
 </html>
