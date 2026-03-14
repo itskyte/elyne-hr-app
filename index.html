@@ -893,6 +893,20 @@ textarea { min-height:90px; line-height:1.6; }
   </div>
 </div>
 
+<!-- MGR PROFILE SCREEN -->
+<div class="screen" id="screen-mgr-profile">
+  <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
+  <div class="body has-nav" style="padding-top:0;" id="mgr-profile-body">
+    <div class="loading"><div class="spinner"></div> Loading...</div>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
+    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div></button>
+    <button class="nav-item" onclick="switchMgrTab('report')"><div class="nav-icon">📋</div><div class="nav-label">Report</div></button>
+    <button class="nav-item active" onclick="switchMgrTab('profile')"><div class="nav-icon">👤</div><div class="nav-label">Profile</div></button>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -978,13 +992,19 @@ function initials(name) { return name.split(' ').map(w=>w[0]).join('').slice(0,2
 function greet() { const h=new Date().getHours(); return h<12?'Good morning':h<17?'Good afternoon':'Good evening'; }
 
 function switchTab(tab) {
-  const m={main:'screen-main',attendance:'screen-attendance',leave:'screen-leave',profile:'screen-profile'};
+  if (tab==='leave') { loadMyLeaves(); return; }
+  const m={main:'screen-main',attendance:'screen-attendance',profile:'screen-profile'};
+  if (!m[tab]) return;
   showScreen(m[tab]);
   if (tab==='attendance') loadAttendance();
   if (tab==='profile') loadProfile();
 }
 function switchMgrTab(tab) {
+  if (tab==='payroll') { showScreen('screen-mgr-payroll'); initPayrollPicker(); return; }
+  if (tab==='announce') { showScreen('screen-mgr-announce'); return; }
+  if (tab==='profile') { showScreen('screen-mgr-profile'); loadMgrProfile(); return; }
   const m={main:'screen-mgr-main',leaves:'screen-mgr-leaves',report:'screen-mgr-report',employees:'screen-mgr-employees'};
+  if (!m[tab]) return;
   showScreen(m[tab]);
   if (tab==='main') loadMgrDashboard();
   if (tab==='leaves') loadMgrLeaves();
@@ -1444,20 +1464,28 @@ async function sendAnnouncement() {
   } catch(e){toast(e.message||'Failed','error');}
 }
 
-// ── OVERRIDE SWITCH TAB FOR MY LEAVES ──
-const _origSwitchTab = switchTab;
-function switchTab(tab) {
-  if(tab==='leave') { loadMyLeaves(); return; }
-  _origSwitchTab(tab);
+// tab routing handled in switchTab/switchMgrTab above
+// ── MANAGER PROFILE ──
+async function loadMgrProfile() {
+  const body = document.getElementById('mgr-profile-body');
+  body.innerHTML = `
+    <div class="profile-big-card">
+      <div class="pf-avatar">KV</div>
+      <div class="pf-name">Kevin</div>
+      <div class="pf-role">Managing Director · elyne</div>
+    </div>
+    <div class="info-card">
+      <div class="info-row"><div class="info-key">Role</div><div class="info-val">Manager</div></div>
+      <div class="info-row"><div class="info-key">Telegram ID</div><div class="info-val" style="font-size:12px;font-family:monospace;color:var(--text2);">${currentUser?.id}</div></div>
+      <div class="info-row"><div class="info-key">Leave Policy</div><div class="info-val">1.5 days / month</div></div>
+      <div class="info-row"><div class="info-key">Max Annual Leave</div><div class="info-val">18 days / year</div></div>
+    </div>
+    <div style="margin-top:16px;">
+      <button class="btn btn-primary" onclick="switchMgrTab('announce')">📢 Send Announcement</button>
+    </div>`;
 }
 
-// ── OVERRIDE MGR TAB FOR PAYROLL + ANNOUNCE ──
-const _origSwitchMgrTab = switchMgrTab;
-function switchMgrTab(tab) {
-  if(tab==='payroll') { showScreen('screen-mgr-payroll'); initPayrollPicker(); return; }
-  if(tab==='announce') { showScreen('screen-mgr-announce'); return; }
-  _origSwitchMgrTab(tab);
-}
+
 </script>
 </body>
 </html>
