@@ -783,7 +783,7 @@ textarea { min-height:90px; line-height:1.6; }
   <div class="bottom-nav">
     <button class="nav-item active" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
     <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div></button>
-    <button class="nav-item" onclick="switchMgrTab('report')"><div class="nav-icon">📋</div><div class="nav-label">Report</div></button>
+    <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
     <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
   </div>
 </div>
@@ -799,7 +799,7 @@ textarea { min-height:90px; line-height:1.6; }
   <div class="bottom-nav">
     <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
     <button class="nav-item active" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div></button>
-    <button class="nav-item" onclick="switchMgrTab('report')"><div class="nav-icon">📋</div><div class="nav-label">Report</div></button>
+    <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
     <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
   </div>
 </div>
@@ -817,7 +817,7 @@ textarea { min-height:90px; line-height:1.6; }
   <div class="bottom-nav">
     <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
     <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div></button>
-    <button class="nav-item active" onclick="switchMgrTab('report')"><div class="nav-icon">📋</div><div class="nav-label">Report</div></button>
+    <button class="nav-item active" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
     <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
   </div>
 </div>
@@ -833,7 +833,62 @@ textarea { min-height:90px; line-height:1.6; }
   <div class="bottom-nav">
     <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
     <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div></button>
-    <button class="nav-item" onclick="switchMgrTab('report')"><div class="nav-icon">📋</div><div class="nav-label">Report</div></button>
+    <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
+    <button class="nav-item active" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
+  </div>
+</div>
+
+<!-- MY LEAVES SCREEN -->
+<div class="screen" id="screen-my-leaves">
+  <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
+  <div class="body has-nav" style="padding-top:0;">
+    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">My Leaves</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:16px;">Leave history & balance</div>
+    <div id="leave-balance-card" style="margin-bottom:20px;"></div>
+    <div id="my-leaves-body"><div class="loading"><div class="spinner"></div> Loading...</div></div>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="switchTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Overview</div></button>
+    <button class="nav-item" onclick="switchTab('attendance')"><div class="nav-icon">📊</div><div class="nav-label">History</div></button>
+    <button class="nav-item active" onclick="switchTab('leave')"><div class="nav-icon">📅</div><div class="nav-label">Leave</div></button>
+    <button class="nav-item" onclick="switchTab('profile')"><div class="nav-icon">👤</div><div class="nav-label">Profile</div></button>
+  </div>
+</div>
+
+<!-- MGR PAYROLL SCREEN -->
+<div class="screen" id="screen-mgr-payroll">
+  <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
+  <div class="body has-nav" style="padding-top:0;">
+    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">Payroll</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Monthly salary calculator</div>
+    <div class="section-label" style="margin-top:0;">Select Month</div>
+    <div class="month-grid" id="payroll-month-grid" style="margin-bottom:20px;"></div>
+    <div id="payroll-results"></div>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
+    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div></button>
+    <button class="nav-item active" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
+    <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
+  </div>
+</div>
+
+<!-- MGR ANNOUNCE SCREEN -->
+<div class="screen" id="screen-mgr-announce">
+  <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
+  <div class="body has-nav" style="padding-top:0;">
+    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">Announcement</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Broadcast to all staff</div>
+    <div class="input-group">
+      <label class="input-label">Message</label>
+      <textarea id="announce-msg" placeholder="Type your announcement here..." style="min-height:140px;"></textarea>
+    </div>
+    <button class="btn btn-primary" onclick="sendAnnouncement()">📢 Send to All Staff</button>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
+    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div></button>
+    <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
     <button class="nav-item active" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
   </div>
 </div>
@@ -1269,6 +1324,139 @@ async function removeEmp(tid,name) {
   if(!confirm(`Remove ${name}?`)) return;
   try { await api('mgr_remove_employee',{target_telegram_id:tid}); toast(`${name} removed`,''); loadMgrEmployees(); }
   catch(e){toast(e.message||'Failed','error');}
+}
+
+// ── MY LEAVES ──
+async function loadMyLeaves() {
+  showScreen('screen-my-leaves');
+  const body=document.getElementById('my-leaves-body');
+  const balCard=document.getElementById('leave-balance-card');
+  body.innerHTML='<div class="loading"><div class="spinner"></div> Loading...</div>';
+  try {
+    const r=await api('my_leaves',{});
+    const bal=r.leave_balance||{total:18,used:0,remaining:18};
+    const pct=Math.round((bal.used/bal.total)*100);
+    balCard.innerHTML=`
+      <div class="overview-card">
+        <div style="font-size:12px;color:rgba(255,255,255,0.75);font-weight:600;margin-bottom:8px;letter-spacing:0.08em;">ANNUAL LEAVE BALANCE</div>
+        <div style="display:flex;align-items:flex-end;gap:8px;margin-bottom:12px;">
+          <div style="font-size:40px;font-weight:800;color:white;line-height:1;">${bal.remaining}</div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.7);padding-bottom:6px;">/ ${bal.total} days</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.2);border-radius:8px;height:8px;overflow:hidden;">
+          <div style="background:white;height:100%;border-radius:8px;width:${100-pct}%;transition:width 0.5s;"></div>
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:6px;">${bal.used} used · ${bal.remaining} remaining</div>
+      </div>`;
+    const leaves=r.leaves||[];
+    if(!leaves.length){body.innerHTML='<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">No leave requests yet.</div></div>';return;}
+    const smap={pending:['badge-late','Pending'],approved:['badge-present','Approved'],rejected:['badge-absent','Rejected']};
+    let html='<div class="section-label">Leave History</div><div class="att-list">';
+    leaves.forEach(l=>{
+      const [cls,label]=smap[l.status]||['badge-absent','Unknown'];
+      html+=`<div class="att-row">
+        <div class="att-dot" style="background:${l.status==='approved'?'var(--success)':l.status==='rejected'?'var(--error)':'var(--warning)'};"></div>
+        <div class="att-info">
+          <div class="att-date">${fmtDate(l.date)} · ${l.leave_type.charAt(0).toUpperCase()+l.leave_type.slice(1)}</div>
+          <div class="att-times">${l.reason}</div>
+        </div>
+        <span class="badge ${cls}">${label}</span>
+      </div>`;
+    });
+    html+='</div>';
+    body.innerHTML=html;
+  } catch(e){body.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load.</div></div>';}
+}
+
+// ── PAYROLL ──
+function initPayrollPicker() {
+  const grid=document.getElementById('payroll-month-grid');
+  if(!grid||grid.children.length>0) return;
+  const today=new Date();
+  for(let i=0;i<6;i++){
+    const d=new Date(today.getFullYear(),today.getMonth()-i,1);
+    const ms=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    const btn=document.createElement('div'); btn.className='month-btn'+(i===0?' selected':'');
+    btn.textContent=d.toLocaleDateString('en-US',{month:'short',year:'numeric'});
+    btn.onclick=()=>{document.querySelectorAll('#payroll-month-grid .month-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');loadPayroll(ms);};
+    grid.appendChild(btn);
+  }
+  const cur=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+  loadPayroll(cur);
+}
+
+async function loadPayroll(monthStr) {
+  const res=document.getElementById('payroll-results');
+  res.innerHTML='<div class="loading"><div class="spinner"></div> Calculating...</div>';
+  try {
+    const r=await api('mgr_payroll',{month:monthStr});
+    const payroll=r.payroll||[];
+    if(!payroll.length){res.innerHTML='<div class="empty"><div class="empty-icon">💰</div><div class="empty-text">No data.</div></div>';return;}
+    let html=`<div class="section-label">Payroll — ${monthStr}</div>`;
+    payroll.forEach(p=>{
+      const hasSalary = p.monthly_salary > 0;
+      html+=`<div class="report-emp-card" style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+          <div>
+            <div class="report-emp-name" style="margin-bottom:2px;">${p.full_name}</div>
+            <div style="font-size:11px;color:var(--text3);">${p.job_title}</div>
+          </div>
+          ${hasSalary ? `<div style="text-align:right;">
+            <div style="font-size:18px;font-weight:800;color:var(--success);">$${p.net_salary.toFixed(2)}</div>
+            <div style="font-size:10px;color:var(--text3);">net salary</div>
+          </div>` : '<div style="font-size:12px;color:var(--warning);font-weight:600;">No salary set</div>'}
+        </div>
+        ${hasSalary ? `<div style="background:var(--bg3);border-radius:10px;padding:12px;margin-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:12px;color:var(--text2);">Base Salary</span>
+            <span style="font-size:12px;font-weight:600;">$${p.monthly_salary.toFixed(2)}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:12px;color:var(--error);">Deductions</span>
+            <span style="font-size:12px;font-weight:600;color:var(--error);">-$${p.total_deductions.toFixed(2)}</span>
+          </div>
+          <div style="height:1px;background:var(--border);margin:8px 0;"></div>
+          <div style="display:flex;justify-content:space-between;">
+            <span style="font-size:13px;font-weight:700;">Net Pay</span>
+            <span style="font-size:13px;font-weight:800;color:var(--success);">$${p.net_salary.toFixed(2)}</span>
+          </div>
+        </div>` : ''}
+        <div class="report-chips">
+          <div class="report-chip" style="background:var(--success-bg);color:var(--success);">✅ ${p.present_days||0} Present</div>
+          <div class="report-chip" style="background:var(--warning-bg);color:var(--warning);">⏰ ${p.late_days||0} Late</div>
+          <div class="report-chip" style="background:var(--info-bg);color:var(--info);">🏖️ ${p.leave_paid||0} Paid Leave</div>
+          <div class="report-chip" style="background:var(--error-bg);color:var(--error);">❌ ${p.absent_days||0} Absent</div>
+        </div>
+      </div>`;
+    });
+    res.innerHTML=html;
+  } catch(e){res.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load payroll.</div></div>';}
+}
+
+// ── ANNOUNCE ──
+async function sendAnnouncement() {
+  const msg=document.getElementById('announce-msg').value.trim();
+  if(!msg){toast('Please type a message','error');return;}
+  try {
+    const r=await api('mgr_announce',{message:msg});
+    toast(r.message||'Sent!','success');
+    document.getElementById('announce-msg').value='';
+  } catch(e){toast(e.message||'Failed','error');}
+}
+
+// ── OVERRIDE SWITCH TAB FOR MY LEAVES ──
+const _origSwitchTab = switchTab;
+function switchTab(tab) {
+  if(tab==='leave') { loadMyLeaves(); return; }
+  _origSwitchTab(tab);
+}
+
+// ── OVERRIDE MGR TAB FOR PAYROLL + ANNOUNCE ──
+const _origSwitchMgrTab = switchMgrTab;
+function switchMgrTab(tab) {
+  if(tab==='payroll') { showScreen('screen-mgr-payroll'); initPayrollPicker(); return; }
+  if(tab==='announce') { showScreen('screen-mgr-announce'); return; }
+  _origSwitchMgrTab(tab);
 }
 </script>
 </body>
