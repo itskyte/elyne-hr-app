@@ -926,6 +926,7 @@ textarea { min-height:90px; line-height:1.6; }
     <div style="font-size:13px;color:var(--text2);margin-bottom:16px;">Leave history & balance</div>
     <div id="leave-balance-card" style="margin-bottom:20px;"></div>
     <div id="my-leaves-body"><div class="loading"><div class="spinner"></div> Loading...</div></div>
+    <button class="btn btn-primary" onclick="goApplyLeave()" style="margin-top:8px;">+ Apply for Leave</button>
   </div>
   <div class="bottom-nav">
     <button class="nav-item" onclick="switchTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Overview</div></button>
@@ -1006,7 +1007,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- MODAL CONTAINER -->
-<div class="modal-overlay" id="modal-overlay" style="display:none;" onclick="closeModal(event)">
+<div class="modal-overlay" id="modal-overlay" style="display:none;visibility:hidden;" onclick="closeModal(event)">
   <div class="modal-sheet" id="modal-sheet">
     <button class="modal-close" onclick="closeModalDirect()">✕</button>
     <div id="modal-content"></div>
@@ -1099,7 +1100,7 @@ function initials(name) { return name.split(' ').map(w=>w[0]).join('').slice(0,2
 function greet() { const h=new Date().getHours(); return h<12?'Good morning':h<17?'Good afternoon':'Good evening'; }
 
 function switchTab(tab) {
-  if (tab==='leave') { loadMyLeaves(); return; }
+  if (tab==='leave') { loadMyLeaves(); return; } // my leaves shows balance first
   const m={main:'screen-main',attendance:'screen-attendance',profile:'screen-profile'};
   if (!m[tab]) return;
   showScreen(m[tab]);
@@ -1142,13 +1143,15 @@ async function submitRegistration() {
 // ── MAIN ──
 async function loadMainScreen() {
   const now = new Date();
+  const dow = now.getDay();
+  const isWeekend = dow === 0 || dow === 6;
   const name = employeeData?.full_name || '';
   const first = name.split(' ')[0];
   const av = initials(name||'?');
   document.getElementById('main-avatar').textContent = av;
   document.getElementById('main-name').textContent = name;
   document.getElementById('main-role').textContent = employeeData?.job_title || '';
-  document.getElementById('main-welcome-line').textContent = `${greet()}, ${first}!`;
+  document.getElementById('main-welcome-line').textContent = isWeekend ? `Happy weekend, ${first}! 🌴` : `${greet()}, ${first}!`;
   document.getElementById('ov-date').textContent = now.toLocaleDateString('en-US',{day:'numeric',month:'long',year:'numeric'});
   document.getElementById('ov-now').textContent = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
   try {
@@ -1159,8 +1162,16 @@ async function loadMainScreen() {
 }
 
 // ── CHECK IN / OUT ──
-function goCheckIn() { showScreen('screen-checkin'); resetLoc('ci'); startCheckin(); }
-function goCheckOut() { showScreen('screen-checkout'); resetLoc('co'); startCheckout(); }
+function goCheckIn() {
+  const dow = new Date().getDay();
+  if (dow === 0 || dow === 6) { toast('Today is a weekend — no attendance required 🌴', ''); return; }
+  showScreen('screen-checkin'); resetLoc('ci'); startCheckin();
+}
+function goCheckOut() {
+  const dow = new Date().getDay();
+  if (dow === 0 || dow === 6) { toast('Today is a weekend — no attendance required 🌴', ''); return; }
+  showScreen('screen-checkout'); resetLoc('co'); startCheckout();
+}
 
 function resetLoc(p) {
   document.getElementById(`${p}-ring`).className='loc-ring';
@@ -1184,6 +1195,15 @@ function gps(p) {
   );
 }
 function onGPS(p,pos) {
+  // Weekend check
+  const dow = new Date().getDay(); // 0=Sun, 6=Sat
+  if (dow === 0 || dow === 6) {
+    document.getElementById(`${p}-ring`).className='loc-ring';
+    document.getElementById(`${p}-ring`).textContent='🌴';
+    document.getElementById(`${p}-title`).textContent='Weekend!';
+    document.getElementById(`${p}-sub`).textContent='Today is a weekend — no attendance required. Enjoy your day off!';
+    return;
+  }
   userLat=pos.coords.latitude; userLng=pos.coords.longitude;
   const d=dist(userLat,userLng,OFFICE_LAT,OFFICE_LNG);
   document.getElementById(`${p}-pill`).style.display='flex';
@@ -1262,10 +1282,21 @@ function selDate(y,m,d) {
   document.getElementById('sel-date-chip').style.display='flex';
 }
 function selectLeaveType(t,el) {
+  if (el.classList.contains('disabled')) return; // blocked
   selectedLeaveType=t;
   document.querySelectorAll('.leave-type-btn').forEach(b=>b.classList.remove('selected'));
   el.classList.add('selected');
 }
+// Called when apply leave button on my-leaves screen is tapped
+function goApplyLeave() {
+  showScreen('screen-leave');
+  initLeaveTypes();
+  initCalendar();
+  selectedLeaveDate = null;
+  document.getElementById('sel-date-chip').style.display = 'none';
+  document.getElementById('leave-reason').value = '';
+}
+
 async function submitLeave() {
   if(!selectedLeaveDate){toast('Please select a date','error');return;}
   const reason=document.getElementById('leave-reason').value.trim();
@@ -1600,14 +1631,14 @@ async function loadMgrProfile() {
 // ── MODAL SYSTEM ──
 function openModal(html) {
   document.getElementById('modal-content').innerHTML = html;
-  document.getElementById('modal-overlay').style.display = 'flex';
+  document.getElementById('modal-overlay').style.display = 'flex'; document.getElementById('modal-overlay').style.visibility = 'visible';
   document.body.style.overflow = 'hidden';
 }
 function closeModal(e) {
   if (e.target === document.getElementById('modal-overlay')) closeModalDirect();
 }
 function closeModalDirect() {
-  document.getElementById('modal-overlay').style.display = 'none';
+  document.getElementById('modal-overlay').style.display = 'none'; document.getElementById('modal-overlay').style.visibility = 'hidden';
   document.body.style.overflow = '';
 }
 
