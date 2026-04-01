@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>elyne office</title>
+<title>elyne HR</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -1479,25 +1479,58 @@ async function loadMgrLeaves() {
     if(!leaves.length){body.innerHTML='<div class="empty"><div class="empty-icon">✅</div><div class="empty-text">No pending requests.</div></div>';return;}
     let html='';
     leaves.forEach(l=>{
-      html+=`<div class="leave-req-card">
+      const balText = l.leave_balance ? `AL: ${l.leave_balance.remaining}/${l.leave_balance.total} days` : '';
+      html+=`<div class="leave-req-card" id="leave-card-${l.id}">
         <div class="leave-req-name">${l.full_name}</div>
-        <div class="leave-req-meta">${l.leave_type.charAt(0).toUpperCase()+l.leave_type.slice(1)} Leave · ${fmtDate(l.date)}</div>
+        <div class="leave-req-meta">${l.leave_type.charAt(0).toUpperCase()+l.leave_type.slice(1)} Leave · ${fmtDate(l.date)}${balText ? ' · ' + balText : ''}</div>
         <div class="leave-req-reason">📝 ${l.reason}</div>
-        <div class="leave-actions">
-          <button class="btn-approve" onclick="processLeave(${l.id},'approved')">✅ Approve</button>
-          <button class="btn-reject" onclick="processLeave(${l.id},'rejected')">❌ Reject</button>
+        <div class="leave-actions" id="leave-actions-${l.id}">
+          <button class="btn-approve" id="btn-approve-${l.id}" onclick="processLeave(${l.id},'approved',this)">✅ Approve</button>
+          <button class="btn-reject" id="btn-reject-${l.id}" onclick="processLeave(${l.id},'rejected',this)">❌ Reject</button>
         </div>
       </div>`;
     });
     body.innerHTML=html;
   } catch(e){body.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load.</div></div>';}
 }
-async function processLeave(id,action) {
+const _processingLeaves = new Set();
+async function processLeave(id, action, btn) {
+  if (_processingLeaves.has(id)) return; // prevent double tap
+  _processingLeaves.add(id);
+
+  // Disable both buttons immediately and show processing state
+  const approveBtn = document.getElementById(`btn-approve-${id}`);
+  const rejectBtn  = document.getElementById(`btn-reject-${id}`);
+  const actionsDiv = document.getElementById(`leave-actions-${id}`);
+  if (approveBtn) { approveBtn.disabled = true; approveBtn.style.opacity = '0.4'; }
+  if (rejectBtn)  { rejectBtn.disabled = true;  rejectBtn.style.opacity = '0.4'; }
+  if (actionsDiv) actionsDiv.innerHTML = `<div style="text-align:center;width:100%;padding:10px;font-size:13px;color:var(--text2);font-weight:600;">Processing...</div>`;
+
   try {
-    await api('mgr_process_leave',{leave_id:id,action});
-    toast(action==='approved'?'Leave approved ✅':'Leave rejected','');
-    loadMgrLeaves();
-  } catch(e){toast(e.message||'Failed','error');}
+    await api('mgr_process_leave', {leave_id:id, action}, {cache:false});
+    // Show result inline on the card before reloading
+    const card = document.getElementById(`leave-card-${id}`);
+    if (card) {
+      card.style.opacity = '0.5';
+      card.style.borderLeftColor = action === 'approved' ? 'var(--success)' : 'var(--error)';
+      const resultDiv = document.createElement('div');
+      resultDiv.style.cssText = 'text-align:center;padding:10px;font-size:13px;font-weight:700;';
+      resultDiv.style.color = action === 'approved' ? 'var(--success)' : 'var(--error)';
+      resultDiv.textContent = action === 'approved' ? '✅ Approved' : '❌ Rejected';
+      if (actionsDiv) actionsDiv.replaceWith(resultDiv);
+    }
+    toast(action === 'approved' ? 'Leave approved ✅' : 'Leave rejected', '');
+    _processingLeaves.delete(id);
+    // Reload after short delay so manager sees the result
+    setTimeout(() => loadMgrLeaves(), 1500);
+  } catch(e) {
+    toast(e.message || 'Failed. Try again.', 'error');
+    _processingLeaves.delete(id);
+    // Re-enable buttons on failure
+    if (actionsDiv) actionsDiv.innerHTML = `
+      <button class="btn-approve" id="btn-approve-${id}" onclick="processLeave(${id},'approved',this)">✅ Approve</button>
+      <button class="btn-reject"  id="btn-reject-${id}"  onclick="processLeave(${id},'rejected',this)">❌ Reject</button>`;
+  }
 }
 
 // ── MANAGER REPORT ──
