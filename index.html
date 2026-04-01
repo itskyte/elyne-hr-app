@@ -1130,6 +1130,34 @@ setInterval(async () => {
   try { await fetch(API_BASE + '/health'); } catch(e) {}
 }, 4 * 60 * 1000);
 
+
+// ── UNIVERSAL BUTTON LOADING HELPERS ──
+function btnLoad(btnEl, msg='Loading...') {
+  if (!btnEl) return;
+  btnEl._origText = btnEl.innerHTML;
+  btnEl.disabled = true;
+  btnEl.innerHTML = `<span style="display:flex;align-items:center;justify-content:center;gap:8px;"><span class="spinner" style="width:14px;height:14px;border-width:2px;"></span>${msg}</span>`;
+  btnEl.style.opacity = '0.85';
+}
+function btnReset(btnEl) {
+  if (!btnEl) return;
+  btnEl.disabled = false;
+  btnEl.innerHTML = btnEl._origText || btnEl.innerHTML;
+  btnEl.style.opacity = '1';
+}
+function getBtn(e) {
+  // Get the button from a click event or element
+  if (!e) return null;
+  return e.target ? e.target.closest('button') : (e.tagName === 'BUTTON' ? e : null);
+}
+
+// ── NAV LOADING STATE ──
+function navLoad(tabName) {
+  // Show subtle loading on nav items when switching tabs
+  document.querySelectorAll('.nav-item').forEach(n => n.style.opacity = '0.6');
+  setTimeout(() => document.querySelectorAll('.nav-item').forEach(n => n.style.opacity = '1'), 800);
+}
+
 // Invalidate cache for a specific action (call after mutations)
 function invalidateCache(...actions) {
   actions.forEach(a => { Object.keys(_cache).forEach(k => { if (k.startsWith(a)) delete _cache[k]; }); });
@@ -1172,7 +1200,8 @@ function initials(name) { return name.split(' ').map(w=>w[0]).join('').slice(0,2
 function greet() { const h=new Date().getHours(); return h<12?'Good morning':h<17?'Good afternoon':'Good evening'; }
 
 function switchTab(tab) {
-  if (tab==='leave') { loadMyLeaves(); return; } // my leaves shows balance first
+  navLoad(tab);
+  if (tab==='leave') { loadMyLeaves(); return; }
   const m={main:'screen-main',attendance:'screen-attendance',profile:'screen-profile'};
   if (!m[tab]) return;
   showScreen(m[tab]);
@@ -1180,6 +1209,7 @@ function switchTab(tab) {
   if (tab==='profile') loadProfile();
 }
 function switchMgrTab(tab) {
+  navLoad(tab);
   if (tab==='payroll') { showScreen('screen-mgr-payroll'); initPayrollPicker(); return; }
   if (tab==='announce') { showScreen('screen-mgr-announce'); return; }
   if (tab==='profile') { showScreen('screen-mgr-profile'); loadMgrProfile(); return; }
@@ -1203,8 +1233,10 @@ async function submitRegistration() {
   const name=document.getElementById('reg-name').value.trim();
   const title=document.getElementById('reg-title').value.trim();
   if (!name||!title) { toast('Please fill in all fields','error'); return; }
+  const btn = document.querySelector('#screen-register .btn-primary');
+  btnLoad(btn, 'Creating...');
   try {
-    await api('register',{full_name:name,job_title:title,employment_type:selType});
+    await api('register',{full_name:name,job_title:title,employment_type:selType},{cache:false});
     employeeData={full_name:name,job_title:title,employment_type:selType,work_start:selType==='fulltime'?'09:00:00':'13:00:00',work_end:'17:00:00'};
     toast('Profile created!','success');
     if (isManager) { await loadMgrDashboard(); showScreen('screen-mgr-main'); }
@@ -1599,10 +1631,15 @@ async function loadMgrEmployees() {
     body.innerHTML=html;
   } catch(e){body.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load.</div></div>';}
 }
-async function removeEmp(tid,name) {
-  if(!confirm(`Remove ${name}?`)) return;
-  try { await api('mgr_remove_employee',{target_telegram_id:tid}); toast(`${name} removed`,''); loadMgrEmployees(); }
-  catch(e){toast(e.message||'Failed','error');}
+async function removeEmp(tid, name, btnEl) {
+  if (!confirm('Remove ' + name + ' from the team?')) return;
+  if (btnEl) btnLoad(btnEl, 'Removing...');
+  try {
+    await api('mgr_remove_employee', {target_telegram_id: tid}, {cache: false});
+    invalidateCache('mgr_employees');
+    toast(name + ' removed', '');
+    loadMgrEmployees();
+  } catch(e) { toast(e.message||'Failed','error'); if (btnEl) btnReset(btnEl); }
 }
 
 // ── MY LEAVES ──
@@ -1777,21 +1814,23 @@ function openAddBonus(tid, name, monthStr) {
       <label class="input-label">Note (optional)</label>
       <input type="text" id="bonus-note" placeholder="e.g. Performance bonus, Year-end bonus">
     </div>
-    <button class="btn btn-primary" onclick="submitBonus(${tid},'${name}','${monthStr}')">Add Bonus</button>
+    <button class="btn btn-primary" id="bonus-submit-btn" onclick="submitBonus(${tid},'${name}','${monthStr}', this)">Add Bonus</button>
   `);
   setTimeout(() => document.getElementById('bonus-amount')?.focus(), 300);
 }
 
-async function submitBonus(tid, name, monthStr) {
+async function submitBonus(tid, name, monthStr, btnEl) {
   const amount = parseFloat(document.getElementById('bonus-amount').value);
   const note   = document.getElementById('bonus-note').value.trim() || 'Bonus';
   if (!amount || amount <= 0) { toast('Enter a valid bonus amount', 'error'); return; }
+  const btn = btnEl || document.getElementById('bonus-submit-btn');
+  btnLoad(btn, 'Adding...');
   try {
     await api('mgr_add_bonus', {target_telegram_id: tid, amount, note, month: monthStr}, {cache: false});
-    toast(`Bonus added for ${name} ✅`, 'success');
+    toast('Bonus added for ' + name + ' ✅', 'success');
     closeModalDirect();
     loadPayroll(monthStr);
-  } catch(e) { toast(e.message || 'Failed', 'error'); }
+  } catch(e) { toast(e.message || 'Failed', 'error'); btnReset(btn); }
 }
 
 // Store payroll data safely to avoid inline JSON issues
@@ -1818,12 +1857,14 @@ async function sendPayslip(tid, monthStr) {
   const payrollData = _payrollStore[tid];
   if (!payrollData) { toast('Payroll data missing', 'error'); return; }
   const name = payrollData.full_name || 'Employee';
+  const btn = document.querySelector('#modal-sheet .btn-primary');
+  btnLoad(btn, 'Sending...');
   try {
     await api('mgr_send_payslip', {target_telegram_id: tid, month: monthStr, payroll_data: payrollData}, {cache: false});
     toast('Payslip sent to ' + name + ' ✅', 'success');
     delete _payrollStore[tid];
     closeModalDirect();
-  } catch(e) { toast(e.message || 'Failed to send', 'error'); }
+  } catch(e) { toast(e.message || 'Failed to send', 'error'); btnReset(btn); }
 }
 
 // Set salary directly from payroll screen and reload
@@ -1843,23 +1884,28 @@ function openSetSalaryFromPayroll(tid, name, monthStr) {
 async function submitSalaryFromPayroll(tid, name, monthStr) {
   const salary = parseFloat(document.getElementById('sal-payroll-amount').value);
   if (!salary || salary <= 0) { toast('Enter a valid salary', 'error'); return; }
+  const btn = document.querySelector('#modal-sheet .btn-primary');
+  btnLoad(btn, 'Saving...');
   try {
     await api('mgr_set_salary', {target_telegram_id: tid, salary}, {cache: false});
-    toast(`Salary set for ${name} ✅`, 'success');
+    toast('Salary set for ' + name + ' ✅', 'success');
     closeModalDirect();
     loadPayroll(monthStr);
-  } catch(e) { toast(e.message || 'Failed', 'error'); }
+  } catch(e) { toast(e.message || 'Failed', 'error'); btnReset(btn); }
 }
 
 // ── ANNOUNCE ──
 async function sendAnnouncement() {
-  const msg=document.getElementById('announce-msg').value.trim();
-  if(!msg){toast('Please type a message','error');return;}
+  const msg = document.getElementById('announce-msg').value.trim();
+  if (!msg) { toast('Please type a message', 'error'); return; }
+  const btn = document.querySelector('#screen-mgr-announce .btn-primary');
+  btnLoad(btn, 'Sending...');
   try {
-    const r=await api('mgr_announce',{message:msg});
-    toast(r.message||'Sent!','success');
-    document.getElementById('announce-msg').value='';
-  } catch(e){toast(e.message||'Failed','error');}
+    const r = await api('mgr_announce', {message: msg}, {cache: false});
+    toast(r.message || 'Sent! ✅', 'success');
+    document.getElementById('announce-msg').value = '';
+    btnReset(btn);
+  } catch(e) { toast(e.message || 'Failed', 'error'); btnReset(btn); }
 }
 
 // tab routing handled in switchTab/switchMgrTab above
@@ -2052,13 +2098,16 @@ function selectAdjStatus(s) {
 async function submitAdjAttendance(tid, name) {
   const d = document.getElementById('adj-date').value;
   const note = document.getElementById('adj-note').value.trim() || 'Adjusted by manager';
-  if (!d) { toast('Please select a date','error'); return; }
+  if (!d) { toast('Please select a date', 'error'); return; }
+  const btn = document.querySelector('#modal-sheet .btn-primary');
+  btnLoad(btn, 'Saving...');
   try {
-    await api('mgr_adjust_attendance', { target_telegram_id: tid, date: d, status: adjStatus, note });
-    toast(`Attendance updated for ${name}`, 'success');
+    await api('mgr_adjust_attendance', {target_telegram_id: tid, date: d, status: adjStatus, note}, {cache: false});
+    invalidateCache('mgr_today_status','mgr_employees','mgr_employee_detail');
+    toast('Attendance updated for ' + name + ' ✅', 'success');
     closeModalDirect();
     openEmpDetail(tid, name);
-  } catch(e) { toast(e.message||'Failed','error'); }
+  } catch(e) { toast(e.message||'Failed','error'); btnReset(btn); }
 }
 
 // ── ADD LEAVE MODAL ──
@@ -2097,13 +2146,16 @@ function selectAddLeaveType(t) {
 async function submitAddLeave(tid, name) {
   const d = document.getElementById('addlv-date').value;
   const reason = document.getElementById('addlv-reason').value.trim() || 'Added by manager';
-  if (!d) { toast('Please select a date','error'); return; }
+  if (!d) { toast('Please select a date', 'error'); return; }
+  const btn = document.querySelector('#modal-sheet .btn-primary');
+  btnLoad(btn, 'Adding...');
   try {
-    await api('mgr_add_leave', { target_telegram_id: tid, date: d, leave_type: addLeaveType, reason });
-    toast(`Leave added for ${name}`, 'success');
+    await api('mgr_add_leave', {target_telegram_id: tid, date: d, leave_type: addLeaveType, reason}, {cache: false});
+    invalidateCache('mgr_today_status','mgr_employees','mgr_employee_detail','mgr_pending_leaves');
+    toast('Leave added for ' + name + ' ✅', 'success');
     closeModalDirect();
     openEmpDetail(tid, name);
-  } catch(e) { toast(e.message||'Failed','error'); }
+  } catch(e) { toast(e.message||'Failed','error'); btnReset(btn); }
 }
 
 // ── ADJUST AL BALANCE MODAL ──
@@ -2138,13 +2190,16 @@ function selectALAction(a) {
 async function submitAdjAL(tid, name) {
   const days = parseFloat(document.getElementById('al-days').value);
   const note = document.getElementById('al-note').value.trim() || 'Manual adjustment';
-  if (!days || days <= 0) { toast('Enter valid days','error'); return; }
+  if (!days || days <= 0) { toast('Enter valid days', 'error'); return; }
+  const btn = document.querySelector('#modal-sheet .btn-primary');
+  btnLoad(btn, 'Updating...');
   try {
-    const r = await api('mgr_adjust_al_balance', { target_telegram_id: tid, action: alAction, days, note });
-    toast(`Balance updated for ${name}`, 'success');
+    await api('mgr_adjust_al_balance', {target_telegram_id: tid, action: alAction, days, note}, {cache: false});
+    invalidateCache('mgr_employees','mgr_employee_detail');
+    toast('Balance updated for ' + name + ' ✅', 'success');
     closeModalDirect();
     openEmpDetail(tid, name);
-  } catch(e) { toast(e.message||'Failed','error'); }
+  } catch(e) { toast(e.message||'Failed','error'); btnReset(btn); }
 }
 
 // ── SET SALARY MODAL ──
@@ -2161,13 +2216,16 @@ function openSetSalary(tid, name, current) {
 }
 async function submitSetSalary(tid, name) {
   const salary = parseFloat(document.getElementById('sal-amount').value);
-  if (!salary || salary < 0) { toast('Enter valid salary','error'); return; }
+  if (!salary || salary < 0) { toast('Enter valid salary', 'error'); return; }
+  const btn = document.querySelector('#modal-sheet .btn-primary');
+  btnLoad(btn, 'Saving...');
   try {
-    await api('mgr_set_salary', { target_telegram_id: tid, salary });
-    toast(`Salary updated for ${name}`, 'success');
+    await api('mgr_set_salary', {target_telegram_id: tid, salary}, {cache: false});
+    invalidateCache('mgr_employees','mgr_employee_detail');
+    toast('Salary updated for ' + name + ' ✅', 'success');
     closeModalDirect();
     openEmpDetail(tid, name);
-  } catch(e) { toast(e.message||'Failed','error'); }
+  } catch(e) { toast(e.message||'Failed','error'); btnReset(btn); }
 }
 
 // ── KEEP-ALIVE: ping Railway every 4 min to prevent cold starts ──
