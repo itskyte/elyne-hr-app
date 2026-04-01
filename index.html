@@ -1740,7 +1740,7 @@ async function loadPayroll(monthStr) {
             style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:var(--text);cursor:pointer;">
             🎁 ${bonus > 0 ? 'Edit Bonus ($'+bonus.toFixed(0)+')' : 'Add Bonus'}
           </button>
-          <button onclick="confirmSendPayslip(${p.telegram_id},'${p.full_name}','${monthStr}',${JSON.stringify(p).replace(/'/g,'"')})"
+          <button onclick="confirmSendPayslip(${p.telegram_id},'${p.full_name}','${monthStr}',p)"
             style="background:var(--grad);border:none;border-radius:10px;padding:10px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:white;cursor:pointer;">
             📤 Send Payslip
           </button>
@@ -1794,26 +1794,34 @@ async function submitBonus(tid, name, monthStr) {
   } catch(e) { toast(e.message || 'Failed', 'error'); }
 }
 
+// Store payroll data safely to avoid inline JSON issues
+const _payrollStore = {};
 function confirmSendPayslip(tid, name, monthStr, payrollData) {
+  _payrollStore[tid] = payrollData;
+  const totalPay = ((payrollData.net_salary||0)+(payrollData.bonus||0)).toFixed(2);
   openModal(`
     <div class="modal-title">Send Payslip</div>
-    <div class="modal-sub">Confirm sending payslip to ${name} for ${monthStr}</div>
+    <div class="modal-sub">Confirm sending payslip to <strong>${name}</strong> for ${monthStr}</div>
     <div style="background:var(--bg3);border-radius:12px;padding:16px;margin-bottom:20px;">
       <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
-        <span style="font-size:13px;color:var(--text2);">Net Pay</span>
-        <span style="font-size:16px;font-weight:800;color:var(--success);">$${((payrollData.net_salary||0)+(payrollData.bonus||0)).toFixed(2)}</span>
+        <span style="font-size:13px;color:var(--text2);">Total Pay</span>
+        <span style="font-size:18px;font-weight:800;color:var(--success);">$${totalPay}</span>
       </div>
-      <div style="font-size:12px;color:var(--text3);">This will be sent directly to ${name} via the HR Bot.</div>
+      <div style="font-size:12px;color:var(--text3);margin-top:6px;">This will be sent to ${name} via the HR Bot immediately.</div>
     </div>
-    <button class="btn btn-primary" onclick="sendPayslip(${tid},'${name}','${monthStr}',${JSON.stringify(payrollData).replace(/'/g,'"')})">✅ Confirm & Send</button>
-    <button class="btn btn-ghost" onclick="closeModalDirect()">Cancel</button>
+    <button class="btn btn-primary" onclick="sendPayslip(${tid},'${monthStr}')">✅ Confirm & Send</button>
+    <button class="btn btn-ghost" onclick="closeModalDirect()" style="margin-top:0;">Cancel</button>
   `);
 }
 
-async function sendPayslip(tid, name, monthStr, payrollData) {
+async function sendPayslip(tid, monthStr) {
+  const payrollData = _payrollStore[tid];
+  if (!payrollData) { toast('Payroll data missing', 'error'); return; }
+  const name = payrollData.full_name || 'Employee';
   try {
     await api('mgr_send_payslip', {target_telegram_id: tid, month: monthStr, payroll_data: payrollData}, {cache: false});
-    toast(`Payslip sent to ${name} ✅`, 'success');
+    toast('Payslip sent to ' + name + ' ✅', 'success');
+    delete _payrollStore[tid];
     closeModalDirect();
   } catch(e) { toast(e.message || 'Failed to send', 'error'); }
 }
