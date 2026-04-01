@@ -1737,7 +1737,7 @@ async function loadPayroll(monthStr) {
                 <div style="font-size:22px;font-weight:800;color:var(--success);">$${totalPay.toFixed(2)}</div>
                 <div style="font-size:10px;color:var(--text3);">total pay</div>
                </div>`
-            : `<button onclick="openSetSalaryFromPayroll(${p.telegram_id},'${p.full_name}','${monthStr}')"
+            : `<button onclick="openSetSalaryFromPayroll(${p.telegram_id},'${monthStr}')"
                 style="background:var(--grad);color:white;border:none;border-radius:10px;padding:8px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;">
                 + Set Salary
                </button>`}
@@ -1776,11 +1776,11 @@ async function loadPayroll(monthStr) {
         </div>
         <!-- Action buttons -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-          <button onclick="openAddBonus(${p.telegram_id},'${p.full_name}','${monthStr}')"
+          <button onclick="openAddBonus(${p.telegram_id},'${monthStr}')"
             style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:var(--text);cursor:pointer;">
             🎁 ${bonus > 0 ? 'Edit Bonus ($'+bonus.toFixed(0)+')' : 'Add Bonus'}
           </button>
-          <button onclick="confirmSendPayslip(${p.telegram_id},'${p.full_name.replace(/'/g,\"\\'\"))}','${monthStr}')"
+          <button onclick="confirmSendPayslip(${p.telegram_id},'${monthStr}')"
             style="background:var(--grad);border:none;border-radius:10px;padding:10px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:white;cursor:pointer;">
             📤 Send Payslip
           </button>
@@ -1805,7 +1805,8 @@ function togglePayrollDetail(id, btn) {
   if (btn) btn.querySelector('span:first-child').textContent = isOpen ? 'View Breakdown' : 'Hide Breakdown';
 }
 
-function openAddBonus(tid, name, monthStr) {
+function openAddBonus(tid, monthStr) {
+  const name = (_payrollStore[tid] || {}).full_name || 'Employee';
   openModal(`
     <div class="modal-title">Add Bonus</div>
     <div class="modal-sub">${name} · ${monthStr}</div>
@@ -1817,12 +1818,13 @@ function openAddBonus(tid, name, monthStr) {
       <label class="input-label">Note (optional)</label>
       <input type="text" id="bonus-note" placeholder="e.g. Performance bonus, Year-end bonus">
     </div>
-    <button class="btn btn-primary" id="bonus-submit-btn" onclick="submitBonus(${tid},'${name}','${monthStr}', this)">Add Bonus</button>
+    <button class="btn btn-primary" id="bonus-submit-btn" onclick="submitBonus(${tid},'${monthStr}', this)">Add Bonus</button>
   `);
   setTimeout(() => document.getElementById('bonus-amount')?.focus(), 300);
 }
 
-async function submitBonus(tid, name, monthStr, btnEl) {
+async function submitBonus(tid, monthStr, btnEl) {
+  const name = (_payrollStore[tid] || {}).full_name || 'Employee';
   const amount = parseFloat(document.getElementById('bonus-amount').value);
   const note   = document.getElementById('bonus-note').value.trim() || 'Bonus';
   if (!amount || amount <= 0) { toast('Enter a valid bonus amount', 'error'); return; }
@@ -1838,8 +1840,9 @@ async function submitBonus(tid, name, monthStr, btnEl) {
 
 // Store payroll data safely to avoid inline JSON issues
 const _payrollStore = {};
-function confirmSendPayslip(tid, name, monthStr) {
+function confirmSendPayslip(tid, monthStr) {
   const payrollData = _payrollStore[tid] || {};
+  const name = payrollData.full_name || 'Employee';
   const totalPay = ((payrollData.net_salary||0)+(payrollData.bonus||0)).toFixed(2);
   openModal(`
     <div class="modal-title">Send Payslip</div>
@@ -1871,7 +1874,8 @@ async function sendPayslip(tid, monthStr) {
 }
 
 // Set salary directly from payroll screen and reload
-function openSetSalaryFromPayroll(tid, name, monthStr) {
+function openSetSalaryFromPayroll(tid, monthStr) {
+  const name = (_payrollStore[tid] || {}).full_name || 'Employee';
   openModal(`
     <div class="modal-title">Set Salary</div>
     <div class="modal-sub">${name}</div>
@@ -1879,12 +1883,13 @@ function openSetSalaryFromPayroll(tid, name, monthStr) {
       <label class="input-label">Monthly Salary (USD)</label>
       <input type="number" id="sal-payroll-amount" placeholder="e.g. 350" min="0" style="font-size:18px;font-weight:700;">
     </div>
-    <button class="btn btn-primary" onclick="submitSalaryFromPayroll(${tid},'${name}','${monthStr}')">Save & Recalculate</button>
+    <button class="btn btn-primary" onclick="submitSalaryFromPayroll(${tid},'${monthStr}')">Save & Recalculate</button>
   `);
   setTimeout(() => document.getElementById('sal-payroll-amount')?.focus(), 300);
 }
 
-async function submitSalaryFromPayroll(tid, name, monthStr) {
+async function submitSalaryFromPayroll(tid, monthStr) {
+  const name = (_payrollStore[tid] || {}).full_name || 'Employee';
   const salary = parseFloat(document.getElementById('sal-payroll-amount').value);
   if (!salary || salary <= 0) { toast('Enter a valid salary', 'error'); return; }
   const btn = document.querySelector('#modal-sheet .btn-primary');
