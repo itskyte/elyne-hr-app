@@ -1666,51 +1666,96 @@ function initPayrollPicker() {
 }
 
 async function loadPayroll(monthStr) {
-  const res=document.getElementById('payroll-results');
-  res.innerHTML='<div class="loading"><div class="spinner"></div> Calculating...</div>';
+  const res = document.getElementById('payroll-results');
+  res.innerHTML = '<div class="loading"><div class="spinner"></div> Calculating...</div>';
   try {
-    const r=await api('mgr_payroll',{month:monthStr});
-    const payroll=r.payroll||[];
-    if(!payroll.length){res.innerHTML='<div class="empty"><div class="empty-icon">💰</div><div class="empty-text">No data.</div></div>';return;}
-    let html=`<div class="section-label">Payroll — ${monthStr}</div>`;
-    payroll.forEach(p=>{
+    const r = await api('mgr_payroll', {month: monthStr}, {cache: false});
+    const payroll = r.payroll || [];
+    if (!payroll.length) {
+      res.innerHTML = '<div class="empty"><div class="empty-icon">💰</div><div class="empty-text">No employees found.</div></div>';
+      return;
+    }
+    let html = `<div class="section-label">Payroll — ${monthStr}</div>`;
+    payroll.forEach(p => {
       const hasSalary = p.monthly_salary > 0;
-      html+=`<div class="report-emp-card" style="margin-bottom:12px;">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+      const netSalary = typeof p.net_salary === 'number' ? p.net_salary : 0;
+      const deductions = typeof p.total_deductions === 'number' ? p.total_deductions : 0;
+      const proRata = p.pro_rata_note ? `<div style="font-size:10px;color:var(--info);margin-top:2px;">📅 ${p.pro_rata_note}</div>` : '';
+      html += `<div class="report-emp-card" style="margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
           <div>
             <div class="report-emp-name" style="margin-bottom:2px;">${p.full_name}</div>
             <div style="font-size:11px;color:var(--text3);">${p.job_title}</div>
+            ${proRata}
           </div>
-          ${hasSalary ? `<div style="text-align:right;">
-            <div style="font-size:18px;font-weight:800;color:var(--success);">$${p.net_salary.toFixed(2)}</div>
-            <div style="font-size:10px;color:var(--text3);">net salary</div>
-          </div>` : '<div style="font-size:12px;color:var(--warning);font-weight:600;">No salary set</div>'}
+          ${hasSalary
+            ? `<div style="text-align:right;">
+                <div style="font-size:20px;font-weight:800;color:var(--success);">$${netSalary.toFixed(2)}</div>
+                <div style="font-size:10px;color:var(--text3);">net pay</div>
+               </div>`
+            : `<button onclick="openSetSalaryFromPayroll(${p.telegram_id},'${p.full_name}','${monthStr}')"
+                style="background:var(--grad);color:white;border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;">
+                + Set Salary
+               </button>`
+          }
         </div>
-        ${hasSalary ? `<div style="background:var(--bg3);border-radius:10px;padding:12px;margin-bottom:10px;">
-          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+        ${hasSalary ? `
+        <div style="background:var(--bg3);border-radius:12px;padding:14px;margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
             <span style="font-size:12px;color:var(--text2);">Base Salary</span>
-            <span style="font-size:12px;font-weight:600;">$${p.monthly_salary.toFixed(2)}</span>
+            <span style="font-size:13px;font-weight:700;">$${p.monthly_salary.toFixed(2)}</span>
           </div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-            <span style="font-size:12px;color:var(--error);">Deductions</span>
-            <span style="font-size:12px;font-weight:600;color:var(--error);">-$${p.total_deductions.toFixed(2)}</span>
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+            <span style="font-size:12px;color:var(--error);">Total Deductions</span>
+            <span style="font-size:13px;font-weight:700;color:var(--error);">-$${deductions.toFixed(2)}</span>
           </div>
           <div style="height:1px;background:var(--border);margin:8px 0;"></div>
           <div style="display:flex;justify-content:space-between;">
-            <span style="font-size:13px;font-weight:700;">Net Pay</span>
-            <span style="font-size:13px;font-weight:800;color:var(--success);">$${p.net_salary.toFixed(2)}</span>
+            <span style="font-size:14px;font-weight:700;">Net Pay</span>
+            <span style="font-size:14px;font-weight:800;color:var(--success);">$${netSalary.toFixed(2)}</span>
           </div>
-        </div>` : ''}
+        </div>` : `
+        <div style="background:var(--warning-bg);border-radius:10px;padding:12px;margin-bottom:12px;font-size:12px;color:var(--warning);font-weight:600;">
+          ⚠️ No salary set — tap "+ Set Salary" to add monthly salary
+        </div>`}
         <div class="report-chips">
           <div class="report-chip" style="background:var(--success-bg);color:var(--success);">✅ ${p.present_days||0} Present</div>
           <div class="report-chip" style="background:var(--warning-bg);color:var(--warning);">⏰ ${p.late_days||0} Late</div>
-          <div class="report-chip" style="background:var(--info-bg);color:var(--info);">🏖️ ${p.leave_paid||0} Paid Leave</div>
+          <div class="report-chip" style="background:var(--info-bg);color:var(--info);">🏖️ ${p.leave_paid||0} Leave</div>
           <div class="report-chip" style="background:var(--error-bg);color:var(--error);">❌ ${p.absent_days||0} Absent</div>
+          <div class="report-chip" style="background:var(--bg3);color:var(--text2);">📅 ${p.work_days||0} Work days</div>
         </div>
       </div>`;
     });
-    res.innerHTML=html;
-  } catch(e){res.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load payroll.</div></div>';}
+    res.innerHTML = html;
+  } catch(e) {
+    res.innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">${e.message || 'Could not load payroll.'}</div></div>`;
+  }
+}
+
+// Set salary directly from payroll screen and reload
+function openSetSalaryFromPayroll(tid, name, monthStr) {
+  openModal(`
+    <div class="modal-title">Set Salary</div>
+    <div class="modal-sub">${name}</div>
+    <div class="input-group">
+      <label class="input-label">Monthly Salary (USD)</label>
+      <input type="number" id="sal-payroll-amount" placeholder="e.g. 350" min="0" style="font-size:18px;font-weight:700;">
+    </div>
+    <button class="btn btn-primary" onclick="submitSalaryFromPayroll(${tid},'${name}','${monthStr}')">Save & Recalculate</button>
+  `);
+  setTimeout(() => document.getElementById('sal-payroll-amount')?.focus(), 300);
+}
+
+async function submitSalaryFromPayroll(tid, name, monthStr) {
+  const salary = parseFloat(document.getElementById('sal-payroll-amount').value);
+  if (!salary || salary <= 0) { toast('Enter a valid salary', 'error'); return; }
+  try {
+    await api('mgr_set_salary', {target_telegram_id: tid, salary}, {cache: false});
+    toast(`Salary set for ${name} ✅`, 'success');
+    closeModalDirect();
+    loadPayroll(monthStr);
+  } catch(e) { toast(e.message || 'Failed', 'error'); }
 }
 
 // ── ANNOUNCE ──
