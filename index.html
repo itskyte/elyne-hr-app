@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>elyne HR</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -187,7 +187,8 @@ body {
   position:fixed; bottom:0; left:0; right:0;
   background:var(--bg2);
   border-top:1px solid var(--border);
-  display:flex; padding:10px 0 24px;
+  display:flex; 
+  padding:10px 0 calc(16px + env(safe-area-inset-bottom, 16px));
   z-index:40;
 }
 .nav-item {
@@ -336,13 +337,14 @@ textarea { min-height:90px; line-height:1.6; }
 
 /* ── TOAST ── */
 .toast {
-  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(60px);
+  position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-80px);
   background:var(--card2); color:var(--text);
   padding:12px 22px; border-radius:40px;
-  font-size:13px; font-weight:600; white-space:nowrap; z-index:200;
-  transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+  font-size:13px; font-weight:600; white-space:nowrap; z-index:600;
+  transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow:0 8px 32px rgba(0,0,0,0.5);
   border:1px solid var(--border);
+  pointer-events:none;
 }
 .toast.show { transform:translateX(-50%) translateY(0); }
 .toast.success { background:var(--success-bg); color:var(--success); border-color:rgba(78,203,141,0.3); }
@@ -1049,20 +1051,56 @@ window.onload = async () => {
     if (r.registered) {
       employeeData = r.employee;
       if (isManager) { await loadMgrDashboard(); showScreen('screen-mgr-main'); }
-      else { await loadMainScreen(); showScreen('screen-main'); }
+      else { showScreen('screen-main'); loadMainScreen(); }
     } else { showScreen('screen-register'); }
   } catch(e) { showScreen('screen-register'); }
 };
 
-async function api(action, data) {
-  const r = await fetch(`${API_BASE}/miniapp/${action}`, {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({...data, telegram_id: currentUser?.id})
-  });
-  const j = await r.json();
-  if (!j.ok) throw new Error(j.error || 'Error');
-  return j;
+// Simple in-memory cache for repeated reads
+const _cache = {};
+function _cacheKey(action, data) { return action + JSON.stringify(data||{}); }
+
+async function api(action, data, opts={}) {
+  const cacheKey = _cacheKey(action, data);
+  // Return cached result for read-only calls (TTL: 30s)
+  const readOnly = ['today_status','attendance_history','my_leaves','leave_balance',
+                    'mgr_today_status','mgr_pending_leaves','mgr_employees','mgr_monthly_report','mgr_pending_count'];
+  if (opts.cache !== false && readOnly.includes(action) && _cache[cacheKey]) {
+    const {ts, val} = _cache[cacheKey];
+    if (Date.now() - ts < 30000) return val;
+  }
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 12000); // 12s timeout
+  try {
+    const r = await fetch(`${API_BASE}/miniapp/${action}`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({...data, telegram_id: currentUser?.id}),
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || 'Error');
+    // Cache read-only results
+    if (readOnly.includes(action)) _cache[cacheKey] = {ts: Date.now(), val: j};
+    return j;
+  } catch(e) {
+    clearTimeout(timeout);
+    if (e.name === 'AbortError') throw new Error('Request timed out. Please try again.');
+    throw e;
+  }
 }
+
+
+// ── KEEP-ALIVE: ping Railway every 4 min to prevent cold starts ──
+setInterval(async () => {
+  try { await fetch(API_BASE + '/health'); } catch(e) {}
+}, 4 * 60 * 1000);
+
+// Invalidate cache for a specific action (call after mutations)
+function invalidateCache(...actions) {
+  actions.forEach(a => { Object.keys(_cache).forEach(k => { if (k.startsWith(a)) delete _cache[k]; }); });
+}
+
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -1136,7 +1174,7 @@ async function submitRegistration() {
     employeeData={full_name:name,job_title:title,employment_type:selType,work_start:selType==='fulltime'?'09:00:00':'13:00:00',work_end:'17:00:00'};
     toast('Profile created!','success');
     if (isManager) { await loadMgrDashboard(); showScreen('screen-mgr-main'); }
-    else { await loadMainScreen(); showScreen('screen-main'); }
+    else { showScreen('screen-main'); loadMainScreen(); }
   } catch(e) { toast(e.message||'Failed','error'); }
 }
 
@@ -1237,8 +1275,7 @@ async function confirmCheckIn() {
   const btn=document.getElementById('ci-btn'); btn.disabled=true; btn.textContent='CHECKING IN...';
   try {
     const r=await api('checkin',{lat:userLat,lng:userLng});
-    toast(r.message||'Checked in!','success');
-    await loadMainScreen(); showScreen('screen-main');
+    toast(r.message||'Checked in!','success'); invalidateCache('today_status','mgr_today_status'); await loadMainScreen(); showScreen('screen-main');
   } catch(e) { toast(e.message,'error'); btn.disabled=false; btn.textContent='CONFIRM CHECK IN'; }
 }
 async function confirmCheckOut() {
@@ -1247,8 +1284,7 @@ async function confirmCheckOut() {
   const btn=document.getElementById('co-btn'); btn.disabled=true; btn.textContent='CHECKING OUT...';
   try {
     const r=await api('checkout',{lat:userLat,lng:userLng,early_reason:er||null});
-    toast(r.message||'Checked out!','success');
-    await loadMainScreen(); showScreen('screen-main');
+    toast(r.message||'Checked out!','success'); invalidateCache('today_status','mgr_today_status'); await loadMainScreen(); showScreen('screen-main');
   } catch(e) { toast(e.message,'error'); btn.disabled=false; btn.textContent='CONFIRM CHECK OUT'; }
 }
 
@@ -1303,7 +1339,7 @@ async function submitLeave() {
   if(!reason){toast('Please provide a reason','error');return;}
   try {
     await api('apply_leave',{leave_type:selectedLeaveType,date:selectedLeaveDate.toISOString().split('T')[0],reason});
-    toast('Leave request submitted!','success');
+    toast('Leave request submitted!','success'); invalidateCache('my_leaves','leave_balance','mgr_pending_leaves','mgr_pending_count');
     selectedLeaveDate=null; document.getElementById('leave-reason').value='';
     document.getElementById('sel-date-chip').style.display='none'; renderCalendar();
     setTimeout(()=>switchTab('main'),1500);
@@ -1912,6 +1948,12 @@ async function submitSetSalary(tid, name) {
     openEmpDetail(tid, name);
   } catch(e) { toast(e.message||'Failed','error'); }
 }
+
+// ── KEEP-ALIVE: ping Railway every 4 min to prevent cold starts ──
+setInterval(async () => {
+  try { await fetch(API_BASE + '/health'); } catch(e) {}
+}, 4 * 60 * 1000);
+
 </script>
 </body>
 </html>
