@@ -1676,61 +1676,146 @@ async function loadPayroll(monthStr) {
       return;
     }
     let html = `<div class="section-label">Payroll — ${monthStr}</div>`;
-    payroll.forEach(p => {
-      const hasSalary = p.monthly_salary > 0;
-      const netSalary = typeof p.net_salary === 'number' ? p.net_salary : 0;
+    payroll.forEach((p, idx) => {
+      const hasSalary  = p.monthly_salary > 0;
+      const net        = typeof p.net_salary === 'number' ? p.net_salary : 0;
       const deductions = typeof p.total_deductions === 'number' ? p.total_deductions : 0;
-      const proRata = p.pro_rata_note ? `<div style="font-size:10px;color:var(--info);margin-top:2px;">📅 ${p.pro_rata_note}</div>` : '';
-      html += `<div class="report-emp-card" style="margin-bottom:14px;">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+      const bonus      = typeof p.bonus === 'number' ? p.bonus : 0;
+      const totalPay   = net + bonus;
+      const proRata    = p.pro_rata_note ? `<div style="font-size:10px;color:var(--info);margin-top:2px;">📅 ${p.pro_rata_note}</div>` : '';
+      const detailId   = 'payroll-detail-'+idx;
+      html += `<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:12px;">
+        <!-- Top: name + net pay -->
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
           <div>
-            <div class="report-emp-name" style="margin-bottom:2px;">${p.full_name}</div>
-            <div style="font-size:11px;color:var(--text3);">${p.job_title}</div>
+            <div style="font-size:14px;font-weight:700;">${p.full_name}</div>
+            <div style="font-size:11px;color:var(--text2);">${p.job_title}</div>
             ${proRata}
           </div>
           ${hasSalary
             ? `<div style="text-align:right;">
-                <div style="font-size:20px;font-weight:800;color:var(--success);">$${netSalary.toFixed(2)}</div>
-                <div style="font-size:10px;color:var(--text3);">net pay</div>
+                <div style="font-size:22px;font-weight:800;color:var(--success);">$${totalPay.toFixed(2)}</div>
+                <div style="font-size:10px;color:var(--text3);">total pay</div>
                </div>`
             : `<button onclick="openSetSalaryFromPayroll(${p.telegram_id},'${p.full_name}','${monthStr}')"
-                style="background:var(--grad);color:white;border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;">
+                style="background:var(--grad);color:white;border:none;border-radius:10px;padding:8px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;">
                 + Set Salary
-               </button>`
-          }
+               </button>`}
         </div>
-        ${hasSalary ? `
-        <div style="background:var(--bg3);border-radius:12px;padding:14px;margin-bottom:12px;">
-          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
-            <span style="font-size:12px;color:var(--text2);">Base Salary</span>
-            <span style="font-size:13px;font-weight:700;">$${p.monthly_salary.toFixed(2)}</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
-            <span style="font-size:12px;color:var(--error);">Total Deductions</span>
-            <span style="font-size:13px;font-weight:700;color:var(--error);">-$${deductions.toFixed(2)}</span>
-          </div>
-          <div style="height:1px;background:var(--border);margin:8px 0;"></div>
-          <div style="display:flex;justify-content:space-between;">
-            <span style="font-size:14px;font-weight:700;">Net Pay</span>
-            <span style="font-size:14px;font-weight:800;color:var(--success);">$${netSalary.toFixed(2)}</span>
-          </div>
-        </div>` : `
-        <div style="background:var(--warning-bg);border-radius:10px;padding:12px;margin-bottom:12px;font-size:12px;color:var(--warning);font-weight:600;">
-          ⚠️ No salary set — tap "+ Set Salary" to add monthly salary
-        </div>`}
-        <div class="report-chips">
+        <!-- Attendance chips -->
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;">
           <div class="report-chip" style="background:var(--success-bg);color:var(--success);">✅ ${p.present_days||0} Present</div>
           <div class="report-chip" style="background:var(--warning-bg);color:var(--warning);">⏰ ${p.late_days||0} Late</div>
-          <div class="report-chip" style="background:var(--info-bg);color:var(--info);">🏖️ ${p.leave_paid||0} Leave</div>
           <div class="report-chip" style="background:var(--error-bg);color:var(--error);">❌ ${p.absent_days||0} Absent</div>
-          <div class="report-chip" style="background:var(--bg3);color:var(--text2);">📅 ${p.work_days||0} Work days</div>
+          <div class="report-chip" style="background:var(--info-bg);color:var(--info);">🏖️ ${p.leave_paid||0} Leave</div>
         </div>
+        ${hasSalary ? `
+        <!-- Dropdown toggle -->
+        <button onclick="togglePayrollDetail('${detailId}', this)"
+          style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
+          <span>View Breakdown</span><span id="${detailId}-arrow">▼</span>
+        </button>
+        <!-- Collapsible breakdown -->
+        <div id="${detailId}" style="display:none;background:var(--bg3);border-radius:12px;padding:14px;margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);">
+            <span style="font-size:12px;color:var(--text2);">Base Salary</span>
+            <span style="font-size:12px;font-weight:700;">$${p.monthly_salary.toFixed(2)}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);">
+            <span style="font-size:12px;color:var(--error);">Deductions</span>
+            <span style="font-size:12px;font-weight:700;color:var(--error);">-$${deductions.toFixed(2)}</span>
+          </div>
+          ${bonus > 0 ? `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);">
+            <span style="font-size:12px;color:var(--success);">Bonus${p.bonus_note ? ' ('+p.bonus_note+')' : ''}</span>
+            <span style="font-size:12px;font-weight:700;color:var(--success);">+$${bonus.toFixed(2)}</span>
+          </div>` : ''}
+          <div style="display:flex;justify-content:space-between;padding:8px 0 0;">
+            <span style="font-size:13px;font-weight:800;">Total Pay</span>
+            <span style="font-size:13px;font-weight:800;color:var(--success);">$${totalPay.toFixed(2)}</span>
+          </div>
+        </div>
+        <!-- Action buttons -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <button onclick="openAddBonus(${p.telegram_id},'${p.full_name}','${monthStr}')"
+            style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:var(--text);cursor:pointer;">
+            🎁 ${bonus > 0 ? 'Edit Bonus ($'+bonus.toFixed(0)+')' : 'Add Bonus'}
+          </button>
+          <button onclick="confirmSendPayslip(${p.telegram_id},'${p.full_name}','${monthStr}',${JSON.stringify(p).replace(/'/g,'"')})"
+            style="background:var(--grad);border:none;border-radius:10px;padding:10px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:white;cursor:pointer;">
+            📤 Send Payslip
+          </button>
+        </div>` : `
+        <div style="background:var(--warning-bg);border-radius:10px;padding:12px;font-size:12px;color:var(--warning);font-weight:600;">
+          ⚠️ No salary set — tap "+ Set Salary" to calculate payroll
+        </div>`}
       </div>`;
     });
     res.innerHTML = html;
   } catch(e) {
-    res.innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">${e.message || 'Could not load payroll.'}</div></div>`;
+    res.innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">${e.message||'Could not load payroll.'}</div></div>`;
   }
+}
+
+function togglePayrollDetail(id, btn) {
+  const el = document.getElementById(id);
+  const arrow = document.getElementById(id+'-arrow');
+  const isOpen = el.style.display !== 'none';
+  el.style.display = isOpen ? 'none' : 'block';
+  if (arrow) arrow.textContent = isOpen ? '▼' : '▲';
+  if (btn) btn.querySelector('span:first-child').textContent = isOpen ? 'View Breakdown' : 'Hide Breakdown';
+}
+
+function openAddBonus(tid, name, monthStr) {
+  openModal(`
+    <div class="modal-title">Add Bonus</div>
+    <div class="modal-sub">${name} · ${monthStr}</div>
+    <div class="input-group">
+      <label class="input-label">Bonus Amount (USD)</label>
+      <input type="number" id="bonus-amount" placeholder="e.g. 50" min="0" step="1" style="font-size:18px;font-weight:700;">
+    </div>
+    <div class="input-group">
+      <label class="input-label">Note (optional)</label>
+      <input type="text" id="bonus-note" placeholder="e.g. Performance bonus, Year-end bonus">
+    </div>
+    <button class="btn btn-primary" onclick="submitBonus(${tid},'${name}','${monthStr}')">Add Bonus</button>
+  `);
+  setTimeout(() => document.getElementById('bonus-amount')?.focus(), 300);
+}
+
+async function submitBonus(tid, name, monthStr) {
+  const amount = parseFloat(document.getElementById('bonus-amount').value);
+  const note   = document.getElementById('bonus-note').value.trim() || 'Bonus';
+  if (!amount || amount <= 0) { toast('Enter a valid bonus amount', 'error'); return; }
+  try {
+    await api('mgr_add_bonus', {target_telegram_id: tid, amount, note, month: monthStr}, {cache: false});
+    toast(`Bonus added for ${name} ✅`, 'success');
+    closeModalDirect();
+    loadPayroll(monthStr);
+  } catch(e) { toast(e.message || 'Failed', 'error'); }
+}
+
+function confirmSendPayslip(tid, name, monthStr, payrollData) {
+  openModal(`
+    <div class="modal-title">Send Payslip</div>
+    <div class="modal-sub">Confirm sending payslip to ${name} for ${monthStr}</div>
+    <div style="background:var(--bg3);border-radius:12px;padding:16px;margin-bottom:20px;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+        <span style="font-size:13px;color:var(--text2);">Net Pay</span>
+        <span style="font-size:16px;font-weight:800;color:var(--success);">$${((payrollData.net_salary||0)+(payrollData.bonus||0)).toFixed(2)}</span>
+      </div>
+      <div style="font-size:12px;color:var(--text3);">This will be sent directly to ${name} via the HR Bot.</div>
+    </div>
+    <button class="btn btn-primary" onclick="sendPayslip(${tid},'${name}','${monthStr}',${JSON.stringify(payrollData).replace(/'/g,'"')})">✅ Confirm & Send</button>
+    <button class="btn btn-ghost" onclick="closeModalDirect()">Cancel</button>
+  `);
+}
+
+async function sendPayslip(tid, name, monthStr, payrollData) {
+  try {
+    await api('mgr_send_payslip', {target_telegram_id: tid, month: monthStr, payroll_data: payrollData}, {cache: false});
+    toast(`Payslip sent to ${name} ✅`, 'success');
+    closeModalDirect();
+  } catch(e) { toast(e.message || 'Failed to send', 'error'); }
 }
 
 // Set salary directly from payroll screen and reload
