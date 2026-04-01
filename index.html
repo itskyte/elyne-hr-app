@@ -1713,6 +1713,9 @@ async function loadPayroll(monthStr) {
       return;
     }
     let html = `<div class="section-label">Payroll — ${monthStr}</div>`;
+    // Store all payroll data upfront keyed by telegram_id
+    payroll.forEach(p => { _payrollStore[p.telegram_id] = p; });
+
     payroll.forEach((p, idx) => {
       const hasSalary  = p.monthly_salary > 0;
       const net        = typeof p.net_salary === 'number' ? p.net_salary : 0;
@@ -1777,7 +1780,7 @@ async function loadPayroll(monthStr) {
             style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:var(--text);cursor:pointer;">
             🎁 ${bonus > 0 ? 'Edit Bonus ($'+bonus.toFixed(0)+')' : 'Add Bonus'}
           </button>
-          <button onclick="confirmSendPayslip(${p.telegram_id},'${p.full_name}','${monthStr}',p)"
+          <button onclick="confirmSendPayslip(${p.telegram_id},'${p.full_name.replace(/'/g,\"\\'\"))}','${monthStr}')"
             style="background:var(--grad);border:none;border-radius:10px;padding:10px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:white;cursor:pointer;">
             📤 Send Payslip
           </button>
@@ -1835,8 +1838,8 @@ async function submitBonus(tid, name, monthStr, btnEl) {
 
 // Store payroll data safely to avoid inline JSON issues
 const _payrollStore = {};
-function confirmSendPayslip(tid, name, monthStr, payrollData) {
-  _payrollStore[tid] = payrollData;
+function confirmSendPayslip(tid, name, monthStr) {
+  const payrollData = _payrollStore[tid] || {};
   const totalPay = ((payrollData.net_salary||0)+(payrollData.bonus||0)).toFixed(2);
   openModal(`
     <div class="modal-title">Send Payslip</div>
