@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>elyne HR</title>
+<title>elyne office</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -354,6 +354,13 @@ textarea { min-height:90px; line-height:1.6; }
 .loading { display:flex; align-items:center; justify-content:center; gap:10px; padding:48px; color:var(--text3); font-size:13px; }
 .spinner { width:20px; height:20px; border:2.5px solid var(--border); border-top-color:var(--purple2); border-radius:50%; animation:spin .7s linear infinite; }
 @keyframes spin { to { transform:rotate(360deg); } }
+@keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+.skeleton {
+  background: linear-gradient(90deg, var(--border) 25%, var(--bg3) 50%, var(--border) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 10px;
+}
 .empty { text-align:center; padding:48px 24px; color:var(--text3); }
 .empty-icon { font-size:42px; margin-bottom:14px; opacity:0.3; }
 .empty-text { font-size:13px; font-weight:500; }
@@ -768,7 +775,8 @@ textarea { min-height:90px; line-height:1.6; }
       <label class="input-label">Reason</label>
       <textarea id="leave-reason" placeholder="Please describe your reason for this leave..."></textarea>
     </div>
-    <button class="btn btn-primary" onclick="submitLeave()">Submit Leave Request</button>
+    <button class="btn btn-primary" id="submit-leave-btn" onclick="submitLeave()">Submit Leave Request</button>
+    <div style="height:8px;"></div>
   </div>
 
   <div class="bottom-nav">
@@ -788,7 +796,11 @@ textarea { min-height:90px; line-height:1.6; }
   <div class="body has-nav" style="padding-top:0;">
     <div style="font-size:22px;font-weight:800;margin-bottom:4px;">Attendance</div>
     <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Your recent records</div>
-    <div id="att-body"><div class="loading"><div class="spinner"></div> Loading...</div></div>
+    <div id="att-body"><div style="padding:4px 0;">
+  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
+  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
+  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
+</div></div>
   </div>
   <div class="bottom-nav">
     <button class="nav-item" onclick="switchTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Overview</div></button>
@@ -802,7 +814,11 @@ textarea { min-height:90px; line-height:1.6; }
 <div class="screen" id="screen-profile">
   <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
   <div class="body has-nav" style="padding-top:0;" id="profile-body">
-    <div class="loading"><div class="spinner"></div> Loading...</div>
+    <div style="padding:4px 0;">
+  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
+  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
+  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
+</div>
   </div>
   <div class="bottom-nav">
     <button class="nav-item" onclick="switchTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Overview</div></button>
@@ -859,7 +875,11 @@ textarea { min-height:90px; line-height:1.6; }
       </div>
     </div>
 
-    <div id="mgr-main-list"><div class="loading"><div class="spinner"></div> Loading...</div></div>
+    <div id="mgr-main-list"><div style="padding:4px 0;">
+  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
+  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
+  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
+</div></div>
   </div>
 
   <div class="bottom-nav">
@@ -876,7 +896,11 @@ textarea { min-height:90px; line-height:1.6; }
   <div class="body has-nav" style="padding-top:0;">
     <div style="font-size:22px;font-weight:800;margin-bottom:4px;">Leave Requests</div>
     <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Pending approvals</div>
-    <div id="mgr-leaves-body"><div class="loading"><div class="spinner"></div> Loading...</div></div>
+    <div id="mgr-leaves-body"><div style="padding:4px 0;">
+  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
+  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
+  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
+</div></div>
   </div>
   <div class="bottom-nav">
     <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
@@ -910,7 +934,11 @@ textarea { min-height:90px; line-height:1.6; }
   <div class="body has-nav" style="padding-top:0;">
     <div style="font-size:22px;font-weight:800;margin-bottom:4px;">Team</div>
     <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">All registered employees</div>
-    <div id="mgr-employees-body"><div class="loading"><div class="spinner"></div> Loading...</div></div>
+    <div id="mgr-employees-body"><div style="padding:4px 0;">
+  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
+  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
+  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
+</div></div>
   </div>
   <div class="bottom-nav">
     <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
@@ -1070,7 +1098,7 @@ async function api(action, data, opts={}) {
     if (Date.now() - ts < 30000) return val;
   }
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 12000); // 12s timeout
+  const timeout = setTimeout(() => controller.abort(), 20000); // 20s timeout
   try {
     const r = await fetch(`${API_BASE}/miniapp/${action}`, {
       method:'POST', headers:{'Content-Type':'application/json'},
@@ -1085,7 +1113,13 @@ async function api(action, data, opts={}) {
     return j;
   } catch(e) {
     clearTimeout(timeout);
-    if (e.name === 'AbortError') throw new Error('Request timed out. Please try again.');
+    if (e.name === 'AbortError') {
+      // Auto-retry once on timeout
+      if (!opts._retry) {
+        return api(action, data, {...opts, _retry:true});
+      }
+      throw new Error('Server is waking up. Please wait a moment and try again.');
+    }
     throw e;
   }
 }
@@ -1333,17 +1367,33 @@ function goApplyLeave() {
   document.getElementById('leave-reason').value = '';
 }
 
+let _submitLeaveInProgress = false;
 async function submitLeave() {
+  if(_submitLeaveInProgress) return; // prevent double tap
   if(!selectedLeaveDate){toast('Please select a date','error');return;}
   const reason=document.getElementById('leave-reason').value.trim();
   if(!reason){toast('Please provide a reason','error');return;}
+
+  // Disable button immediately
+  _submitLeaveInProgress = true;
+  const btn = document.getElementById('submit-leave-btn');
+  if(btn) { btn.disabled = true; btn.textContent = 'SUBMITTING...'; }
+
   try {
-    await api('apply_leave',{leave_type:selectedLeaveType,date:selectedLeaveDate.toISOString().split('T')[0],reason});
-    toast('Leave request submitted!','success'); invalidateCache('my_leaves','leave_balance','mgr_pending_leaves','mgr_pending_count');
-    selectedLeaveDate=null; document.getElementById('leave-reason').value='';
-    document.getElementById('sel-date-chip').style.display='none'; renderCalendar();
-    setTimeout(()=>switchTab('main'),1500);
-  } catch(e){toast(e.message||'Failed','error');}
+    await api('apply_leave',{leave_type:selectedLeaveType,date:selectedLeaveDate.toISOString().split('T')[0],reason},{cache:false});
+    toast('Leave request submitted! ✅','success');
+    invalidateCache('my_leaves','leave_balance','mgr_pending_leaves','mgr_pending_count');
+    selectedLeaveDate=null;
+    document.getElementById('leave-reason').value='';
+    document.getElementById('sel-date-chip').style.display='none';
+    renderCalendar();
+    setTimeout(()=>{ _submitLeaveInProgress=false; switchTab('main'); },1500);
+  } catch(e){
+    toast(e.message||'Failed. Please try again.','error');
+    // Re-enable on failure
+    _submitLeaveInProgress = false;
+    if(btn) { btn.disabled = false; btn.textContent = 'SUBMIT LEAVE REQUEST'; }
+  }
 }
 
 // ── ATTENDANCE ──
