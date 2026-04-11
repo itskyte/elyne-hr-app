@@ -882,6 +882,16 @@ textarea { min-height:90px; line-height:1.6; }
 </div></div>
   </div>
 
+      <div class="section-label" style="margin-top:16px;">Settings</div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;margin-bottom:16px;" onclick="switchMgrTab('holidays')">
+      <div>
+        <div style="font-size:13px;font-weight:700;">🗓️ Public Holidays</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;">Manage Cambodia holidays for payroll</div>
+      </div>
+      <div style="color:var(--text3);font-size:18px;">›</div>
+    </div>
+  </div>
+
   <div class="bottom-nav">
     <button class="nav-item active" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
     <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
@@ -1214,6 +1224,7 @@ function switchMgrTab(tab) {
   if (tab==='announce') { showScreen('screen-mgr-announce'); return; }
   if (tab==='profile') { showScreen('screen-mgr-profile'); loadMgrProfile(); return; }
   if (tab==='emp-detail') { showScreen('screen-emp-detail'); return; }
+  if (tab==='holidays') { showScreen('screen-mgr-holidays'); loadHolidays(); return; }
   const m={main:'screen-mgr-main',leaves:'screen-mgr-leaves',report:'screen-mgr-report',employees:'screen-mgr-employees'};
   if (!m[tab]) return;
   showScreen(m[tab]);
@@ -1256,6 +1267,29 @@ async function loadMainScreen() {
   document.getElementById('main-name').textContent = name;
   document.getElementById('main-role').textContent = employeeData?.job_title || '';
   document.getElementById('main-welcome-line').textContent = isWeekend ? `Happy weekend, ${first}! 🌴` : `${greet()}, ${first}!`;
+  // Check for holiday
+  if (!isWeekend) {
+    try {
+      const ts = await api('today_status', {});
+      if (ts.is_holiday) {
+        document.getElementById('main-welcome-line').textContent = `Happy Holiday, ${first}! 🎉`;
+        const body = document.getElementById('main-body');
+        const existing = document.getElementById('holiday-banner');
+        if (!existing) {
+          const banner = document.createElement('div');
+          banner.id = 'holiday-banner';
+          banner.style.cssText = 'background:linear-gradient(135deg,#f5a623,#f7c948);border-radius:16px;padding:18px;margin-bottom:16px;text-align:center;';
+          banner.innerHTML = `<div style="font-size:24px;margin-bottom:6px;">🎉</div>
+            <div style="font-size:15px;font-weight:800;color:#7a4800;">Today is ${ts.holiday_name}</div>
+            <div style="font-size:12px;color:#a06000;margin-top:4px;">Public Holiday — Enjoy your day!</div>`;
+          body.prepend(banner);
+        }
+        // Hide check-in/out cards on holiday
+        document.querySelectorAll('.action-card').forEach(c => c.style.display = 'none');
+        return;
+      }
+    } catch(e) {}
+  }
   document.getElementById('ov-date').textContent = now.toLocaleDateString('en-US',{day:'numeric',month:'long',year:'numeric'});
   document.getElementById('ov-now').textContent = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
   try {
@@ -1266,12 +1300,12 @@ async function loadMainScreen() {
 }
 
 // ── CHECK IN / OUT ──
-function goCheckIn() {
+async function goCheckIn() {
   const dow = new Date().getDay();
   if (dow === 0 || dow === 6) { toast('Today is a weekend — no attendance required 🌴', ''); return; }
   showScreen('screen-checkin'); resetLoc('ci'); startCheckin();
 }
-function goCheckOut() {
+async function goCheckOut() {
   const dow = new Date().getDay();
   if (dow === 0 || dow === 6) { toast('Today is a weekend — no attendance required 🌴', ''); return; }
   showScreen('screen-checkout'); resetLoc('co'); startCheckout();
@@ -2240,6 +2274,81 @@ async function submitSetSalary(tid, name) {
 setInterval(async () => {
   try { await fetch(API_BASE + '/health'); } catch(e) {}
 }, 4 * 60 * 1000);
+
+
+// ── HOLIDAYS ──
+async function loadHolidays() {
+  const body = document.getElementById('holidays-body');
+  if (!body) return;
+  body.innerHTML = '<div class="loading"><div class="spinner"></div> Loading...</div>';
+  try {
+    const year = new Date().getFullYear();
+    const r = await api('get_holidays', {year}, {cache: false});
+    const holidays = r.holidays || [];
+    if (!holidays.length) {
+      body.innerHTML = '<div class="empty"><div class="empty-icon">🗓️</div><div class="empty-text">No holidays added yet.</div></div>';
+      return;
+    }
+    let html = `<div class="section-label">${holidays.length} holidays in ${year}</div>`;
+    holidays.forEach(h => {
+      const d = new Date(h.date + 'T00:00:00');
+      const label = d.toLocaleDateString('en-US', {weekday:'short', day:'numeric', month:'long'});
+      html += `<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:13px;font-weight:700;">${h.name}</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:2px;">${label}</div>
+        </div>
+        <button onclick="deleteHoliday(${h.id},'${h.name}', this)"
+          style="background:var(--error-bg);color:var(--error);border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;">
+          Remove
+        </button>
+      </div>`;
+    });
+    body.innerHTML = html;
+  } catch(e) {
+    body.innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">${e.message||'Could not load.'}</div></div>`;
+  }
+}
+
+function openAddHoliday() {
+  const today = new Date().toISOString().split('T')[0];
+  openModal(`
+    <div class="modal-title">Add Holiday</div>
+    <div class="modal-sub">Add a Cambodia public holiday</div>
+    <div class="input-group">
+      <label class="input-label">Date</label>
+      <input type="date" id="holiday-date" value="${today}">
+    </div>
+    <div class="input-group">
+      <label class="input-label">Holiday Name</label>
+      <input type="text" id="holiday-name" placeholder="e.g. Khmer New Year">
+    </div>
+    <button class="btn btn-primary" onclick="submitAddHoliday(this)">Add Holiday</button>
+  `);
+}
+
+async function submitAddHoliday(btnEl) {
+  const d = document.getElementById('holiday-date').value;
+  const name = document.getElementById('holiday-name').value.trim();
+  if (!d || !name) { toast('Please fill in both fields', 'error'); return; }
+  btnLoad(btnEl, 'Adding...');
+  try {
+    await api('mgr_add_holiday', {date: d, name}, {cache: false});
+    toast('Holiday added ✅', 'success');
+    closeModalDirect();
+    loadHolidays();
+  } catch(e) { toast(e.message || 'Failed', 'error'); btnReset(btnEl); }
+}
+
+async function deleteHoliday(id, name, btnEl) {
+  if (!confirm('Remove ' + name + '?')) return;
+  btnLoad(btnEl, '...');
+  try {
+    await api('mgr_delete_holiday', {holiday_id: id}, {cache: false});
+    toast(name + ' removed', '');
+    loadHolidays();
+  } catch(e) { toast(e.message || 'Failed', 'error'); btnReset(btnEl); }
+}
 
 </script>
 </body>
