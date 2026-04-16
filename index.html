@@ -69,7 +69,7 @@ body {
 
 /* ── BODY ── */
 .body { flex:1; padding:0 20px 20px; overflow-y:auto; }
-.body.has-nav { padding-bottom:90px; }
+.body.has-nav { padding-bottom:calc(100px + env(safe-area-inset-bottom, 20px)); }
 
 /* ── SECTION LABEL ── */
 .section-label {
@@ -614,7 +614,7 @@ textarea { min-height:90px; line-height:1.6; }
     <div style="font-size:22px;">👋</div>
   </div>
 
-  <div class="body has-nav" style="padding-top:16px;">
+  <div class="body has-nav" style="padding-top:16px;padding-bottom:calc(120px + env(safe-area-inset-bottom, 20px));">
     <div style="font-size:22px;font-weight:800;margin-bottom:4px;" id="main-welcome-line">Welcome!</div>
     <div style="font-size:13px;color:var(--text2);margin-bottom:20px;" id="main-tagline">Great brands are built by great people.</div>
 
@@ -1502,14 +1502,25 @@ async function loadProfile() {
 
 // ── MANAGER DASHBOARD ──
 async function loadMgrDashboard() {
-  const now=new Date();
-  document.getElementById('mgr-welcome').textContent=`${greet()}.`;
-  document.getElementById('mgr-ov-date').textContent=now.toLocaleDateString('en-US',{day:'numeric',month:'long',year:'numeric'});
-  document.getElementById('mgr-ov-now').textContent=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
-  const list=document.getElementById('mgr-main-list');
-  list.innerHTML='<div class="loading"><div class="spinner"></div> Loading...</div>';
+  const now = new Date();
+  document.getElementById('mgr-welcome').textContent = `${greet()}.`;
+  document.getElementById('mgr-ov-date').textContent = now.toLocaleDateString('en-US',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('mgr-ov-now').textContent = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
+  const list = document.getElementById('mgr-main-list');
+  list.innerHTML = '<div class="loading"><div class="spinner"></div> Loading...</div>';
   try {
-    const r=await api('mgr_today_status',{});
+    const r = await api('mgr_today_status', {});
+    if (r.is_holiday) {
+      ['mgr-stat-present','mgr-stat-late','mgr-stat-leave','mgr-stat-absent'].forEach(id => {
+        document.getElementById(id).textContent = '—';
+      });
+      list.innerHTML = `<div style="background:linear-gradient(135deg,#f5a623,#f7c948);border-radius:18px;padding:28px;text-align:center;margin:8px 0;">
+        <div style="font-size:40px;margin-bottom:12px;">🎉</div>
+        <div style="font-size:18px;font-weight:800;color:#7a4800;margin-bottom:6px;">${r.holiday_name}</div>
+        <div style="font-size:13px;color:#a06000;">Public Holiday — no attendance today</div>
+      </div>`;
+      return;
+    }
     const {present=[],late=[],absent=[],on_leave=[]}=r;
     document.getElementById('mgr-stat-present').textContent=present.length;
     document.getElementById('mgr-stat-late').textContent=late.length;
@@ -1530,12 +1541,12 @@ async function loadMgrDashboard() {
       });
       html+='</div>';
     });
-    if(!html) html='<div class="empty"><div class="empty-icon">🌿</div><div class="empty-text">No employees yet.</div></div>';
+    if(!html) html='<div class="empty"><div class="empty-icon">🌿</div><div class="empty-text">All good — no activity yet.</div></div>';
     list.innerHTML=html;
-  } catch(e){list.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load.</div></div>';}
+  } catch(e){list.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load dashboard.</div></div>';}
 }
 
-// ── MANAGER LEAVES ──
+
 async function loadMgrLeaves() {
   const body=document.getElementById('mgr-leaves-body');
   body.innerHTML='<div class="loading"><div class="spinner"></div> Loading...</div>';
