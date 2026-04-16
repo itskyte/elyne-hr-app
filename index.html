@@ -614,7 +614,7 @@ textarea { min-height:90px; line-height:1.6; }
     <div style="font-size:22px;">👋</div>
   </div>
 
-  <div class="body has-nav" style="padding-top:16px;padding-bottom:calc(120px + env(safe-area-inset-bottom, 20px));">
+  <div class="body has-nav" style="padding-top:16px;">
     <div style="font-size:22px;font-weight:800;margin-bottom:4px;" id="main-welcome-line">Welcome!</div>
     <div style="font-size:13px;color:var(--text2);margin-bottom:20px;" id="main-tagline">Great brands are built by great people.</div>
 
@@ -882,21 +882,14 @@ textarea { min-height:90px; line-height:1.6; }
 </div></div>
   </div>
 
-      <div class="section-label" style="margin-top:16px;">Settings</div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;margin-bottom:16px;" onclick="switchMgrTab('holidays')">
-      <div>
-        <div style="font-size:13px;font-weight:700;">🗓️ Public Holidays</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:2px;">Manage Cambodia holidays for payroll</div>
-      </div>
-      <div style="color:var(--text3);font-size:18px;">›</div>
     </div>
-  </div>
 
   <div class="bottom-nav">
     <button class="nav-item active" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
     <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
     <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
     <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
+    <button class="nav-item" onclick="switchMgrTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></button>
   </div>
 </div>
 
@@ -917,6 +910,7 @@ textarea { min-height:90px; line-height:1.6; }
     <button class="nav-item active" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
     <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
     <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
+    <button class="nav-item" onclick="switchMgrTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></button>
   </div>
 </div>
 
@@ -935,6 +929,7 @@ textarea { min-height:90px; line-height:1.6; }
     <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
     <button class="nav-item active" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
     <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
+    <button class="nav-item" onclick="switchMgrTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></button>
   </div>
 </div>
 
@@ -955,6 +950,7 @@ textarea { min-height:90px; line-height:1.6; }
     <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
     <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
     <button class="nav-item active" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
+    <button class="nav-item" onclick="switchMgrTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></button>
   </div>
 </div>
 
@@ -991,6 +987,7 @@ textarea { min-height:90px; line-height:1.6; }
     <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
     <button class="nav-item active" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
     <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
+    <button class="nav-item" onclick="switchMgrTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></button>
   </div>
 </div>
 
@@ -1011,6 +1008,7 @@ textarea { min-height:90px; line-height:1.6; }
     <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
     <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
     <button class="nav-item active" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
+    <button class="nav-item" onclick="switchMgrTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></button>
   </div>
 </div>
 
@@ -1028,6 +1026,64 @@ textarea { min-height:90px; line-height:1.6; }
   </div>
 </div>
 
+<!-- SETTINGS SCREEN -->
+<div class="screen" id="screen-mgr-settings">
+  <div class="top-bar">
+    <div class="top-logo">elyne HR</div>
+    <div></div>
+  </div>
+  <div class="body has-nav" style="padding-top:0;">
+    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">⚙️ Settings</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Manage your HR system</div>
+
+    <div class="section-label" style="margin-top:0;">Payroll & Compliance</div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;cursor:pointer;border-bottom:1px solid var(--border);" onclick="switchMgrTab('holidays')">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="font-size:22px;">🗓️</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;">Public Holidays</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px;">Cambodia holiday calendar</div>
+          </div>
+        </div>
+        <div style="color:var(--text3);font-size:18px;">›</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;cursor:pointer;" onclick="switchMgrTab('announce')">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="font-size:22px;">📢</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;">Send Announcement</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px;">Broadcast to all staff</div>
+          </div>
+        </div>
+        <div style="color:var(--text3);font-size:18px;">›</div>
+      </div>
+    </div>
+
+    <div class="section-label">Account</div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;cursor:pointer;" onclick="switchMgrTab('profile')">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="font-size:22px;">👤</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;">My Profile</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px;">View your account details</div>
+          </div>
+        </div>
+        <div style="color:var(--text3);font-size:18px;">›</div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+        <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
+    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
+    <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
+    <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
+    <button class="nav-item active" onclick="switchMgrTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></button>
+  </div>
+</div>
+
+<!-- EMPLOYEE DETAIL SCREEN -->
 <!-- EMPLOYEE DETAIL SCREEN -->
 <div class="screen" id="screen-emp-detail">
   <div class="top-bar">
@@ -1225,6 +1281,7 @@ function switchMgrTab(tab) {
   if (tab==='profile') { showScreen('screen-mgr-profile'); loadMgrProfile(); return; }
   if (tab==='emp-detail') { showScreen('screen-emp-detail'); return; }
   if (tab==='holidays') { showScreen('screen-mgr-holidays'); loadHolidays(); return; }
+  if (tab==='settings') { showScreen('screen-mgr-settings'); return; }
   const m={main:'screen-mgr-main',leaves:'screen-mgr-leaves',report:'screen-mgr-report',employees:'screen-mgr-employees'};
   if (!m[tab]) return;
   showScreen(m[tab]);
