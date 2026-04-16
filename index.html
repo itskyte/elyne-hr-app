@@ -1083,6 +1083,28 @@ textarea { min-height:90px; line-height:1.6; }
   </div>
 </div>
 
+<!-- HOLIDAYS SCREEN -->
+<div class="screen" id="screen-mgr-holidays">
+  <div class="top-bar">
+    <button class="back-btn" onclick="switchMgrTab('settings')">‹ Back</button>
+    <div class="top-logo">Public Holidays</div>
+    <div></div>
+  </div>
+  <div class="body has-nav" style="padding-top:0;">
+    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">🗓️ Holidays</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:16px;">Cambodia public holidays — excluded from payroll & attendance</div>
+    <button class="btn btn-primary" onclick="openAddHoliday()" style="margin-bottom:16px;">+ Add Holiday</button>
+    <div id="holidays-body"><div class="loading"><div class="spinner"></div> Loading...</div></div>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
+    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
+    <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
+    <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
+    <button class="nav-item active" onclick="switchMgrTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></button>
+  </div>
+</div>
+
 <!-- EMPLOYEE DETAIL SCREEN -->
 <!-- EMPLOYEE DETAIL SCREEN -->
 <div class="screen" id="screen-emp-detail">
