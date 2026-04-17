@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -36,14 +37,14 @@
   --radius-xs: 10px;
 }
 
-* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+- { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
 body {
-  font-family: 'Montserrat', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
+font-family: ‘Montserrat’, sans-serif;
+background: var(–bg);
+color: var(–text);
+min-height: 100vh;
+overflow-x: hidden;
 }
 
 /* ── SCREENS ── */
@@ -53,18 +54,18 @@ body {
 
 /* ── TOP BAR ── */
 .top-bar {
-  padding: 20px 20px 16px;
-  display:flex; align-items:center; justify-content:space-between;
+padding: 20px 20px 16px;
+display:flex; align-items:center; justify-content:space-between;
 }
 .top-logo {
-  font-size:18px; font-weight:800; letter-spacing:0.06em;
-  background: var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+font-size:18px; font-weight:800; letter-spacing:0.06em;
+background: var(–grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
 }
 .back-btn {
-  background:var(--bg3); border:none; cursor:pointer;
-  font-family:'Montserrat',sans-serif; font-size:13px; font-weight:600;
-  color:var(--purple2); padding:8px 14px; border-radius:10px;
-  display:flex; align-items:center; gap:6px;
+background:var(–bg3); border:none; cursor:pointer;
+font-family:‘Montserrat’,sans-serif; font-size:13px; font-weight:600;
+color:var(–purple2); padding:8px 14px; border-radius:10px;
+display:flex; align-items:center; gap:6px;
 }
 
 /* ── BODY ── */
@@ -73,64 +74,64 @@ body {
 
 /* ── SECTION LABEL ── */
 .section-label {
-  font-size:11px; font-weight:700; letter-spacing:0.1em;
-  text-transform:uppercase; color:var(--text3);
-  margin-bottom:12px; margin-top:24px;
+font-size:11px; font-weight:700; letter-spacing:0.1em;
+text-transform:uppercase; color:var(–text3);
+margin-bottom:12px; margin-top:24px;
 }
 
 /* ── PROFILE HEADER ── */
 .profile-header {
-  padding: 20px 20px 0;
-  display:flex; align-items:center; justify-content:space-between;
+padding: 20px 20px 0;
+display:flex; align-items:center; justify-content:space-between;
 }
 .profile-info { display:flex; align-items:center; gap:12px; }
 .profile-avatar-sm {
-  width:46px; height:46px; border-radius:15px;
-  background: var(--grad);
-  display:flex; align-items:center; justify-content:center;
-  font-size:17px; font-weight:800; color:white; flex-shrink:0;
+width:46px; height:46px; border-radius:15px;
+background: var(–grad);
+display:flex; align-items:center; justify-content:center;
+font-size:17px; font-weight:800; color:white; flex-shrink:0;
 }
-.profile-name-sm { font-size:15px; font-weight:700; color:var(--text); }
-.profile-role-sm { font-size:12px; color:var(--text2); margin-top:2px; font-weight:400; }
+.profile-name-sm { font-size:15px; font-weight:700; color:var(–text); }
+.profile-role-sm { font-size:12px; color:var(–text2); margin-top:2px; font-weight:400; }
 
 /* ── OVERVIEW CARD (purple gradient big card) ── */
 .overview-card {
-  background: var(--grad);
-  border-radius: var(--radius);
-  padding: 22px 20px;
-  margin-bottom: 0;
-  position:relative; overflow:hidden;
+background: var(–grad);
+border-radius: var(–radius);
+padding: 22px 20px;
+margin-bottom: 0;
+position:relative; overflow:hidden;
 }
 .overview-card::before {
-  content:''; position:absolute;
-  top:-40px; right:-30px;
-  width:140px; height:140px;
-  background:rgba(255,255,255,0.07); border-radius:50%;
+content:’’; position:absolute;
+top:-40px; right:-30px;
+width:140px; height:140px;
+background:rgba(255,255,255,0.07); border-radius:50%;
 }
 .overview-card::after {
-  content:''; position:absolute;
-  bottom:-20px; left:20px;
-  width:90px; height:90px;
-  background:rgba(255,255,255,0.05); border-radius:50%;
+content:’’; position:absolute;
+bottom:-20px; left:20px;
+width:90px; height:90px;
+background:rgba(255,255,255,0.05); border-radius:50%;
 }
 .ov-date-row {
-  display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:16px; position:relative; z-index:1;
+display:flex; align-items:center; justify-content:space-between;
+margin-bottom:16px; position:relative; z-index:1;
 }
 .ov-date { font-size:20px; font-weight:800; color:white; }
 .ov-time-badge {
-  background:rgba(255,255,255,0.25);
-  padding:6px 14px; border-radius:20px;
-  font-size:13px; font-weight:700; color:white;
-  backdrop-filter:blur(10px);
+background:rgba(255,255,255,0.25);
+padding:6px 14px; border-radius:20px;
+font-size:13px; font-weight:700; color:white;
+backdrop-filter:blur(10px);
 }
 .ov-times {
-  background:rgba(255,255,255,0.15);
-  border-radius:var(--radius-sm);
-  padding:16px 18px;
-  display:flex; align-items:center;
-  position:relative; z-index:1;
-  backdrop-filter:blur(10px);
+background:rgba(255,255,255,0.15);
+border-radius:var(–radius-sm);
+padding:16px 18px;
+display:flex; align-items:center;
+position:relative; z-index:1;
+backdrop-filter:blur(10px);
 }
 .ov-time-block { flex:1; }
 .ov-time-label { font-size:11px; color:rgba(255,255,255,0.7); font-weight:500; margin-bottom:4px; }
@@ -139,351 +140,350 @@ body {
 
 /* ── STAT CHIPS GRID ── */
 .stat-grid {
-  display:grid; grid-template-columns:1fr 1fr;
-  gap:12px; margin-top:14px;
+display:grid; grid-template-columns:1fr 1fr;
+gap:12px; margin-top:14px;
 }
 .stat-chip {
-  background:var(--card);
-  border-radius:var(--radius-sm);
-  padding:16px 16px;
-  display:flex; align-items:center; gap:12px;
-  border:1px solid var(--border);
+background:var(–card);
+border-radius:var(–radius-sm);
+padding:16px 16px;
+display:flex; align-items:center; gap:12px;
+border:1px solid var(–border);
 }
 .stat-chip-icon {
-  width:40px; height:40px; border-radius:12px;
-  display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;
+width:40px; height:40px; border-radius:12px;
+display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;
 }
-.stat-chip-val { font-size:22px; font-weight:800; color:var(--text); }
-.stat-chip-label { font-size:11px; color:var(--text2); font-weight:500; margin-top:2px; }
+.stat-chip-val { font-size:22px; font-weight:800; color:var(–text); }
+.stat-chip-label { font-size:11px; color:var(–text2); font-weight:500; margin-top:2px; }
 
 /* ── ACTION CARDS ── */
 .action-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 .action-card {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:var(--radius); padding:18px 16px;
-  cursor:pointer; transition:all 0.2s ease;
-  display:flex; flex-direction:column; gap:12px;
+background:var(–card); border:1px solid var(–border);
+border-radius:var(–radius); padding:18px 16px;
+cursor:pointer; transition:all 0.2s ease;
+display:flex; flex-direction:column; gap:12px;
 }
-.action-card:active { transform:scale(0.97); border-color:var(--purple); }
+.action-card:active { transform:scale(0.97); border-color:var(–purple); }
 .action-card.full { grid-column:1/-1; flex-direction:row; align-items:center; }
 .action-card.grad-card {
-  background:var(--grad); border:none;
-  box-shadow:0 8px 24px rgba(124,92,191,0.35);
+background:var(–grad); border:none;
+box-shadow:0 8px 24px rgba(124,92,191,0.35);
 }
 .action-icon-box {
-  width:44px; height:44px; border-radius:14px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:20px; background:var(--bg3); flex-shrink:0;
+width:44px; height:44px; border-radius:14px;
+display:flex; align-items:center; justify-content:center;
+font-size:20px; background:var(–bg3); flex-shrink:0;
 }
 .action-card.grad-card .action-icon-box { background:rgba(255,255,255,0.2); }
-.action-label { font-size:13px; font-weight:700; color:var(--text); }
-.action-sub { font-size:11px; color:var(--text2); margin-top:2px; }
+.action-label { font-size:13px; font-weight:700; color:var(–text); }
+.action-sub { font-size:11px; color:var(–text2); margin-top:2px; }
 .action-card.grad-card .action-label,
 .action-card.grad-card .action-sub { color:white; }
 .action-card.grad-card .action-sub { opacity:0.8; }
 
 /* ── BOTTOM NAV ── */
 .bottom-nav {
-  position:fixed; bottom:0; left:0; right:0;
-  background:var(--bg2);
-  border-top:1px solid var(--border);
-  display:flex; 
-  padding:10px 0 calc(16px + env(safe-area-inset-bottom, 16px));
-  z-index:40;
+position:fixed; bottom:0; left:0; right:0;
+background:var(–bg2);
+border-top:1px solid var(–border);
+display:flex;
+padding:10px 0 calc(16px + env(safe-area-inset-bottom, 16px));
+z-index:40;
 }
 .nav-item {
-  flex:1; display:flex; flex-direction:column;
-  align-items:center; gap:5px;
-  padding:4px; cursor:pointer; background:none; border:none;
+flex:1; display:flex; flex-direction:column;
+align-items:center; gap:5px;
+padding:4px; cursor:pointer; background:none; border:none;
 }
 .nav-icon { font-size:20px; transition:transform 0.2s; }
-.nav-label { font-size:10px; font-weight:600; color:var(--text3); letter-spacing:0.03em; }
-.nav-item.active .nav-label { color:var(--purple2); }
+.nav-label { font-size:10px; font-weight:600; color:var(–text3); letter-spacing:0.03em; }
+.nav-item.active .nav-label { color:var(–purple2); }
 .nav-item.active .nav-icon { transform:translateY(-2px); }
 
 /* ── ATTENDANCE ROW ── */
-.att-list { background:var(--card); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; }
+.att-list { background:var(–card); border-radius:var(–radius); border:1px solid var(–border); overflow:hidden; }
 .att-row {
-  display:flex; align-items:center; gap:14px;
-  padding:14px 18px; border-bottom:1px solid var(--border);
+display:flex; align-items:center; gap:14px;
+padding:14px 18px; border-bottom:1px solid var(–border);
 }
 .att-row:last-child { border-bottom:none; }
 .att-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
 .att-info { flex:1; }
 .att-date { font-size:13px; font-weight:600; }
-.att-times { font-size:11px; color:var(--text2); margin-top:3px; }
+.att-times { font-size:11px; color:var(–text2); margin-top:3px; }
 .badge {
-  font-size:10px; font-weight:700; padding:5px 11px;
-  border-radius:20px; letter-spacing:0.04em; white-space:nowrap;
+font-size:10px; font-weight:700; padding:5px 11px;
+border-radius:20px; letter-spacing:0.04em; white-space:nowrap;
 }
-.badge-present { background:var(--success-bg); color:var(--success); }
-.badge-late { background:var(--warning-bg); color:var(--warning); }
-.badge-half { background:var(--error-bg); color:var(--error); }
-.badge-leave { background:var(--info-bg); color:var(--info); }
-.badge-absent { background:var(--error-bg); color:var(--error); }
+.badge-present { background:var(–success-bg); color:var(–success); }
+.badge-late { background:var(–warning-bg); color:var(–warning); }
+.badge-half { background:var(–error-bg); color:var(–error); }
+.badge-leave { background:var(–info-bg); color:var(–info); }
+.badge-absent { background:var(–error-bg); color:var(–error); }
 
 /* ── LOCATION CARD ── */
 .loc-card {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:var(--radius); padding:32px 24px;
-  text-align:center; margin-bottom:20px;
+background:var(–card); border:1px solid var(–border);
+border-radius:var(–radius); padding:32px 24px;
+text-align:center; margin-bottom:20px;
 }
 .loc-ring {
-  width:84px; height:84px; border-radius:50%;
-  background:var(--bg3); border:3px solid var(--border);
-  display:flex; align-items:center; justify-content:center;
-  font-size:36px; margin:0 auto 20px;
+width:84px; height:84px; border-radius:50%;
+background:var(–bg3); border:3px solid var(–border);
+display:flex; align-items:center; justify-content:center;
+font-size:36px; margin:0 auto 20px;
 }
-.loc-ring.ok { background:var(--success-bg); border-color:rgba(78,203,141,0.3); }
-.loc-ring.fail { background:var(--error-bg); border-color:rgba(224,92,122,0.3); }
+.loc-ring.ok { background:var(–success-bg); border-color:rgba(78,203,141,0.3); }
+.loc-ring.fail { background:var(–error-bg); border-color:rgba(224,92,122,0.3); }
 .loc-title { font-size:20px; font-weight:800; margin-bottom:8px; }
-.loc-sub { font-size:13px; color:var(--text2); line-height:1.6; }
+.loc-sub { font-size:13px; color:var(–text2); line-height:1.6; }
 .dist-pill {
-  background:var(--bg3); border-radius:12px; padding:12px 16px;
-  display:flex; justify-content:space-between; align-items:center;
-  margin-top:18px;
+background:var(–bg3); border-radius:12px; padding:12px 16px;
+display:flex; justify-content:space-between; align-items:center;
+margin-top:18px;
 }
-.dist-label { font-size:12px; color:var(--text3); font-weight:500; }
+.dist-label { font-size:12px; color:var(–text3); font-weight:500; }
 .dist-val { font-size:13px; font-weight:700; }
-.dist-val.ok { color:var(--success); }
-.dist-val.far { color:var(--error); }
+.dist-val.ok { color:var(–success); }
+.dist-val.far { color:var(–error); }
 
 /* ── BUTTONS ── */
 .btn {
-  width:100%; padding:17px; border:none; border-radius:var(--radius);
-  font-family:'Montserrat',sans-serif; font-size:13px; font-weight:700;
-  letter-spacing:0.06em; text-transform:uppercase;
-  cursor:pointer; transition:all 0.2s; margin-bottom:12px;
+width:100%; padding:17px; border:none; border-radius:var(–radius);
+font-family:‘Montserrat’,sans-serif; font-size:13px; font-weight:700;
+letter-spacing:0.06em; text-transform:uppercase;
+cursor:pointer; transition:all 0.2s; margin-bottom:12px;
 }
 .btn:last-child { margin-bottom:0; }
-.btn-primary { background:var(--grad); color:white; box-shadow:0 6px 20px rgba(124,92,191,0.4); }
+.btn-primary { background:var(–grad); color:white; box-shadow:0 6px 20px rgba(124,92,191,0.4); }
 .btn-primary:active { transform:scale(0.98); }
-.btn-primary:disabled { background:var(--bg3); color:var(--text3); box-shadow:none; }
-.btn-ghost { background:var(--bg3); color:var(--text2); }
-.btn-ghost:active { background:var(--bg2); }
+.btn-primary:disabled { background:var(–bg3); color:var(–text3); box-shadow:none; }
+.btn-ghost { background:var(–bg3); color:var(–text2); }
+.btn-ghost:active { background:var(–bg2); }
 
 /* ── INPUTS ── */
 .input-group { margin-bottom:16px; }
 .input-label {
-  font-size:11px; font-weight:700; letter-spacing:0.08em;
-  text-transform:uppercase; color:var(--text3);
-  margin-bottom:8px; display:block;
+font-size:11px; font-weight:700; letter-spacing:0.08em;
+text-transform:uppercase; color:var(–text3);
+margin-bottom:8px; display:block;
 }
 input, textarea {
-  width:100%; background:var(--card2);
-  border:1.5px solid var(--border);
-  border-radius:var(--radius-sm); padding:14px 16px;
-  font-family:'Montserrat',sans-serif; font-size:14px;
-  color:var(--text); outline:none; transition:border-color 0.2s;
-  resize:none;
+width:100%; background:var(–card2);
+border:1.5px solid var(–border);
+border-radius:var(–radius-sm); padding:14px 16px;
+font-family:‘Montserrat’,sans-serif; font-size:14px;
+color:var(–text); outline:none; transition:border-color 0.2s;
+resize:none;
 }
-input::placeholder, textarea::placeholder { color:var(--text3); }
-input:focus, textarea:focus { border-color:var(--purple2); }
+input::placeholder, textarea::placeholder { color:var(–text3); }
+input:focus, textarea:focus { border-color:var(–purple2); }
 textarea { min-height:90px; line-height:1.6; }
 
 /* ── RADIO ── */
 .radio-group { display:flex; gap:10px; }
 .radio-btn {
-  flex:1; padding:13px 10px; background:var(--card);
-  border:1.5px solid var(--border); border-radius:var(--radius-sm);
-  text-align:center; cursor:pointer; font-size:12px; font-weight:500;
-  color:var(--text2); transition:all 0.2s; line-height:1.5;
+flex:1; padding:13px 10px; background:var(–card);
+border:1.5px solid var(–border); border-radius:var(–radius-sm);
+text-align:center; cursor:pointer; font-size:12px; font-weight:500;
+color:var(–text2); transition:all 0.2s; line-height:1.5;
 }
-.radio-btn.selected { border-color:var(--purple2); background:rgba(155,127,232,0.12); color:var(--purple2); font-weight:700; }
+.radio-btn.selected { border-color:var(–purple2); background:rgba(155,127,232,0.12); color:var(–purple2); font-weight:700; }
 
 /* ── LEAVE TYPE ── */
 .leave-type-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 .leave-type-btn {
-  background:var(--card); border:1.5px solid var(--border);
-  border-radius:var(--radius-sm); padding:18px 12px;
-  cursor:pointer; text-align:center; transition:all 0.2s;
+background:var(–card); border:1.5px solid var(–border);
+border-radius:var(–radius-sm); padding:18px 12px;
+cursor:pointer; text-align:center; transition:all 0.2s;
 }
-.leave-type-btn.selected { border-color:var(--purple2); background:rgba(155,127,232,0.12); }
+.leave-type-btn.selected { border-color:var(–purple2); background:rgba(155,127,232,0.12); }
 .leave-type-btn:active { transform:scale(0.97); }
 .leave-type-icon { font-size:26px; margin-bottom:8px; }
-.leave-type-label { font-size:12px; font-weight:600; color:var(--text2); }
-.leave-type-btn.selected .leave-type-label { color:var(--purple2); }
+.leave-type-label { font-size:12px; font-weight:600; color:var(–text2); }
+.leave-type-btn.selected .leave-type-label { color:var(–purple2); }
 
 /* ── CALENDAR ── */
 .calendar {
-  background:var(--card); border-radius:var(--radius);
-  border:1px solid var(--border); padding:20px; margin-bottom:16px;
+background:var(–card); border-radius:var(–radius);
+border:1px solid var(–border); padding:20px; margin-bottom:16px;
 }
 .cal-nav-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
 .cal-month { font-size:15px; font-weight:700; }
 .cal-nav-btn {
-  background:var(--bg3); border:none; cursor:pointer;
-  width:34px; height:34px; border-radius:10px;
-  font-size:16px; color:var(--text2);
-  display:flex; align-items:center; justify-content:center;
+background:var(–bg3); border:none; cursor:pointer;
+width:34px; height:34px; border-radius:10px;
+font-size:16px; color:var(–text2);
+display:flex; align-items:center; justify-content:center;
 }
 .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
-.cal-day-name { text-align:center; font-size:10px; font-weight:700; color:var(--text3); padding:4px 0 10px; }
+.cal-day-name { text-align:center; font-size:10px; font-weight:700; color:var(–text3); padding:4px 0 10px; }
 .cal-day {
-  text-align:center; padding:9px 2px;
-  font-size:13px; font-weight:500; color:var(--text2);
-  border-radius:10px; cursor:pointer; transition:all 0.15s;
+text-align:center; padding:9px 2px;
+font-size:13px; font-weight:500; color:var(–text2);
+border-radius:10px; cursor:pointer; transition:all 0.15s;
 }
-.cal-day.today { color:var(--purple2); font-weight:700; }
-.cal-day.selected { background:var(--grad); color:white; font-weight:700; box-shadow:0 4px 12px rgba(124,92,191,0.4); }
-.cal-day.past { color:var(--text3); cursor:default; }
-.cal-day:not(.past):not(:empty):not(.selected):active { background:var(--bg3); }
+.cal-day.today { color:var(–purple2); font-weight:700; }
+.cal-day.selected { background:var(–grad); color:white; font-weight:700; box-shadow:0 4px 12px rgba(124,92,191,0.4); }
+.cal-day.past { color:var(–text3); cursor:default; }
+.cal-day:not(.past):not(:empty):not(.selected):active { background:var(–bg3); }
 .sel-date-chip {
-  background:rgba(155,127,232,0.12); border:1px solid rgba(155,127,232,0.25);
-  border-radius:var(--radius-xs); padding:12px 16px;
-  margin-bottom:16px; display:flex; align-items:center; gap:10px;
+background:rgba(155,127,232,0.12); border:1px solid rgba(155,127,232,0.25);
+border-radius:var(–radius-xs); padding:12px 16px;
+margin-bottom:16px; display:flex; align-items:center; gap:10px;
 }
-.sel-date-chip-text { font-size:13px; font-weight:600; color:var(--purple2); }
+.sel-date-chip-text { font-size:13px; font-weight:600; color:var(–purple2); }
 
 /* ── TOAST ── */
 .toast {
-  position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-80px);
-  background:var(--card2); color:var(--text);
-  padding:12px 22px; border-radius:40px;
-  font-size:13px; font-weight:600; white-space:nowrap; z-index:600;
-  transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
-  box-shadow:0 8px 32px rgba(0,0,0,0.5);
-  border:1px solid var(--border);
-  pointer-events:none;
+position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-80px);
+background:var(–card2); color:var(–text);
+padding:12px 22px; border-radius:40px;
+font-size:13px; font-weight:600; white-space:nowrap; z-index:600;
+transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+box-shadow:0 8px 32px rgba(0,0,0,0.5);
+border:1px solid var(–border);
+pointer-events:none;
 }
 .toast.show { transform:translateX(-50%) translateY(0); }
-.toast.success { background:var(--success-bg); color:var(--success); border-color:rgba(78,203,141,0.3); }
-.toast.error { background:var(--error-bg); color:var(--error); border-color:rgba(224,92,122,0.3); }
+.toast.success { background:var(–success-bg); color:var(–success); border-color:rgba(78,203,141,0.3); }
+.toast.error { background:var(–error-bg); color:var(–error); border-color:rgba(224,92,122,0.3); }
 
 /* ── LOADING / EMPTY ── */
-.loading { display:flex; align-items:center; justify-content:center; gap:10px; padding:48px; color:var(--text3); font-size:13px; }
-.spinner { width:20px; height:20px; border:2.5px solid var(--border); border-top-color:var(--purple2); border-radius:50%; animation:spin .7s linear infinite; }
+.loading { display:flex; align-items:center; justify-content:center; gap:10px; padding:48px; color:var(–text3); font-size:13px; }
+.spinner { width:20px; height:20px; border:2.5px solid var(–border); border-top-color:var(–purple2); border-radius:50%; animation:spin .7s linear infinite; }
 @keyframes spin { to { transform:rotate(360deg); } }
 @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
 .skeleton {
-  background: linear-gradient(90deg, var(--border) 25%, var(--bg3) 50%, var(--border) 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.4s infinite;
-  border-radius: 10px;
+background: linear-gradient(90deg, var(–border) 25%, var(–bg3) 50%, var(–border) 75%);
+background-size: 200% 100%;
+animation: shimmer 1.4s infinite;
+border-radius: 10px;
 }
-.empty { text-align:center; padding:48px 24px; color:var(--text3); }
+.empty { text-align:center; padding:48px 24px; color:var(–text3); }
 .empty-icon { font-size:42px; margin-bottom:14px; opacity:0.3; }
 .empty-text { font-size:13px; font-weight:500; }
 
 /* ── PROFILE CARD ── */
 .profile-big-card {
-  background:var(--grad); border-radius:var(--radius);
-  padding:28px 22px; text-align:center; margin-bottom:16px;
-  position:relative; overflow:hidden;
+background:var(–grad); border-radius:var(–radius);
+padding:28px 22px; text-align:center; margin-bottom:16px;
+position:relative; overflow:hidden;
 }
 .profile-big-card::before {
-  content:''; position:absolute; top:-30px; right:-30px;
-  width:120px; height:120px; background:rgba(255,255,255,0.08); border-radius:50%;
+content:’’; position:absolute; top:-30px; right:-30px;
+width:120px; height:120px; background:rgba(255,255,255,0.08); border-radius:50%;
 }
 .pf-avatar {
-  width:72px; height:72px; border-radius:22px;
-  background:rgba(255,255,255,0.2); border:2px solid rgba(255,255,255,0.3);
-  display:flex; align-items:center; justify-content:center;
-  font-size:26px; font-weight:800; color:white;
-  margin:0 auto 14px; position:relative; z-index:1;
+width:72px; height:72px; border-radius:22px;
+background:rgba(255,255,255,0.2); border:2px solid rgba(255,255,255,0.3);
+display:flex; align-items:center; justify-content:center;
+font-size:26px; font-weight:800; color:white;
+margin:0 auto 14px; position:relative; z-index:1;
 }
 .pf-name { font-size:20px; font-weight:800; color:white; margin-bottom:4px; position:relative; z-index:1; }
 .pf-role { font-size:13px; color:rgba(255,255,255,0.75); position:relative; z-index:1; }
 
-.info-card { background:var(--card); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; }
+.info-card { background:var(–card); border-radius:var(–radius); border:1px solid var(–border); overflow:hidden; }
 .info-row {
-  display:flex; justify-content:space-between; align-items:center;
-  padding:16px 18px; border-bottom:1px solid var(--border);
+display:flex; justify-content:space-between; align-items:center;
+padding:16px 18px; border-bottom:1px solid var(–border);
 }
 .info-row:last-child { border-bottom:none; }
-.info-key { font-size:12px; color:var(--text3); font-weight:500; }
+.info-key { font-size:12px; color:var(–text3); font-weight:500; }
 .info-val { font-size:13px; font-weight:700; }
-
 
 /* ── EMPLOYEE DETAIL ── */
 .emp-detail-hero {
-  background: var(--grad); border-radius: var(--radius);
-  padding: 22px 20px; margin-bottom: 16px;
-  display: flex; align-items: center; gap: 16px;
-  position: relative; overflow: hidden;
+background: var(–grad); border-radius: var(–radius);
+padding: 22px 20px; margin-bottom: 16px;
+display: flex; align-items: center; gap: 16px;
+position: relative; overflow: hidden;
 }
 .emp-detail-hero::after {
-  content:''; position:absolute; top:-20px; right:-20px;
-  width:100px; height:100px; background:rgba(255,255,255,0.07); border-radius:50%;
+content:’’; position:absolute; top:-20px; right:-20px;
+width:100px; height:100px; background:rgba(255,255,255,0.07); border-radius:50%;
 }
 .emp-detail-avatar {
-  width: 56px; height: 56px; border-radius: 18px;
-  background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.3);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px; font-weight: 800; color: white; flex-shrink: 0;
+width: 56px; height: 56px; border-radius: 18px;
+background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.3);
+display: flex; align-items: center; justify-content: center;
+font-size: 20px; font-weight: 800; color: white; flex-shrink: 0;
 }
 .emp-detail-name { font-size: 17px; font-weight: 800; color: white; }
 .emp-detail-role { font-size: 12px; color: rgba(255,255,255,0.75); margin-top: 3px; }
 
 .mgr-action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
 .mgr-action-btn {
-  background: var(--card); border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm); padding: 14px 12px;
-  cursor: pointer; text-align: center; transition: all 0.2s;
-  font-family: 'Montserrat', sans-serif;
+background: var(–card); border: 1.5px solid var(–border);
+border-radius: var(–radius-sm); padding: 14px 12px;
+cursor: pointer; text-align: center; transition: all 0.2s;
+font-family: ‘Montserrat’, sans-serif;
 }
-.mgr-action-btn:active { transform: scale(0.97); border-color: var(--purple2); background: rgba(155,127,232,0.08); }
+.mgr-action-btn:active { transform: scale(0.97); border-color: var(–purple2); background: rgba(155,127,232,0.08); }
 .mgr-action-btn-icon { font-size: 22px; margin-bottom: 6px; }
-.mgr-action-btn-label { font-size: 11px; font-weight: 700; color: var(--text); letter-spacing: 0.03em; }
-.mgr-action-btn-sub { font-size: 10px; color: var(--text3); margin-top: 2px; }
+.mgr-action-btn-label { font-size: 11px; font-weight: 700; color: var(–text); letter-spacing: 0.03em; }
+.mgr-action-btn-sub { font-size: 10px; color: var(–text3); margin-top: 2px; }
 
 /* ── BADGE NOTIFICATION ── */
 .nav-badge {
-  position: absolute; top: 2px; right: 8px;
-  background: var(--error); color: white;
-  font-size: 9px; font-weight: 800;
-  min-width: 16px; height: 16px;
-  border-radius: 8px; padding: 0 4px;
-  display: flex; align-items: center; justify-content: center;
+position: absolute; top: 2px; right: 8px;
+background: var(–error); color: white;
+font-size: 9px; font-weight: 800;
+min-width: 16px; height: 16px;
+border-radius: 8px; padding: 0 4px;
+display: flex; align-items: center; justify-content: center;
 }
 .nav-item { position: relative; }
 
 /* ── MODAL OVERLAY ── */
 .modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
-  z-index: 100; display: flex; align-items: flex-end;
-  animation: fadeIn .2s ease;
+position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+z-index: 100; display: flex; align-items: flex-end;
+animation: fadeIn .2s ease;
 }
 .modal-sheet {
-  background: var(--bg2); border-radius: 24px 24px 0 0;
-  padding: 24px 20px 40px; width: 100%;
-  max-height: 85vh; overflow-y: auto;
-  animation: slideUp .25s ease;
+background: var(–bg2); border-radius: 24px 24px 0 0;
+padding: 24px 20px 40px; width: 100%;
+max-height: 85vh; overflow-y: auto;
+animation: slideUp .25s ease;
 }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 .modal-title { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
-.modal-sub { font-size: 13px; color: var(--text2); margin-bottom: 20px; }
+.modal-sub { font-size: 13px; color: var(–text2); margin-bottom: 20px; }
 .modal-close {
-  position: absolute; top: 16px; right: 20px;
-  background: var(--bg3); border: none; cursor: pointer;
-  width: 32px; height: 32px; border-radius: 10px;
-  font-size: 16px; color: var(--text2);
-  display: flex; align-items: center; justify-content: center;
+position: absolute; top: 16px; right: 20px;
+background: var(–bg3); border: none; cursor: pointer;
+width: 32px; height: 32px; border-radius: 10px;
+font-size: 16px; color: var(–text2);
+display: flex; align-items: center; justify-content: center;
 }
 
 /* ── AL BALANCE BAR ── */
-.al-bar-wrap { background: var(--bg3); border-radius: 8px; height: 8px; overflow: hidden; margin: 8px 0 4px; }
-.al-bar-fill { height: 100%; border-radius: 8px; background: var(--grad); transition: width 0.5s; }
+.al-bar-wrap { background: var(–bg3); border-radius: 8px; height: 8px; overflow: hidden; margin: 8px 0 4px; }
+.al-bar-fill { height: 100%; border-radius: 8px; background: var(–grad); transition: width 0.5s; }
 
 /* ── DISABLED LEAVE TYPE ── */
 .leave-type-btn.disabled {
-  opacity: 0.4; cursor: not-allowed;
-  border-color: var(--border) !important;
-  background: var(--bg3) !important;
+opacity: 0.4; cursor: not-allowed;
+border-color: var(–border) !important;
+background: var(–bg3) !important;
 }
-.leave-type-btn.disabled .leave-type-label { color: var(--text3) !important; }
+.leave-type-btn.disabled .leave-type-label { color: var(–text3) !important; }
 /* ── REGISTER ── */
 .register-hero {
-  background:var(--grad); padding:48px 24px 36px;
-  text-align:center; position:relative; overflow:hidden;
+background:var(–grad); padding:48px 24px 36px;
+text-align:center; position:relative; overflow:hidden;
 }
 .register-hero::before {
-  content:''; position:absolute; top:-50px; right:-50px;
-  width:200px; height:200px; background:rgba(255,255,255,0.07); border-radius:50%;
+content:’’; position:absolute; top:-50px; right:-50px;
+width:200px; height:200px; background:rgba(255,255,255,0.07); border-radius:50%;
 }
 .register-hero::after {
-  content:''; position:absolute; bottom:-30px; left:-20px;
-  width:130px; height:130px; background:rgba(255,255,255,0.05); border-radius:50%;
+content:’’; position:absolute; bottom:-30px; left:-20px;
+width:130px; height:130px; background:rgba(255,255,255,0.05); border-radius:50%;
 }
 .reg-title { font-size:26px; font-weight:800; color:white; margin-bottom:8px; position:relative; z-index:1; }
 .reg-sub { font-size:13px; color:rgba(255,255,255,0.8); line-height:1.6; position:relative; z-index:1; }
@@ -491,79 +491,81 @@ textarea { min-height:90px; line-height:1.6; }
 /* ── MANAGER STYLES ── */
 .mgr-stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 .mgr-stat-card {
-  background:var(--card); border-radius:var(--radius-sm);
-  border:1px solid var(--border); padding:16px;
+background:var(–card); border-radius:var(–radius-sm);
+border:1px solid var(–border); padding:16px;
 }
 .mgr-stat-icon { font-size:22px; margin-bottom:8px; }
 .mgr-stat-val { font-size:26px; font-weight:800; }
-.mgr-stat-label { font-size:11px; color:var(--text2); font-weight:500; margin-top:2px; }
+.mgr-stat-label { font-size:11px; color:var(–text2); font-weight:500; margin-top:2px; }
 
-.emp-list { background:var(--card); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; }
+.emp-list { background:var(–card); border-radius:var(–radius); border:1px solid var(–border); overflow:hidden; }
 .emp-row {
-  display:flex; align-items:center; gap:14px;
-  padding:14px 18px; border-bottom:1px solid var(--border);
+display:flex; align-items:center; gap:14px;
+padding:14px 18px; border-bottom:1px solid var(–border);
 }
 .emp-row:last-child { border-bottom:none; }
 .emp-avatar {
-  width:44px; height:44px; border-radius:14px;
-  background:rgba(155,127,232,0.15);
-  display:flex; align-items:center; justify-content:center;
-  font-size:15px; font-weight:800; color:var(--purple2); flex-shrink:0;
+width:44px; height:44px; border-radius:14px;
+background:rgba(155,127,232,0.15);
+display:flex; align-items:center; justify-content:center;
+font-size:15px; font-weight:800; color:var(–purple2); flex-shrink:0;
 }
 .emp-name { font-size:13px; font-weight:700; }
-.emp-role { font-size:11px; color:var(--text2); margin-top:2px; }
+.emp-role { font-size:11px; color:var(–text2); margin-top:2px; }
 
 .leave-req-card {
-  background:var(--card); border-radius:var(--radius);
-  border:1px solid var(--border); padding:18px;
-  margin-bottom:12px;
-  border-left:4px solid var(--purple2);
+background:var(–card); border-radius:var(–radius);
+border:1px solid var(–border); padding:18px;
+margin-bottom:12px;
+border-left:4px solid var(–purple2);
 }
 .leave-req-name { font-size:14px; font-weight:700; margin-bottom:2px; }
-.leave-req-meta { font-size:12px; color:var(--text2); margin-bottom:10px; }
-.leave-req-reason { font-size:12px; color:var(--text2); line-height:1.6; margin-bottom:14px; }
+.leave-req-meta { font-size:12px; color:var(–text2); margin-bottom:10px; }
+.leave-req-reason { font-size:12px; color:var(–text2); line-height:1.6; margin-bottom:14px; }
 .leave-actions { display:flex; gap:10px; }
 .btn-approve {
-  flex:1; padding:11px; border:none; border-radius:var(--radius-xs);
-  background:var(--success-bg); color:var(--success);
-  font-family:'Montserrat',sans-serif; font-size:12px; font-weight:700;
-  cursor:pointer; border:1px solid rgba(78,203,141,0.2);
+flex:1; padding:11px; border:none; border-radius:var(–radius-xs);
+background:var(–success-bg); color:var(–success);
+font-family:‘Montserrat’,sans-serif; font-size:12px; font-weight:700;
+cursor:pointer; border:1px solid rgba(78,203,141,0.2);
 }
 .btn-reject {
-  flex:1; padding:11px; border:none; border-radius:var(--radius-xs);
-  background:var(--error-bg); color:var(--error);
-  font-family:'Montserrat',sans-serif; font-size:12px; font-weight:700;
-  cursor:pointer; border:1px solid rgba(224,92,122,0.2);
+flex:1; padding:11px; border:none; border-radius:var(–radius-xs);
+background:var(–error-bg); color:var(–error);
+font-family:‘Montserrat’,sans-serif; font-size:12px; font-weight:700;
+cursor:pointer; border:1px solid rgba(224,92,122,0.2);
 }
 
 .report-emp-card {
-  background:var(--card); border-radius:var(--radius-sm);
-  border:1px solid var(--border); padding:16px 18px; margin-bottom:10px;
+background:var(–card); border-radius:var(–radius-sm);
+border:1px solid var(–border); padding:16px 18px; margin-bottom:10px;
 }
 .report-emp-name { font-size:13px; font-weight:700; margin-bottom:12px; }
 .report-chips { display:flex; flex-wrap:wrap; gap:8px; }
 .report-chip {
-  padding:5px 10px; border-radius:8px;
-  font-size:11px; font-weight:600;
+padding:5px 10px; border-radius:8px;
+font-size:11px; font-weight:600;
 }
 
 .month-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
 .month-btn {
-  background:var(--card); border:1.5px solid var(--border);
-  border-radius:var(--radius-sm); padding:12px 6px;
-  text-align:center; cursor:pointer; transition:all 0.2s;
-  font-family:'Montserrat',sans-serif; font-size:11px; font-weight:600; color:var(--text2);
+background:var(–card); border:1.5px solid var(–border);
+border-radius:var(–radius-sm); padding:12px 6px;
+text-align:center; cursor:pointer; transition:all 0.2s;
+font-family:‘Montserrat’,sans-serif; font-size:11px; font-weight:600; color:var(–text2);
 }
-.month-btn.selected { background:var(--grad); color:white; border-color:transparent; }
+.month-btn.selected { background:var(–grad); color:white; border-color:transparent; }
 .month-btn:active { opacity:0.8; }
 
 /* ── DIVIDER ── */
-.divider { height:1px; background:var(--border); margin:4px 0; }
+.divider { height:1px; background:var(–border); margin:4px 0; }
 </style>
+
 </head>
 <body>
 
 <!-- LOADING -->
+
 <div class="screen active" id="screen-loading">
   <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:20px;">
     <div style="font-size:26px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:0.06em;">elyne HR</div>
@@ -572,6 +574,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- REGISTER -->
+
 <div class="screen" id="screen-register">
   <div class="register-hero">
     <div class="reg-title">Welcome to elyne HR</div>
@@ -602,6 +605,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- STAFF MAIN -->
+
 <div class="screen" id="screen-main">
   <div class="profile-header">
     <div class="profile-info">
@@ -618,52 +622,55 @@ textarea { min-height:90px; line-height:1.6; }
     <div style="font-size:22px;font-weight:800;margin-bottom:4px;" id="main-welcome-line">Welcome!</div>
     <div style="font-size:13px;color:var(--text2);margin-bottom:20px;" id="main-tagline">Great brands are built by great people.</div>
 
-    <!-- Today's Overview -->
-    <div class="section-label" style="margin-top:0;">Today's Overview</div>
-    <div class="overview-card" style="margin-bottom:14px;">
-      <div class="ov-date-row">
-        <div class="ov-date" id="ov-date">—</div>
-        <div class="ov-time-badge" id="ov-now">—</div>
-      </div>
-      <div class="ov-times">
-        <div class="ov-time-block">
-          <div class="ov-time-label">Clock In</div>
-          <div class="ov-time-val" id="ov-checkin">--:--</div>
-        </div>
-        <div class="ov-divider"></div>
-        <div class="ov-time-block">
-          <div class="ov-time-label">Clock Out</div>
-          <div class="ov-time-val" id="ov-checkout">--:--</div>
-        </div>
-      </div>
+```
+<!-- Today's Overview -->
+<div class="section-label" style="margin-top:0;">Today's Overview</div>
+<div class="overview-card" style="margin-bottom:14px;">
+  <div class="ov-date-row">
+    <div class="ov-date" id="ov-date">—</div>
+    <div class="ov-time-badge" id="ov-now">—</div>
+  </div>
+  <div class="ov-times">
+    <div class="ov-time-block">
+      <div class="ov-time-label">Clock In</div>
+      <div class="ov-time-val" id="ov-checkin">--:--</div>
     </div>
+    <div class="ov-divider"></div>
+    <div class="ov-time-block">
+      <div class="ov-time-label">Clock Out</div>
+      <div class="ov-time-val" id="ov-checkout">--:--</div>
+    </div>
+  </div>
+</div>
 
-    <!-- Quick Actions -->
-    <div class="section-label">Quick Actions</div>
-    <div class="action-grid">
-      <div class="action-card grad-card" onclick="goCheckIn()">
-        <div class="action-icon-box">✅</div>
-        <div>
-          <div class="action-label">Check In</div>
-          <div class="action-sub">Clock in for today</div>
-        </div>
-      </div>
-      <div class="action-card" onclick="goCheckOut()">
-        <div class="action-icon-box">🚪</div>
-        <div>
-          <div class="action-label">Check Out</div>
-          <div class="action-sub">End your shift</div>
-        </div>
-      </div>
-      <div class="action-card full" onclick="switchTab('leave')">
-        <div class="action-icon-box" style="background:rgba(155,127,232,0.12);">📅</div>
-        <div style="flex:1;">
-          <div class="action-label">Apply for Leave</div>
-          <div class="action-sub">Annual · Sick · Emergency · Unpaid</div>
-        </div>
-        <div style="color:var(--text3);font-size:18px;">›</div>
-      </div>
+<!-- Quick Actions -->
+<div class="section-label">Quick Actions</div>
+<div class="action-grid">
+  <div class="action-card grad-card" onclick="goCheckIn()">
+    <div class="action-icon-box">✅</div>
+    <div>
+      <div class="action-label">Check In</div>
+      <div class="action-sub">Clock in for today</div>
     </div>
+  </div>
+  <div class="action-card" onclick="goCheckOut()">
+    <div class="action-icon-box">🚪</div>
+    <div>
+      <div class="action-label">Check Out</div>
+      <div class="action-sub">End your shift</div>
+    </div>
+  </div>
+  <div class="action-card full" onclick="switchTab('leave')">
+    <div class="action-icon-box" style="background:rgba(155,127,232,0.12);">📅</div>
+    <div style="flex:1;">
+      <div class="action-label">Apply for Leave</div>
+      <div class="action-sub">Annual · Sick · Emergency · Unpaid</div>
+    </div>
+    <div style="color:var(--text3);font-size:18px;">›</div>
+  </div>
+</div>
+```
+
   </div>
 
   <div class="bottom-nav">
@@ -675,6 +682,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- CHECK IN -->
+
 <div class="screen" id="screen-checkin">
   <div class="top-bar">
     <button class="back-btn" onclick="showScreen('screen-main')">‹ Back</button>
@@ -697,6 +705,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- CHECK OUT -->
+
 <div class="screen" id="screen-checkout">
   <div class="top-bar">
     <button class="back-btn" onclick="showScreen('screen-main')">‹ Back</button>
@@ -725,6 +734,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- LEAVE -->
+
 <div class="screen" id="screen-leave">
   <div class="top-bar">
     <div class="top-logo">elyne HR</div>
@@ -734,49 +744,52 @@ textarea { min-height:90px; line-height:1.6; }
     <div style="font-size:22px;font-weight:800;margin-bottom:4px;">Leave Request</div>
     <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Apply for time off</div>
 
-    <div class="section-label" style="margin-top:0;">Leave Type</div>
-    <div id="leave-balance-notice" style="display:none;background:var(--warning-bg);border:1px solid rgba(245,166,35,0.25);border-radius:var(--radius-xs);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--warning);font-weight:600;"></div>
-    <div class="leave-type-grid" style="margin-bottom:0;" id="leave-type-grid">
-      <div class="leave-type-btn selected" id="lt-annual" onclick="selectLeaveType('annual',this)">
-        <div class="leave-type-icon">🏖️</div>
-        <div class="leave-type-label">Annual</div>
-        <div style="font-size:10px;color:var(--text3);margin-top:3px;" id="lt-annual-bal"></div>
-      </div>
-      <div class="leave-type-btn" id="lt-sick" onclick="selectLeaveType('sick',this)">
-        <div class="leave-type-icon">🤒</div>
-        <div class="leave-type-label">Sick</div>
-      </div>
-      <div class="leave-type-btn" id="lt-emergency" onclick="selectLeaveType('emergency',this)">
-        <div class="leave-type-icon">🚨</div>
-        <div class="leave-type-label">Emergency</div>
-      </div>
-      <div class="leave-type-btn" id="lt-unpaid" onclick="selectLeaveType('unpaid',this)">
-        <div class="leave-type-icon">💸</div>
-        <div class="leave-type-label">Unpaid</div>
-      </div>
-    </div>
+```
+<div class="section-label" style="margin-top:0;">Leave Type</div>
+<div id="leave-balance-notice" style="display:none;background:var(--warning-bg);border:1px solid rgba(245,166,35,0.25);border-radius:var(--radius-xs);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--warning);font-weight:600;"></div>
+<div class="leave-type-grid" style="margin-bottom:0;" id="leave-type-grid">
+  <div class="leave-type-btn selected" id="lt-annual" onclick="selectLeaveType('annual',this)">
+    <div class="leave-type-icon">🏖️</div>
+    <div class="leave-type-label">Annual</div>
+    <div style="font-size:10px;color:var(--text3);margin-top:3px;" id="lt-annual-bal"></div>
+  </div>
+  <div class="leave-type-btn" id="lt-sick" onclick="selectLeaveType('sick',this)">
+    <div class="leave-type-icon">🤒</div>
+    <div class="leave-type-label">Sick</div>
+  </div>
+  <div class="leave-type-btn" id="lt-emergency" onclick="selectLeaveType('emergency',this)">
+    <div class="leave-type-icon">🚨</div>
+    <div class="leave-type-label">Emergency</div>
+  </div>
+  <div class="leave-type-btn" id="lt-unpaid" onclick="selectLeaveType('unpaid',this)">
+    <div class="leave-type-icon">💸</div>
+    <div class="leave-type-label">Unpaid</div>
+  </div>
+</div>
 
-    <div class="section-label">Select Date</div>
-    <div class="calendar">
-      <div class="cal-nav-row">
-        <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
-        <div class="cal-month" id="cal-title">—</div>
-        <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
-      </div>
-      <div class="cal-grid" id="cal-grid"></div>
-    </div>
+<div class="section-label">Select Date</div>
+<div class="calendar">
+  <div class="cal-nav-row">
+    <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
+    <div class="cal-month" id="cal-title">—</div>
+    <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
+  </div>
+  <div class="cal-grid" id="cal-grid"></div>
+</div>
 
-    <div id="sel-date-chip" style="display:none;" class="sel-date-chip">
-      <div style="font-size:18px;">📆</div>
-      <div class="sel-date-chip-text" id="sel-date-text">—</div>
-    </div>
+<div id="sel-date-chip" style="display:none;" class="sel-date-chip">
+  <div style="font-size:18px;">📆</div>
+  <div class="sel-date-chip-text" id="sel-date-text">—</div>
+</div>
 
-    <div class="input-group">
-      <label class="input-label">Reason</label>
-      <textarea id="leave-reason" placeholder="Please describe your reason for this leave..."></textarea>
-    </div>
-    <button class="btn btn-primary" id="submit-leave-btn" onclick="submitLeave()">Submit Leave Request</button>
-    <div style="height:8px;"></div>
+<div class="input-group">
+  <label class="input-label">Reason</label>
+  <textarea id="leave-reason" placeholder="Please describe your reason for this leave..."></textarea>
+</div>
+<button class="btn btn-primary" id="submit-leave-btn" onclick="submitLeave()">Submit Leave Request</button>
+<div style="height:8px;"></div>
+```
+
   </div>
 
   <div class="bottom-nav">
@@ -788,6 +801,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- ATTENDANCE HISTORY -->
+
 <div class="screen" id="screen-attendance">
   <div class="top-bar">
     <div class="top-logo">elyne HR</div>
@@ -811,6 +825,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- PROFILE -->
+
 <div class="screen" id="screen-profile">
   <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
   <div class="body has-nav" style="padding-top:0;" id="profile-body">
@@ -829,10 +844,13 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- ═══════════════════════════════════════════════ -->
+
 <!-- MANAGER SCREENS -->
+
 <!-- ═══════════════════════════════════════════════ -->
 
 <!-- MGR MAIN -->
+
 <div class="screen" id="screen-mgr-main">
   <div class="profile-header">
     <div class="profile-info">
@@ -849,40 +867,45 @@ textarea { min-height:90px; line-height:1.6; }
     <div style="font-size:22px;font-weight:800;margin-bottom:4px;" id="mgr-welcome">Good morning.</div>
     <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Great companies are built by great people.</div>
 
-    <div class="section-label" style="margin-top:0;">Today's Overview</div>
-    <div class="overview-card" style="margin-bottom:14px;">
-      <div class="ov-date-row">
-        <div class="ov-date" id="mgr-ov-date">—</div>
-        <div class="ov-time-badge" id="mgr-ov-now">—</div>
-      </div>
-      <div class="stat-grid" style="margin-top:0;">
-        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px;backdrop-filter:blur(10px);">
-          <div style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;margin-bottom:4px;">TOTAL PRESENT</div>
-          <div style="font-size:26px;font-weight:800;color:white;" id="mgr-stat-present">—</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px;backdrop-filter:blur(10px);">
-          <div style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;margin-bottom:4px;">TOTAL LATE</div>
-          <div style="font-size:26px;font-weight:800;color:white;" id="mgr-stat-late">—</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px;backdrop-filter:blur(10px);">
-          <div style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;margin-bottom:4px;">ON LEAVE</div>
-          <div style="font-size:26px;font-weight:800;color:white;" id="mgr-stat-leave">—</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px;backdrop-filter:blur(10px);">
-          <div style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;margin-bottom:4px;">ABSENT</div>
-          <div style="font-size:26px;font-weight:800;color:white;" id="mgr-stat-absent">—</div>
-        </div>
-      </div>
+```
+<div class="section-label" style="margin-top:0;">Today's Overview</div>
+<div class="overview-card" style="margin-bottom:14px;">
+  <div class="ov-date-row">
+    <div class="ov-date" id="mgr-ov-date">—</div>
+    <div class="ov-time-badge" id="mgr-ov-now">—</div>
+  </div>
+  <div class="stat-grid" style="margin-top:0;">
+    <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px;backdrop-filter:blur(10px);">
+      <div style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;margin-bottom:4px;">TOTAL PRESENT</div>
+      <div style="font-size:26px;font-weight:800;color:white;" id="mgr-stat-present">—</div>
     </div>
+    <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px;backdrop-filter:blur(10px);">
+      <div style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;margin-bottom:4px;">TOTAL LATE</div>
+      <div style="font-size:26px;font-weight:800;color:white;" id="mgr-stat-late">—</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px;backdrop-filter:blur(10px);">
+      <div style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;margin-bottom:4px;">ON LEAVE</div>
+      <div style="font-size:26px;font-weight:800;color:white;" id="mgr-stat-leave">—</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px;backdrop-filter:blur(10px);">
+      <div style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;margin-bottom:4px;">ABSENT</div>
+      <div style="font-size:26px;font-weight:800;color:white;" id="mgr-stat-absent">—</div>
+    </div>
+  </div>
+</div>
 
-    <div id="mgr-main-list"><div style="padding:4px 0;">
+<div id="mgr-main-list"><div style="padding:4px 0;">
+```
+
   <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
   <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
   <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
 </div></div>
   </div>
 
-    </div>
+```
+</div>
+```
 
   <div class="bottom-nav">
     <button class="nav-item active" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
@@ -894,6 +917,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- MGR LEAVES -->
+
 <div class="screen" id="screen-mgr-leaves">
   <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
   <div class="body has-nav" style="padding-top:0;">
@@ -915,6 +939,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- MGR REPORT -->
+
 <div class="screen" id="screen-mgr-report">
   <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
   <div class="body has-nav" style="padding-top:0;">
@@ -934,6 +959,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- MGR EMPLOYEES -->
+
 <div class="screen" id="screen-mgr-employees">
   <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
   <div class="body has-nav" style="padding-top:0;">
@@ -955,6 +981,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- MY LEAVES SCREEN -->
+
 <div class="screen" id="screen-my-leaves">
   <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
   <div class="body has-nav" style="padding-top:0;">
@@ -973,6 +1000,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- MGR PAYROLL SCREEN -->
+
 <div class="screen" id="screen-mgr-payroll">
   <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
   <div class="body has-nav" style="padding-top:0;">
@@ -992,6 +1020,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- MGR ANNOUNCE SCREEN -->
+
 <div class="screen" id="screen-mgr-announce">
   <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
   <div class="body has-nav" style="padding-top:0;">
@@ -1013,6 +1042,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- MGR PROFILE SCREEN -->
+
 <div class="screen" id="screen-mgr-profile">
   <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
   <div class="body has-nav" style="padding-top:0;" id="mgr-profile-body">
@@ -1027,6 +1057,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- SETTINGS SCREEN -->
+
 <div class="screen" id="screen-mgr-settings">
   <div class="top-bar">
     <div class="top-logo">elyne HR</div>
@@ -1036,43 +1067,46 @@ textarea { min-height:90px; line-height:1.6; }
     <div style="font-size:22px;font-weight:800;margin-bottom:4px;">⚙️ Settings</div>
     <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Manage your HR system</div>
 
-    <div class="section-label" style="margin-top:0;">Payroll & Compliance</div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;cursor:pointer;border-bottom:1px solid var(--border);" onclick="switchMgrTab('holidays')">
-        <div style="display:flex;align-items:center;gap:12px;">
-          <div style="font-size:22px;">🗓️</div>
-          <div>
-            <div style="font-size:13px;font-weight:700;">Public Holidays</div>
-            <div style="font-size:11px;color:var(--text3);margin-top:2px;">Cambodia holiday calendar</div>
-          </div>
-        </div>
-        <div style="color:var(--text3);font-size:18px;">›</div>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;cursor:pointer;" onclick="switchMgrTab('announce')">
-        <div style="display:flex;align-items:center;gap:12px;">
-          <div style="font-size:22px;">📢</div>
-          <div>
-            <div style="font-size:13px;font-weight:700;">Send Announcement</div>
-            <div style="font-size:11px;color:var(--text3);margin-top:2px;">Broadcast to all staff</div>
-          </div>
-        </div>
-        <div style="color:var(--text3);font-size:18px;">›</div>
+```
+<div class="section-label" style="margin-top:0;">Payroll & Compliance</div>
+<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;cursor:pointer;border-bottom:1px solid var(--border);" onclick="switchMgrTab('holidays')">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="font-size:22px;">🗓️</div>
+      <div>
+        <div style="font-size:13px;font-weight:700;">Public Holidays</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;">Cambodia holiday calendar</div>
       </div>
     </div>
+    <div style="color:var(--text3);font-size:18px;">›</div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;cursor:pointer;" onclick="switchMgrTab('announce')">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="font-size:22px;">📢</div>
+      <div>
+        <div style="font-size:13px;font-weight:700;">Send Announcement</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;">Broadcast to all staff</div>
+      </div>
+    </div>
+    <div style="color:var(--text3);font-size:18px;">›</div>
+  </div>
+</div>
 
-    <div class="section-label">Account</div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;cursor:pointer;" onclick="switchMgrTab('profile')">
-        <div style="display:flex;align-items:center;gap:12px;">
-          <div style="font-size:22px;">👤</div>
-          <div>
-            <div style="font-size:13px;font-weight:700;">My Profile</div>
-            <div style="font-size:11px;color:var(--text3);margin-top:2px;">View your account details</div>
-          </div>
-        </div>
-        <div style="color:var(--text3);font-size:18px;">›</div>
+<div class="section-label">Account</div>
+<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;cursor:pointer;" onclick="switchMgrTab('profile')">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="font-size:22px;">👤</div>
+      <div>
+        <div style="font-size:13px;font-weight:700;">My Profile</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;">View your account details</div>
       </div>
     </div>
+    <div style="color:var(--text3);font-size:18px;">›</div>
+  </div>
+</div>
+```
+
   </div>
   <div class="bottom-nav">
         <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
@@ -1084,6 +1118,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- HOLIDAYS SCREEN -->
+
 <div class="screen" id="screen-mgr-holidays">
   <div class="top-bar">
     <button class="back-btn" onclick="switchMgrTab('settings')">‹ Back</button>
@@ -1106,7 +1141,9 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- EMPLOYEE DETAIL SCREEN -->
+
 <!-- EMPLOYEE DETAIL SCREEN -->
+
 <div class="screen" id="screen-emp-detail">
   <div class="top-bar">
     <button class="back-btn" onclick="switchMgrTab('employees')">‹ Back</button>
@@ -1125,6 +1162,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- MODAL CONTAINER -->
+
 <div class="modal-overlay" id="modal-overlay" style="display:none;visibility:hidden;" onclick="closeModal(event)">
   <div class="modal-sheet" id="modal-sheet">
     <button class="modal-close" onclick="closeModalDirect()">✕</button>
@@ -1133,6 +1171,7 @@ textarea { min-height:90px; line-height:1.6; }
 </div>
 
 <!-- TOAST -->
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1158,7 +1197,11 @@ window.onload = async () => {
     tg.setHeaderColor('#ffffff');
     currentUser = tg.initDataUnsafe?.user;
   }
-  if (!currentUser) currentUser = { id: 999999, first_name: 'Test', last_name: 'User' };
+  if (!currentUser) {
+    // No Telegram user context — show error, don't grant any access
+    document.body.innerHTML = '<div style="display:flex;height:100vh;align-items:center;justify-content:center;font-family:Montserrat,sans-serif;text-align:center;padding:24px;"><div><div style="font-size:40px;margin-bottom:16px;">⚠️</div><div style="font-size:16px;font-weight:700;">Please open this app through Telegram</div></div></div>';
+    return;
+  }
   isManager = (currentUser.id === MANAGER_ID);
   if (isManager) setInterval(refreshLeaveBadge, 30000);
   initCalendar(); initMonthPicker();
@@ -1166,8 +1209,8 @@ window.onload = async () => {
     const r = await api('check_employee', {});
     if (r.registered) {
       employeeData = r.employee;
-      if (isManager) { await loadMgrDashboard(); showScreen('screen-mgr-main'); }
-      else { showScreen('screen-main'); loadMainScreen(); }
+      if (isManager) { showScreen('screen-mgr-main'); loadMgrDashboard(); refreshLeaveBadge(); }
+      else { showScreen('screen-main'); loadMainScreen(); } // non-managers always get staff screen
     } else { showScreen('screen-register'); }
   } catch(e) { showScreen('screen-register'); }
 };
@@ -1297,6 +1340,10 @@ function switchTab(tab) {
   if (tab==='profile') loadProfile();
 }
 function switchMgrTab(tab) {
+  if (!isManager) {
+    console.warn('Unauthorized mgr tab access attempt:', tab);
+    return;
+  }
   navLoad(tab);
   if (tab==='payroll') { showScreen('screen-mgr-payroll'); initPayrollPicker(); return; }
   if (tab==='announce') { showScreen('screen-mgr-announce'); return; }
@@ -2043,18 +2090,33 @@ async function sendAnnouncement() {
 // tab routing handled in switchTab/switchMgrTab above
 // ── MANAGER PROFILE ──
 async function loadMgrProfile() {
+  if (!isManager) return; // security guard
   const body = document.getElementById('mgr-profile-body');
+  const name = currentUser?.first_name + (currentUser?.last_name ? ' ' + currentUser.last_name : '');
+  const av = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  // Also fetch employee record if manager is registered
+  let empInfo = '';
+  try {
+    const r = await api('profile', {});
+    if (r.employee) {
+      const e = r.employee;
+      empInfo = `
+      <div class="info-row"><div class="info-key">Job Title</div><div class="info-val">${e.job_title || 'Manager'}</div></div>
+      <div class="info-row"><div class="info-key">Type</div><div class="info-val">${e.employment_type === 'fulltime' ? 'Full Time' : 'Part Time'}</div></div>
+      <div class="info-row"><div class="info-key">Work Hours</div><div class="info-val">${fmtTimeStr(e.work_start)} – ${fmtTimeStr(e.work_end)}</div></div>`;
+    }
+  } catch(e) {}
   body.innerHTML = `
     <div class="profile-big-card">
-      <div class="pf-avatar">KV</div>
-      <div class="pf-name">Kevin</div>
-      <div class="pf-role">Managing Director · elyne</div>
+      <div class="pf-avatar">${av}</div>
+      <div class="pf-name">${name}</div>
+      <div class="pf-role">Manager · elyne</div>
     </div>
     <div class="info-card">
       <div class="info-row"><div class="info-key">Role</div><div class="info-val">Manager</div></div>
       <div class="info-row"><div class="info-key">Telegram ID</div><div class="info-val" style="font-size:12px;font-family:monospace;color:var(--text2);">${currentUser?.id}</div></div>
+      ${empInfo}
       <div class="info-row"><div class="info-key">Leave Policy</div><div class="info-val">1.5 days / month</div></div>
-      <div class="info-row"><div class="info-key">Max Annual Leave</div><div class="info-val">18 days / year</div></div>
     </div>
     <div style="margin-top:16px;">
       <button class="btn btn-primary" onclick="switchMgrTab('announce')">📢 Send Announcement</button>
@@ -2441,5 +2503,6 @@ async function deleteHoliday(id, name, btnEl) {
 }
 
 </script>
+
 </body>
 </html>
