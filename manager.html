@@ -1012,15 +1012,41 @@ setInterval(async () => {
 
 const _processingLeaves = new Set();
 async function processLeave(id, action, btn) {
-  if (_processingLeaves.has(id)) return; // prevent double tap
+  if (_processingLeaves.has(id)) return;
   _processingLeaves.add(id);
 
+  const approveBtn = document.getElementById('btn-approve-'+id);
+  const rejectBtn  = document.getElementById('btn-reject-'+id);
+  const actionsDiv = document.getElementById('leave-actions-'+id);
+  if (approveBtn) { approveBtn.disabled=true; approveBtn.style.opacity='0.4'; }
+  if (rejectBtn)  { rejectBtn.disabled=true;  rejectBtn.style.opacity='0.4'; }
+  if (actionsDiv) actionsDiv.innerHTML='<div style="text-align:center;width:100%;padding:10px;font-size:13px;color:var(--text2);font-weight:600;">Processing...</div>';
+
+  try {
+    await api('mgr_process_leave', {leave_id:id, action}, {cache:false});
+    const card = document.getElementById('leave-card-'+id);
+    if (card) {
+      card.style.opacity='0.5';
+      card.style.borderLeftColor = action==='approved' ? 'var(--success)' : 'var(--error)';
+      const resultDiv = document.createElement('div');
+      resultDiv.style.cssText='text-align:center;padding:10px;font-size:13px;font-weight:700;';
+      resultDiv.style.color = action==='approved' ? 'var(--success)' : 'var(--error)';
+      resultDiv.textContent = action==='approved' ? '✅ Approved' : '❌ Rejected';
+      if (actionsDiv) actionsDiv.replaceWith(resultDiv);
+    }
+    toast(action==='approved' ? 'Leave approved ✅' : 'Leave rejected', '');
+    _processingLeaves.delete(id);
+    setTimeout(() => loadMgrLeaves(), 1500);
+  } catch(e) {
+    toast(e.message||'Failed. Try again.','error');
+    _processingLeaves.delete(id);
+    if (actionsDiv) actionsDiv.innerHTML=`
+      <button class="btn-approve" id="btn-approve-${id}" onclick="processLeave(${id},'approved',this)">✅ Approve</button>
+      <button class="btn-reject"  id="btn-reject-${id}"  onclick="processLeave(${id},'rejected',this)">❌ Reject</button>`;
+  }
+}
 
 function switchMgrTab(tab) {
-  if (!isManager) {
-    console.warn('Unauthorized mgr tab access attempt:', tab);
-    return;
-  }
   navLoad(tab);
   if (tab==='payroll') { showScreen('screen-mgr-payroll'); initPayrollPicker(); return; }
   if (tab==='announce') { showScreen('screen-mgr-announce'); return; }
@@ -1053,7 +1079,7 @@ async function submitRegistration() {
     await api('register',{full_name:name,job_title:title,employment_type:selType},{cache:false});
     employeeData={full_name:name,job_title:title,employment_type:selType,work_start:selType==='fulltime'?'09:00:00':'13:00:00',work_end:'17:00:00'};
     toast('Profile created!','success');
-    if (isManager) { await loadMgrDashboard(); showScreen('screen-mgr-main'); }
+    showScreen('screen-mgr-main'); loadMgrDashboard();
     else { showScreen('screen-main'); loadMainScreen(); }
   } catch(e) { toast(e.message||'Failed','error'); }
 }
@@ -1782,7 +1808,6 @@ async function sendAnnouncement() {
 // tab routing handled in switchTab/switchMgrTab above
 // ── MANAGER PROFILE ──
 async function loadMgrProfile() {
-  if (!isManager) return; // security guard
   const body = document.getElementById('mgr-profile-body');
   const name = currentUser?.first_name + (currentUser?.last_name ? ' ' + currentUser.last_name : '');
   const av = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
@@ -1833,7 +1858,6 @@ function closeModalDirect() {
 
 // ── PENDING LEAVE BADGE ──
 async function refreshLeaveBadge() {
-  if (!isManager) return;
   try {
     const r = await api('mgr_pending_count', {});
     const badge = document.getElementById('leaves-badge');
