@@ -833,305 +833,6 @@ textarea { min-height:90px; line-height:1.6; }
 <!-- ═══════════════════════════════════════════════ -->
 
 <!-- MGR MAIN -->
-<div class="screen" id="screen-mgr-main">
-  <div class="profile-header">
-    <div class="profile-info">
-      <div class="profile-avatar-sm" style="font-size:14px;">KV</div>
-      <div>
-        <div class="profile-name-sm">Kevin</div>
-        <div class="profile-role-sm">Managing Director</div>
-      </div>
-    </div>
-    <div style="font-size:22px;">👔</div>
-  </div>
-
-  <div class="body has-nav" style="padding-top:16px;">
-    <div style="font-size:22px;font-weight:800;margin-bottom:4px;" id="mgr-welcome">Good morning.</div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Great companies are built by great people.</div>
-
-    <div class="section-label" style="margin-top:0;">Today's Overview</div>
-    <div class="overview-card" style="margin-bottom:14px;">
-      <div class="ov-date-row">
-        <div class="ov-date" id="mgr-ov-date">—</div>
-        <div class="ov-time-badge" id="mgr-ov-now">—</div>
-      </div>
-      <div class="stat-grid" style="margin-top:0;">
-        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px;backdrop-filter:blur(10px);">
-          <div style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;margin-bottom:4px;">TOTAL PRESENT</div>
-          <div style="font-size:26px;font-weight:800;color:white;" id="mgr-stat-present">—</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px;backdrop-filter:blur(10px);">
-          <div style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;margin-bottom:4px;">TOTAL LATE</div>
-          <div style="font-size:26px;font-weight:800;color:white;" id="mgr-stat-late">—</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px;backdrop-filter:blur(10px);">
-          <div style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;margin-bottom:4px;">ON LEAVE</div>
-          <div style="font-size:26px;font-weight:800;color:white;" id="mgr-stat-leave">—</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:14px;backdrop-filter:blur(10px);">
-          <div style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:600;margin-bottom:4px;">ABSENT</div>
-          <div style="font-size:26px;font-weight:800;color:white;" id="mgr-stat-absent">—</div>
-        </div>
-      </div>
-    </div>
-
-    <div id="mgr-main-list"><div style="padding:4px 0;">
-  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
-  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
-  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
-</div></div>
-  </div>
-
-    </div>
-
-  <div class="bottom-nav">
-    <button class="nav-item active" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
-    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
-    <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
-    <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
-    <button class="nav-item" onclick="switchMgrTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></button>
-  </div>
-</div>
-
-<!-- MGR LEAVES -->
-<div class="screen" id="screen-mgr-leaves">
-  <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
-  <div class="body has-nav" style="padding-top:0;">
-    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">Leave Requests</div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Pending approvals</div>
-    <div id="mgr-leaves-body"><div style="padding:4px 0;">
-  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
-  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
-  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
-</div></div>
-  </div>
-  <div class="bottom-nav">
-    <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
-    <button class="nav-item active" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
-    <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
-    <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
-    <button class="nav-item" onclick="switchMgrTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></button>
-  </div>
-</div>
-
-<!-- MGR REPORT -->
-<div class="screen" id="screen-mgr-report">
-  <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
-  <div class="body has-nav" style="padding-top:0;">
-    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">Monthly Report</div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Attendance breakdown by employee</div>
-    <div class="section-label" style="margin-top:0;">Select Month</div>
-    <div class="month-grid" id="month-picker-grid" style="margin-bottom:20px;"></div>
-    <div id="report-results"></div>
-  </div>
-  <div class="bottom-nav">
-    <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
-    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
-    <button class="nav-item active" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
-    <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
-    <button class="nav-item" onclick="switchMgrTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></button>
-  </div>
-</div>
-
-<!-- MGR EMPLOYEES -->
-<div class="screen" id="screen-mgr-employees">
-  <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
-  <div class="body has-nav" style="padding-top:0;">
-    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">Team</div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">All registered employees</div>
-    <div id="mgr-employees-body"><div style="padding:4px 0;">
-  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
-  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
-  <div class="skeleton" style="height:72px;border-radius:16px;margin-bottom:12px;"></div>
-</div></div>
-  </div>
-  <div class="bottom-nav">
-    <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
-    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
-    <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
-    <button class="nav-item active" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
-    <button class="nav-item" onclick="switchMgrTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></button>
-  </div>
-</div>
-
-<!-- MY LEAVES SCREEN -->
-<div class="screen" id="screen-my-leaves">
-  <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
-  <div class="body has-nav" style="padding-top:0;">
-    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">My Leaves</div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:16px;">Leave history & balance</div>
-    <div id="leave-balance-card" style="margin-bottom:20px;"></div>
-    <div id="my-leaves-body"><div class="loading"><div class="spinner"></div> Loading...</div></div>
-    <button class="btn btn-primary" onclick="goApplyLeave()" style="margin-top:8px;">+ Apply for Leave</button>
-  </div>
-  <div class="bottom-nav">
-    <button class="nav-item" onclick="switchTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Overview</div></button>
-    <button class="nav-item" onclick="switchTab('attendance')"><div class="nav-icon">📊</div><div class="nav-label">History</div></button>
-    <button class="nav-item active" onclick="switchTab('leave')"><div class="nav-icon">📅</div><div class="nav-label">Leave</div></button>
-    <button class="nav-item" onclick="switchTab('profile')"><div class="nav-icon">👤</div><div class="nav-label">Profile</div></button>
-  </div>
-</div>
-
-<!-- MGR PAYROLL SCREEN -->
-<div class="screen" id="screen-mgr-payroll">
-  <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
-  <div class="body has-nav" style="padding-top:0;">
-    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">Payroll</div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Monthly salary calculator</div>
-    <div class="section-label" style="margin-top:0;">Select Month</div>
-    <div class="month-grid" id="payroll-month-grid" style="margin-bottom:20px;"></div>
-    <div id="payroll-results"></div>
-  </div>
-  <div class="bottom-nav">
-    <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
-    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
-    <button class="nav-item active" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
-    <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
-    <button class="nav-item" onclick="switchMgrTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></button>
-  </div>
-</div>
-
-<!-- MGR ANNOUNCE SCREEN -->
-<div class="screen" id="screen-mgr-announce">
-  <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
-  <div class="body has-nav" style="padding-top:0;">
-    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">Announcement</div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Broadcast to all staff</div>
-    <div class="input-group">
-      <label class="input-label">Message</label>
-      <textarea id="announce-msg" placeholder="Type your announcement here..." style="min-height:140px;"></textarea>
-    </div>
-    <button class="btn btn-primary" onclick="sendAnnouncement()">📢 Send to All Staff</button>
-  </div>
-  <div class="bottom-nav">
-    <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
-    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
-    <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
-    <button class="nav-item active" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
-    <button class="nav-item" onclick="switchMgrTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></button>
-  </div>
-</div>
-
-<!-- MGR PROFILE SCREEN -->
-<div class="screen" id="screen-mgr-profile">
-  <div class="top-bar"><div class="top-logo">elyne HR</div><div></div></div>
-  <div class="body has-nav" style="padding-top:0;" id="mgr-profile-body">
-    <div class="loading"><div class="spinner"></div> Loading...</div>
-  </div>
-  <div class="bottom-nav">
-    <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
-    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
-    <button class="nav-item" onclick="switchMgrTab('report')"><div class="nav-icon">📋</div><div class="nav-label">Report</div></button>
-    <button class="nav-item active" onclick="switchMgrTab('profile')"><div class="nav-icon">👤</div><div class="nav-label">Profile</div></button>
-  </div>
-</div>
-
-<!-- SETTINGS SCREEN -->
-<div class="screen" id="screen-mgr-settings">
-  <div class="top-bar">
-    <div class="top-logo">elyne HR</div>
-    <div></div>
-  </div>
-  <div class="body has-nav" style="padding-top:0;">
-    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">⚙️ Settings</div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:20px;">Manage your HR system</div>
-
-    <div class="section-label" style="margin-top:0;">Payroll & Compliance</div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;cursor:pointer;border-bottom:1px solid var(--border);" onclick="switchMgrTab('holidays')">
-        <div style="display:flex;align-items:center;gap:12px;">
-          <div style="font-size:22px;">🗓️</div>
-          <div>
-            <div style="font-size:13px;font-weight:700;">Public Holidays</div>
-            <div style="font-size:11px;color:var(--text3);margin-top:2px;">Cambodia holiday calendar</div>
-          </div>
-        </div>
-        <div style="color:var(--text3);font-size:18px;">›</div>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;cursor:pointer;" onclick="switchMgrTab('announce')">
-        <div style="display:flex;align-items:center;gap:12px;">
-          <div style="font-size:22px;">📢</div>
-          <div>
-            <div style="font-size:13px;font-weight:700;">Send Announcement</div>
-            <div style="font-size:11px;color:var(--text3);margin-top:2px;">Broadcast to all staff</div>
-          </div>
-        </div>
-        <div style="color:var(--text3);font-size:18px;">›</div>
-      </div>
-    </div>
-
-    <div class="section-label">Account</div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;cursor:pointer;" onclick="switchMgrTab('profile')">
-        <div style="display:flex;align-items:center;gap:12px;">
-          <div style="font-size:22px;">👤</div>
-          <div>
-            <div style="font-size:13px;font-weight:700;">My Profile</div>
-            <div style="font-size:11px;color:var(--text3);margin-top:2px;">View your account details</div>
-          </div>
-        </div>
-        <div style="color:var(--text3);font-size:18px;">›</div>
-      </div>
-    </div>
-  </div>
-  <div class="bottom-nav">
-        <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
-    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
-    <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
-    <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
-    <button class="nav-item active" onclick="switchMgrTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></button>
-  </div>
-</div>
-
-<!-- HOLIDAYS SCREEN -->
-<div class="screen" id="screen-mgr-holidays">
-  <div class="top-bar">
-    <button class="back-btn" onclick="switchMgrTab('settings')">‹ Back</button>
-    <div class="top-logo">Public Holidays</div>
-    <div></div>
-  </div>
-  <div class="body has-nav" style="padding-top:0;">
-    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">🗓️ Holidays</div>
-    <div style="font-size:13px;color:var(--text2);margin-bottom:16px;">Cambodia public holidays — excluded from payroll & attendance</div>
-    <button class="btn btn-primary" onclick="openAddHoliday()" style="margin-bottom:16px;">+ Add Holiday</button>
-    <div id="holidays-body"><div class="loading"><div class="spinner"></div> Loading...</div></div>
-  </div>
-  <div class="bottom-nav">
-    <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
-    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
-    <button class="nav-item" onclick="switchMgrTab('payroll')"><div class="nav-icon">💰</div><div class="nav-label">Payroll</div></button>
-    <button class="nav-item" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
-    <button class="nav-item active" onclick="switchMgrTab('settings')"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></button>
-  </div>
-</div>
-
-<!-- EMPLOYEE DETAIL SCREEN -->
-<!-- EMPLOYEE DETAIL SCREEN -->
-<div class="screen" id="screen-emp-detail">
-  <div class="top-bar">
-    <button class="back-btn" onclick="switchMgrTab('employees')">‹ Back</button>
-    <div class="top-logo">elyne HR</div>
-    <div></div>
-  </div>
-  <div class="body has-nav" style="padding-top:0;" id="emp-detail-body">
-    <div class="loading"><div class="spinner"></div> Loading...</div>
-  </div>
-  <div class="bottom-nav">
-    <button class="nav-item" onclick="switchMgrTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Dashboard</div></button>
-    <button class="nav-item" onclick="switchMgrTab('leaves')"><div class="nav-icon">📅</div><div class="nav-label">Leaves</div><div class="nav-badge" id="leaves-badge" style="display:none;"></div></button>
-    <button class="nav-item" onclick="switchMgrTab('report')"><div class="nav-icon">📋</div><div class="nav-label">Report</div></button>
-    <button class="nav-item active" onclick="switchMgrTab('employees')"><div class="nav-icon">👥</div><div class="nav-label">Team</div></button>
-  </div>
-</div>
-
-<!-- MODAL CONTAINER -->
-<div class="modal-overlay" id="modal-overlay" style="display:none;visibility:hidden;" onclick="closeModal(event)">
-  <div class="modal-sheet" id="modal-sheet">
-    <button class="modal-close" onclick="closeModalDirect()">✕</button>
-    <div id="modal-content"></div>
-  </div>
-</div>
-
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -1140,12 +841,9 @@ const API_BASE = 'https://elyne-hr-bot-production.up.railway.app';
 const OFFICE_LAT = 11.5764427;
 const OFFICE_LNG = 104.8966103;
 const OFFICE_RADIUS = 100;
-const MANAGER_ID = 315830657;
-
 let tg = window.Telegram?.WebApp;
 let currentUser = null;
 let employeeData = null;
-let isManager = false;
 let selectedLeaveType = 'annual';
 let selectedLeaveDate = null;
 let calYear, calMonth;
@@ -1163,16 +861,12 @@ window.onload = async () => {
     document.body.innerHTML = '<div style="display:flex;height:100vh;align-items:center;justify-content:center;font-family:Montserrat,sans-serif;text-align:center;padding:24px;"><div><div style="font-size:40px;margin-bottom:16px;">⚠️</div><div style="font-size:16px;font-weight:700;">Please open this app through Telegram</div></div></div>';
     return;
   }
-  isManager = (currentUser.id === MANAGER_ID);
-  if (isManager) setInterval(refreshLeaveBadge, 30000);
-  initCalendar(); initMonthPicker();
+    initCalendar(); initMonthPicker();
   try {
     const r = await api('check_employee', {});
     if (r.registered) {
       employeeData = r.employee;
-      if (isManager) { showScreen('screen-mgr-main'); loadMgrDashboard(); refreshLeaveBadge(); }
-      else { showScreen('screen-main'); loadMainScreen(); } // non-managers always get staff screen
-    } else { showScreen('screen-register'); }
+          } else { showScreen('screen-register'); }
   } catch(e) { showScreen('screen-register'); }
 };
 
@@ -1299,1089 +993,58 @@ function switchTab(tab) {
   showScreen(m[tab]);
   if (tab==='attendance') loadAttendance();
   if (tab==='profile') loadProfile();
-}
-function switchMgrTab(tab) {
-  if (!isManager) {
-    console.warn('Unauthorized mgr tab access attempt:', tab);
+}async function initApp() {
+  const tg = window.Telegram?.WebApp;
+  if (tg) { tg.ready(); tg.expand(); currentUser = tg.initDataUnsafe?.user; }
+  if (!currentUser) {
+    document.body.innerHTML = '<div style="display:flex;height:100vh;align-items:center;justify-content:center;font-family:Montserrat,sans-serif;text-align:center;padding:24px;"><div><div style="font-size:40px;margin-bottom:16px;">⚠️</div><div style="font-size:16px;font-weight:700;">Please open this app through Telegram</div></div></div>';
     return;
   }
-  navLoad(tab);
-  if (tab==='payroll') { showScreen('screen-mgr-payroll'); initPayrollPicker(); return; }
-  if (tab==='announce') { showScreen('screen-mgr-announce'); return; }
-  if (tab==='profile') { showScreen('screen-mgr-profile'); loadMgrProfile(); return; }
-  if (tab==='emp-detail') { showScreen('screen-emp-detail'); return; }
-  if (tab==='holidays') { showScreen('screen-mgr-holidays'); loadHolidays(); return; }
-  if (tab==='settings') { showScreen('screen-mgr-settings'); return; }
-  const m={main:'screen-mgr-main',leaves:'screen-mgr-leaves',report:'screen-mgr-report',employees:'screen-mgr-employees'};
-  if (!m[tab]) return;
-  showScreen(m[tab]);
-  if (tab==='main') loadMgrDashboard();
-  if (tab==='leaves') loadMgrLeaves();
-  if (tab==='employees') loadMgrEmployees();
-}
-
-// ── REGISTER ──
-let selType = 'fulltime';
-function selectType(t) {
-  selType = t;
-  document.getElementById('type-fulltime').className='radio-btn'+(t==='fulltime'?' selected':'');
-  document.getElementById('type-parttime').className='radio-btn'+(t==='parttime'?' selected':'');
-}
-async function submitRegistration() {
-  const name=document.getElementById('reg-name').value.trim();
-  const title=document.getElementById('reg-title').value.trim();
-  if (!name||!title) { toast('Please fill in all fields','error'); return; }
-  const btn = document.querySelector('#screen-register .btn-primary');
-  btnLoad(btn, 'Creating...');
-  try {
-    await api('register',{full_name:name,job_title:title,employment_type:selType},{cache:false});
-    employeeData={full_name:name,job_title:title,employment_type:selType,work_start:selType==='fulltime'?'09:00:00':'13:00:00',work_end:'17:00:00'};
-    toast('Profile created!','success');
-    if (isManager) { await loadMgrDashboard(); showScreen('screen-mgr-main'); }
-    else { showScreen('screen-main'); loadMainScreen(); }
-  } catch(e) { toast(e.message||'Failed','error'); }
-}
-
-// ── MAIN ──
-async function loadMainScreen() {
-  const now = new Date();
-  const dow = now.getDay();
-  const isWeekend = dow === 0 || dow === 6;
-  const name = employeeData?.full_name || '';
-  const first = name.split(' ')[0];
-  const av = initials(name||'?');
-  document.getElementById('main-avatar').textContent = av;
-  document.getElementById('main-name').textContent = name;
-  document.getElementById('main-role').textContent = employeeData?.job_title || '';
-  document.getElementById('main-welcome-line').textContent = isWeekend ? `Happy weekend, ${first}! 🌴` : `${greet()}, ${first}!`;
-  // Check for holiday
-  if (!isWeekend) {
-    try {
-      const ts = await api('today_status', {});
-      if (ts.is_holiday) {
-        document.getElementById('main-welcome-line').textContent = `Happy Holiday, ${first}! 🎉`;
-        const body = document.getElementById('main-body');
-        const existing = document.getElementById('holiday-banner');
-        if (!existing) {
-          const banner = document.createElement('div');
-          banner.id = 'holiday-banner';
-          banner.style.cssText = 'background:linear-gradient(135deg,#f5a623,#f7c948);border-radius:16px;padding:18px;margin-bottom:16px;text-align:center;';
-          banner.innerHTML = `<div style="font-size:24px;margin-bottom:6px;">🎉</div>
-            <div style="font-size:15px;font-weight:800;color:#7a4800;">Today is ${ts.holiday_name}</div>
-            <div style="font-size:12px;color:#a06000;margin-top:4px;">Public Holiday — Enjoy your day!</div>`;
-          body.prepend(banner);
-        }
-        // Hide check-in/out cards on holiday
-        document.querySelectorAll('.action-card').forEach(c => c.style.display = 'none');
-        return;
-      }
-    } catch(e) {}
-  }
-  document.getElementById('ov-date').textContent = now.toLocaleDateString('en-US',{day:'numeric',month:'long',year:'numeric'});
-  document.getElementById('ov-now').textContent = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
-  try {
-    const r = await api('today_status',{});
-    document.getElementById('ov-checkin').textContent = r.check_in_time ? fmtTime(r.check_in_time) : '--:--';
-    document.getElementById('ov-checkout').textContent = r.check_out_time ? fmtTime(r.check_out_time) : '--:--';
-  } catch(e) {}
-}
-
-// ── CHECK IN / OUT ──
-async function goCheckIn() {
-  const dow = new Date().getDay();
-  if (dow === 0 || dow === 6) { toast('Today is a weekend — no attendance required 🌴', ''); return; }
-  showScreen('screen-checkin'); resetLoc('ci'); startCheckin();
-}
-async function goCheckOut() {
-  const dow = new Date().getDay();
-  if (dow === 0 || dow === 6) { toast('Today is a weekend — no attendance required 🌴', ''); return; }
-  showScreen('screen-checkout'); resetLoc('co'); startCheckout();
-}
-
-function resetLoc(p) {
-  document.getElementById(`${p}-ring`).className='loc-ring';
-  document.getElementById(`${p}-ring`).textContent='📍';
-  document.getElementById(`${p}-title`).textContent='Locating You...';
-  document.getElementById(`${p}-sub`).textContent='Getting your GPS. Please wait.';
-  document.getElementById(`${p}-pill`).style.display='none';
-  document.getElementById(`${p}-btn`).style.display='none';
-  document.getElementById(`${p}-retry`).style.display='none';
-  if (p==='co') document.getElementById('early-section').style.display='none';
-}
-function startCheckin() { resetLoc('ci'); gps('ci'); }
-function startCheckout() { resetLoc('co'); gps('co'); }
-
-function gps(p) {
-  if (!navigator.geolocation) { locErr(p,'GPS not available.'); return; }
-  navigator.geolocation.getCurrentPosition(
-    pos => onGPS(p,pos),
-    () => locErr(p,'Could not get location. Enable GPS and try again.'),
-    {enableHighAccuracy:true,timeout:15000,maximumAge:0}
-  );
-}
-function onGPS(p,pos) {
-  // Weekend check
-  const dow = new Date().getDay(); // 0=Sun, 6=Sat
-  if (dow === 0 || dow === 6) {
-    document.getElementById(`${p}-ring`).className='loc-ring';
-    document.getElementById(`${p}-ring`).textContent='🌴';
-    document.getElementById(`${p}-title`).textContent='Weekend!';
-    document.getElementById(`${p}-sub`).textContent='Today is a weekend — no attendance required. Enjoy your day off!';
-    return;
-  }
-  userLat=pos.coords.latitude; userLng=pos.coords.longitude;
-  const d=dist(userLat,userLng,OFFICE_LAT,OFFICE_LNG);
-  document.getElementById(`${p}-pill`).style.display='flex';
-  const dv=document.getElementById(`${p}-dist`);
-  dv.textContent=`${Math.round(d)}m away`;
-  if (d<=OFFICE_RADIUS) {
-    dv.className='dist-val ok';
-    document.getElementById(`${p}-ring`).className='loc-ring ok';
-    document.getElementById(`${p}-ring`).textContent='✅';
-    document.getElementById(`${p}-title`).textContent="You're at the office";
-    document.getElementById(`${p}-sub`).textContent=`Confirmed — ${Math.round(d)}m from office.`;
-    if (p==='co') {
-      const now=new Date(); const we=employeeData?.work_end||'17:00:00';
-      const [wh,wm]=we.split(':'); const end=new Date(); end.setHours(parseInt(wh),parseInt(wm),0);
-      if (now<new Date(end.getTime()-15*60*1000)) document.getElementById('early-section').style.display='block';
-    }
-    document.getElementById(`${p}-btn`).style.display='block';
-  } else {
-    dv.className='dist-val far';
-    locErr(p,`You are ${Math.round(d)}m from office. Must be within ${OFFICE_RADIUS}m.`);
-    document.getElementById(`${p}-retry`).style.display='block';
-  }
-}
-function locErr(p,msg) {
-  document.getElementById(`${p}-ring`).className='loc-ring fail';
-  document.getElementById(`${p}-ring`).textContent='❌';
-  document.getElementById(`${p}-title`).textContent='Location Error';
-  document.getElementById(`${p}-sub`).textContent=msg;
-}
-async function confirmCheckIn() {
-  const btn=document.getElementById('ci-btn'); btn.disabled=true; btn.textContent='CHECKING IN...';
-  try {
-    const r=await api('checkin',{lat:userLat,lng:userLng});
-    toast(r.message||'Checked in!','success'); invalidateCache('today_status','mgr_today_status'); await loadMainScreen(); showScreen('screen-main');
-  } catch(e) { toast(e.message,'error'); btn.disabled=false; btn.textContent='CONFIRM CHECK IN'; }
-}
-async function confirmCheckOut() {
-  const er=document.getElementById('early-reason').value.trim();
-  if (document.getElementById('early-section').style.display!=='none'&&!er) { toast('Please provide early leave reason','error'); return; }
-  const btn=document.getElementById('co-btn'); btn.disabled=true; btn.textContent='CHECKING OUT...';
-  try {
-    const r=await api('checkout',{lat:userLat,lng:userLng,early_reason:er||null});
-    toast(r.message||'Checked out!','success'); invalidateCache('today_status','mgr_today_status'); await loadMainScreen(); showScreen('screen-main');
-  } catch(e) { toast(e.message,'error'); btn.disabled=false; btn.textContent='CONFIRM CHECK OUT'; }
-}
-
-// ── CALENDAR ──
-function initCalendar() { const n=new Date(); calYear=n.getFullYear(); calMonth=n.getMonth(); renderCalendar(); }
-function changeMonth(d) { calMonth+=d; if(calMonth>11){calMonth=0;calYear++;} if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
-function renderCalendar() {
-  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('cal-title').textContent=`${months[calMonth]} ${calYear}`;
-  const grid=document.getElementById('cal-grid'); grid.innerHTML='';
-  ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(d=>{const e=document.createElement('div');e.className='cal-day-name';e.textContent=d;grid.appendChild(e);});
-  const first=new Date(calYear,calMonth,1).getDay();
-  const dim=new Date(calYear,calMonth+1,0).getDate();
-  const today=new Date(); today.setHours(0,0,0,0);
-  for(let i=0;i<first;i++) grid.appendChild(document.createElement('div'));
-  for(let d=1;d<=dim;d++) {
-    const el=document.createElement('div'); el.className='cal-day'; el.textContent=d;
-    const td=new Date(calYear,calMonth,d);
-    if(td.toDateString()===new Date().toDateString()) el.classList.add('today');
-    if(td<today) el.classList.add('past');
-    if(selectedLeaveDate&&td.toDateString()===new Date(selectedLeaveDate).toDateString()) el.classList.add('selected');
-    if(td>=today) el.onclick=()=>selDate(calYear,calMonth,d);
-    grid.appendChild(el);
-  }
-}
-function selDate(y,m,d) {
-  selectedLeaveDate=new Date(y,m,d); renderCalendar();
-  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  document.getElementById('sel-date-text').textContent=`${days[selectedLeaveDate.getDay()]}, ${d} ${months[m]} ${y}`;
-  document.getElementById('sel-date-chip').style.display='flex';
-}
-function selectLeaveType(t,el) {
-  if (el.classList.contains('disabled')) return; // blocked
-  selectedLeaveType=t;
-  document.querySelectorAll('.leave-type-btn').forEach(b=>b.classList.remove('selected'));
-  el.classList.add('selected');
-}
-// Called when apply leave button on my-leaves screen is tapped
-function goApplyLeave() {
-  showScreen('screen-leave');
-  initLeaveTypes();
-  initCalendar();
-  selectedLeaveDate = null;
-  document.getElementById('sel-date-chip').style.display = 'none';
-  document.getElementById('leave-reason').value = '';
-}
-
-let _submitLeaveInProgress = false;
-async function submitLeave() {
-  if(_submitLeaveInProgress) return; // prevent double tap
-  if(!selectedLeaveDate){toast('Please select a date','error');return;}
-  const reason=document.getElementById('leave-reason').value.trim();
-  if(!reason){toast('Please provide a reason','error');return;}
-
-  // Disable button immediately
-  _submitLeaveInProgress = true;
-  const btn = document.getElementById('submit-leave-btn');
-  if(btn) { btn.disabled = true; btn.textContent = 'SUBMITTING...'; }
-
-  try {
-    await api('apply_leave',{leave_type:selectedLeaveType,date:selectedLeaveDate.toISOString().split('T')[0],reason},{cache:false});
-    toast('Leave request submitted! ✅','success');
-    invalidateCache('my_leaves','leave_balance','mgr_pending_leaves','mgr_pending_count');
-    selectedLeaveDate=null;
-    document.getElementById('leave-reason').value='';
-    document.getElementById('sel-date-chip').style.display='none';
-    renderCalendar();
-    setTimeout(()=>{ _submitLeaveInProgress=false; switchTab('main'); },1500);
-  } catch(e){
-    toast(e.message||'Failed. Please try again.','error');
-    // Re-enable on failure
-    _submitLeaveInProgress = false;
-    if(btn) { btn.disabled = false; btn.textContent = 'SUBMIT LEAVE REQUEST'; }
-  }
-}
-
-// ── ATTENDANCE ──
-async function loadAttendance() {
-  const body=document.getElementById('att-body');
-  body.innerHTML='<div class="loading"><div class="spinner"></div> Loading...</div>';
-  try {
-    const r=await api('attendance_history',{});
-    const records=r.records||[];
-    if(!records.length){body.innerHTML='<div class="empty"><div class="empty-icon">📊</div><div class="empty-text">No records yet.</div></div>';return;}
-    const bmap={present:['badge-present','Present','#4ecb8d'],late:['badge-late','Late','#f5a623'],half_day_unpaid:['badge-half','Half Day','#e05c7a'],on_leave:['badge-leave','On Leave','#5b8def'],absent:['badge-absent','Absent','#e05c7a']};
-    let html='<div class="att-list">';
-    records.forEach(r=>{
-      const [cls,label,color]=bmap[r.status]||['badge-absent','Unknown','#888'];
-      html+=`<div class="att-row"><div class="att-dot" style="background:${color};"></div><div class="att-info"><div class="att-date">${fmtDate(r.date)}</div><div class="att-times">In: ${fmtTime(r.check_in_time)} · Out: ${fmtTime(r.check_out_time)}</div></div><span class="badge ${cls}">${label}</span></div>`;
-    });
-    html+='</div>'; body.innerHTML=html;
-  } catch(e){body.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load records.</div></div>';}
-}
-
-// ── PROFILE ──
-async function loadProfile() {
-  const body=document.getElementById('profile-body');
-  if(!employeeData){body.innerHTML='<div class="empty"><div class="empty-icon">👤</div><div class="empty-text">Not registered.</div></div>';return;}
-  const ws=fmtTimeStr(employeeData.work_start||'09:00:00');
-  const we=fmtTimeStr(employeeData.work_end||'17:00:00');
-  body.innerHTML=`
-    <div class="profile-big-card">
-      <div class="pf-avatar">${initials(employeeData.full_name)}</div>
-      <div class="pf-name">${employeeData.full_name}</div>
-      <div class="pf-role">${employeeData.job_title}</div>
-    </div>
-    <div class="info-card">
-      <div class="info-row"><div class="info-key">Employment Type</div><div class="info-val">${employeeData.employment_type==='fulltime'?'Full Time':'Part Time'}</div></div>
-      <div class="info-row"><div class="info-key">Work Hours</div><div class="info-val">${ws} – ${we}</div></div>
-      <div class="info-row"><div class="info-key">Work Days</div><div class="info-val">Mon – Fri</div></div>
-      <div class="info-row"><div class="info-key">Telegram ID</div><div class="info-val" style="font-size:12px;font-family:monospace;color:var(--text2);">${currentUser?.id}</div></div>
-    </div>`;
-}
-
-// ── MANAGER DASHBOARD ──
-async function loadMgrDashboard() {
-  const now = new Date();
-  document.getElementById('mgr-welcome').textContent = `${greet()}.`;
-  document.getElementById('mgr-ov-date').textContent = now.toLocaleDateString('en-US',{day:'numeric',month:'long',year:'numeric'});
-  document.getElementById('mgr-ov-now').textContent = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
-  const list = document.getElementById('mgr-main-list');
-  list.innerHTML = '<div class="loading"><div class="spinner"></div> Loading...</div>';
-  try {
-    const r = await api('mgr_today_status', {});
-    if (r.is_holiday) {
-      ['mgr-stat-present','mgr-stat-late','mgr-stat-leave','mgr-stat-absent'].forEach(id => {
-        document.getElementById(id).textContent = '—';
-      });
-      list.innerHTML = `<div style="background:linear-gradient(135deg,#f5a623,#f7c948);border-radius:18px;padding:28px;text-align:center;margin:8px 0;">
-        <div style="font-size:40px;margin-bottom:12px;">🎉</div>
-        <div style="font-size:18px;font-weight:800;color:#7a4800;margin-bottom:6px;">${r.holiday_name}</div>
-        <div style="font-size:13px;color:#a06000;">Public Holiday — no attendance today</div>
-      </div>`;
-      return;
-    }
-    const {present=[],late=[],absent=[],on_leave=[]}=r;
-    document.getElementById('mgr-stat-present').textContent=present.length;
-    document.getElementById('mgr-stat-late').textContent=late.length;
-    document.getElementById('mgr-stat-leave').textContent=on_leave.length;
-    document.getElementById('mgr-stat-absent').textContent=absent.length;
-    const sections=[
-      {label:'✅ Present',list:present,color:'var(--success)',bg:'var(--success-bg)'},
-      {label:'⏰ Late',list:late,color:'var(--warning)',bg:'var(--warning-bg)'},
-      {label:'🏖️ On Leave',list:on_leave,color:'var(--info)',bg:'var(--info-bg)'},
-      {label:'❌ Absent',list:absent,color:'var(--error)',bg:'var(--error-bg)'},
-    ];
-    let html='';
-    sections.forEach(s=>{
-      if(!s.list.length) return;
-      html+=`<div class="section-label">${s.label}</div><div class="emp-list">`;
-      s.list.forEach(e=>{
-        html+=`<div class="emp-row"><div class="emp-avatar" style="background:${s.bg};color:${s.color};">${initials(e.full_name)}</div><div class="emp-info"><div class="emp-name">${e.full_name}</div><div class="emp-role">${e.job_title}</div></div>${e.check_in_time?`<div style="font-size:12px;font-weight:700;color:${s.color};">${fmtTime(e.check_in_time)}</div>`:''}</div>`;
-      });
-      html+='</div>';
-    });
-    if(!html) html='<div class="empty"><div class="empty-icon">🌿</div><div class="empty-text">All good — no activity yet.</div></div>';
-    list.innerHTML=html;
-  } catch(e){list.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load dashboard.</div></div>';}
-}
-
-
-async function loadMgrLeaves() {
-  const body=document.getElementById('mgr-leaves-body');
-  body.innerHTML='<div class="loading"><div class="spinner"></div> Loading...</div>';
-  try {
-    const r=await api('mgr_pending_leaves',{});
-    const leaves=r.leaves||[];
-    if(!leaves.length){body.innerHTML='<div class="empty"><div class="empty-icon">✅</div><div class="empty-text">No pending requests.</div></div>';return;}
-    let html='';
-    leaves.forEach(l=>{
-      const balText = l.leave_balance ? `AL: ${l.leave_balance.remaining}/${l.leave_balance.total} days` : '';
-      html+=`<div class="leave-req-card" id="leave-card-${l.id}">
-        <div class="leave-req-name">${l.full_name}</div>
-        <div class="leave-req-meta">${l.leave_type.charAt(0).toUpperCase()+l.leave_type.slice(1)} Leave · ${fmtDate(l.date)}${balText ? ' · ' + balText : ''}</div>
-        <div class="leave-req-reason">📝 ${l.reason}</div>
-        <div class="leave-actions" id="leave-actions-${l.id}">
-          <button class="btn-approve" id="btn-approve-${l.id}" onclick="processLeave(${l.id},'approved',this)">✅ Approve</button>
-          <button class="btn-reject" id="btn-reject-${l.id}" onclick="processLeave(${l.id},'rejected',this)">❌ Reject</button>
-        </div>
-      </div>`;
-    });
-    body.innerHTML=html;
-  } catch(e){body.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load.</div></div>';}
-}
-const _processingLeaves = new Set();
-async function processLeave(id, action, btn) {
-  if (_processingLeaves.has(id)) return; // prevent double tap
-  _processingLeaves.add(id);
-
-  // Disable both buttons immediately and show processing state
-  const approveBtn = document.getElementById(`btn-approve-${id}`);
-  const rejectBtn  = document.getElementById(`btn-reject-${id}`);
-  const actionsDiv = document.getElementById(`leave-actions-${id}`);
-  if (approveBtn) { approveBtn.disabled = true; approveBtn.style.opacity = '0.4'; }
-  if (rejectBtn)  { rejectBtn.disabled = true;  rejectBtn.style.opacity = '0.4'; }
-  if (actionsDiv) actionsDiv.innerHTML = `<div style="text-align:center;width:100%;padding:10px;font-size:13px;color:var(--text2);font-weight:600;">Processing...</div>`;
-
-  try {
-    await api('mgr_process_leave', {leave_id:id, action}, {cache:false});
-    // Show result inline on the card before reloading
-    const card = document.getElementById(`leave-card-${id}`);
-    if (card) {
-      card.style.opacity = '0.5';
-      card.style.borderLeftColor = action === 'approved' ? 'var(--success)' : 'var(--error)';
-      const resultDiv = document.createElement('div');
-      resultDiv.style.cssText = 'text-align:center;padding:10px;font-size:13px;font-weight:700;';
-      resultDiv.style.color = action === 'approved' ? 'var(--success)' : 'var(--error)';
-      resultDiv.textContent = action === 'approved' ? '✅ Approved' : '❌ Rejected';
-      if (actionsDiv) actionsDiv.replaceWith(resultDiv);
-    }
-    toast(action === 'approved' ? 'Leave approved ✅' : 'Leave rejected', '');
-    _processingLeaves.delete(id);
-    // Reload after short delay so manager sees the result
-    setTimeout(() => loadMgrLeaves(), 1500);
-  } catch(e) {
-    toast(e.message || 'Failed. Try again.', 'error');
-    _processingLeaves.delete(id);
-    // Re-enable buttons on failure
-    if (actionsDiv) actionsDiv.innerHTML = `
-      <button class="btn-approve" id="btn-approve-${id}" onclick="processLeave(${id},'approved',this)">✅ Approve</button>
-      <button class="btn-reject"  id="btn-reject-${id}"  onclick="processLeave(${id},'rejected',this)">❌ Reject</button>`;
-  }
-}
-
-// ── MANAGER REPORT ──
-function initMonthPicker() {
-  const grid=document.getElementById('month-picker-grid');
-  const today=new Date();
-  for(let i=0;i<6;i++){
-    const d=new Date(today.getFullYear(),today.getMonth()-i,1);
-    const ms=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-    const btn=document.createElement('div'); btn.className='month-btn'+(i===0?' selected':'');
-    btn.textContent=d.toLocaleDateString('en-US',{month:'short',year:'numeric'});
-    btn.onclick=()=>{document.querySelectorAll('.month-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');loadMgrReport(ms);};
-    grid.appendChild(btn);
-  }
-  const cur=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
-  loadMgrReport(cur);
-}
-async function loadMgrReport(monthStr) {
-  const res=document.getElementById('report-results');
-  res.innerHTML='<div class="loading"><div class="spinner"></div> Loading...</div>';
-  try {
-    const r=await api('mgr_monthly_report',{month:monthStr});
-    const employees=r.employees||[];
-    if(!employees.length){res.innerHTML='<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">No data.</div></div>';return;}
-    let html=`<div class="section-label">Results — ${monthStr}</div>`;
-    employees.forEach(e=>{
-      html+=`<div class="report-emp-card">
-        <div class="report-emp-name">${e.full_name} <span style="font-size:11px;color:var(--text3);font-weight:400;">${e.job_title}</span></div>
-        <div class="report-chips">
-          <div class="report-chip" style="background:var(--success-bg);color:var(--success);">✅ ${e.present} Present</div>
-          <div class="report-chip" style="background:var(--warning-bg);color:var(--warning);">⏰ ${e.late} Late</div>
-          <div class="report-chip" style="background:var(--error-bg);color:var(--error);">⚠️ ${e.half_day} Half</div>
-          <div class="report-chip" style="background:var(--info-bg);color:var(--info);">🏖️ ${e.leave} Leave</div>
-          <div class="report-chip" style="background:var(--error-bg);color:var(--error);">❌ ${e.absent} Absent</div>
-        </div>
-      </div>`;
-    });
-    res.innerHTML=html;
-  } catch(e){res.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load.</div></div>';}
-}
-
-// ── MANAGER EMPLOYEES ──
-async function loadMgrEmployees() {
-  const body=document.getElementById('mgr-employees-body');
-  body.innerHTML='<div class="loading"><div class="spinner"></div> Loading...</div>';
-  try {
-    const r=await api('mgr_employees',{});
-    const employees=r.employees||[];
-    if(!employees.length){body.innerHTML='<div class="empty"><div class="empty-icon">👥</div><div class="empty-text">No employees yet.</div></div>';return;}
-    let html=`<div class="section-label">${employees.length} member${employees.length>1?'s':''}</div><div class="emp-list">`;
-    employees.forEach(e=>{
-      const bal = e.leave_balance || {remaining:0,total:0};
-      html+=`<div class="emp-row" onclick="openEmpDetail(${e.telegram_id},'${e.full_name}')" style="cursor:pointer;">
-        <div class="emp-avatar">${initials(e.full_name)}</div>
-        <div class="emp-info">
-          <div class="emp-name">${e.full_name}</div>
-          <div class="emp-role">${e.job_title} · ${e.employment_type==='fulltime'?'FT':'PT'} · AL: ${bal.remaining}/${bal.total}</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
-          <span class="badge ${e.is_active?'badge-present':'badge-absent'}">${e.is_active?'Active':'Inactive'}</span>
-          <div style="font-size:10px;color:var(--text3);">Tap to manage ›</div>
-        </div>
-      </div>`;
-    });
-    html+='</div>';
-    body.innerHTML=html;
-  } catch(e){body.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load.</div></div>';}
-}
-async function removeEmp(tid, name, btnEl) {
-  if (!confirm('Remove ' + name + ' from the team?')) return;
-  if (btnEl) btnLoad(btnEl, 'Removing...');
-  try {
-    await api('mgr_remove_employee', {target_telegram_id: tid}, {cache: false});
-    invalidateCache('mgr_employees');
-    toast(name + ' removed', '');
-    loadMgrEmployees();
-  } catch(e) { toast(e.message||'Failed','error'); if (btnEl) btnReset(btnEl); }
-}
-
-// ── MY LEAVES ──
-async function loadMyLeaves() {
-  initLeaveTypes();
-  showScreen('screen-my-leaves');
-  const body=document.getElementById('my-leaves-body');
-  const balCard=document.getElementById('leave-balance-card');
-  body.innerHTML='<div class="loading"><div class="spinner"></div> Loading...</div>';
-  try {
-    const r=await api('my_leaves',{});
-    const bal=r.leave_balance||{total:18,used:0,remaining:18};
-    const pct=Math.round((bal.used/bal.total)*100);
-    balCard.innerHTML=`
-      <div class="overview-card">
-        <div style="font-size:12px;color:rgba(255,255,255,0.75);font-weight:600;margin-bottom:8px;letter-spacing:0.08em;">ANNUAL LEAVE BALANCE</div>
-        <div style="display:flex;align-items:flex-end;gap:8px;margin-bottom:12px;">
-          <div style="font-size:40px;font-weight:800;color:white;line-height:1;">${bal.remaining}</div>
-          <div style="font-size:14px;color:rgba(255,255,255,0.7);padding-bottom:6px;">/ ${bal.total} days</div>
-        </div>
-        <div style="background:rgba(255,255,255,0.2);border-radius:8px;height:8px;overflow:hidden;">
-          <div style="background:white;height:100%;border-radius:8px;width:${100-pct}%;transition:width 0.5s;"></div>
-        </div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:6px;">${bal.used} used · ${bal.remaining} remaining</div>
-      </div>`;
-    const leaves=r.leaves||[];
-    if(!leaves.length){body.innerHTML='<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">No leave requests yet.</div></div>';return;}
-    const smap={pending:['badge-late','Pending'],approved:['badge-present','Approved'],rejected:['badge-absent','Rejected']};
-    let html='<div class="section-label">Leave History</div><div class="att-list">';
-    leaves.forEach(l=>{
-      const [cls,label]=smap[l.status]||['badge-absent','Unknown'];
-      html+=`<div class="att-row">
-        <div class="att-dot" style="background:${l.status==='approved'?'var(--success)':l.status==='rejected'?'var(--error)':'var(--warning)'};"></div>
-        <div class="att-info">
-          <div class="att-date">${fmtDate(l.date)} · ${l.leave_type.charAt(0).toUpperCase()+l.leave_type.slice(1)}</div>
-          <div class="att-times">${l.reason}</div>
-        </div>
-        <span class="badge ${cls}">${label}</span>
-      </div>`;
-    });
-    html+='</div>';
-    body.innerHTML=html;
-  } catch(e){body.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load.</div></div>';}
-}
-
-// ── PAYROLL ──
-function initPayrollPicker() {
-  const grid=document.getElementById('payroll-month-grid');
-  if(!grid||grid.children.length>0) return;
-  const today=new Date();
-  for(let i=0;i<6;i++){
-    const d=new Date(today.getFullYear(),today.getMonth()-i,1);
-    const ms=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-    const btn=document.createElement('div'); btn.className='month-btn'+(i===0?' selected':'');
-    btn.textContent=d.toLocaleDateString('en-US',{month:'short',year:'numeric'});
-    btn.onclick=()=>{document.querySelectorAll('#payroll-month-grid .month-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');loadPayroll(ms);};
-    grid.appendChild(btn);
-  }
-  const cur=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
-  loadPayroll(cur);
-}
-
-async function loadPayroll(monthStr) {
-  const res = document.getElementById('payroll-results');
-  res.innerHTML = '<div class="loading"><div class="spinner"></div> Calculating...</div>';
-  try {
-    const r = await api('mgr_payroll', {month: monthStr}, {cache: false});
-    const payroll = r.payroll || [];
-    if (!payroll.length) {
-      res.innerHTML = '<div class="empty"><div class="empty-icon">💰</div><div class="empty-text">No employees found.</div></div>';
-      return;
-    }
-    let html = `<div class="section-label">Payroll — ${monthStr}</div>`;
-    // Store all payroll data upfront keyed by telegram_id
-    payroll.forEach(p => { _payrollStore[p.telegram_id] = p; });
-
-    payroll.forEach((p, idx) => {
-      const hasSalary  = p.monthly_salary > 0;
-      const net        = typeof p.net_salary === 'number' ? p.net_salary : 0;
-      const deductions = typeof p.total_deductions === 'number' ? p.total_deductions : 0;
-      const bonus      = typeof p.bonus === 'number' ? p.bonus : 0;
-      const totalPay   = net + bonus;
-      const proRata    = p.pro_rata_note ? `<div style="font-size:10px;color:var(--info);margin-top:2px;">📅 ${p.pro_rata_note}</div>` : '';
-      const detailId   = 'payroll-detail-'+idx;
-      html += `<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:12px;">
-        <!-- Top: name + net pay -->
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
-          <div>
-            <div style="font-size:14px;font-weight:700;">${p.full_name}</div>
-            <div style="font-size:11px;color:var(--text2);">${p.job_title}</div>
-            ${proRata}
-          </div>
-          ${hasSalary
-            ? `<div style="text-align:right;">
-                <div style="font-size:22px;font-weight:800;color:var(--success);">$${totalPay.toFixed(2)}</div>
-                <div style="font-size:10px;color:var(--text3);">total pay</div>
-               </div>`
-            : `<button onclick="openSetSalaryFromPayroll(${p.telegram_id},'${monthStr}')"
-                style="background:var(--grad);color:white;border:none;border-radius:10px;padding:8px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;">
-                + Set Salary
-               </button>`}
-        </div>
-        <!-- Attendance chips -->
-        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;">
-          <div class="report-chip" style="background:var(--success-bg);color:var(--success);">✅ ${p.present_days||0} Present</div>
-          <div class="report-chip" style="background:var(--warning-bg);color:var(--warning);">⏰ ${p.late_days||0} Late</div>
-          <div class="report-chip" style="background:var(--error-bg);color:var(--error);">❌ ${p.absent_days||0} Absent</div>
-          <div class="report-chip" style="background:var(--info-bg);color:var(--info);">🏖️ ${p.leave_paid||0} Leave</div>
-        </div>
-        ${hasSalary ? `
-        <!-- Dropdown toggle -->
-        <button onclick="togglePayrollDetail('${detailId}', this)"
-          style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
-          <span>View Breakdown</span><span id="${detailId}-arrow">▼</span>
-        </button>
-        <!-- Collapsible breakdown -->
-        <div id="${detailId}" style="display:none;background:var(--bg3);border-radius:12px;padding:14px;margin-bottom:12px;">
-          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);">
-            <span style="font-size:12px;color:var(--text2);">Base Salary</span>
-            <span style="font-size:12px;font-weight:700;">$${p.monthly_salary.toFixed(2)}</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);">
-            <span style="font-size:12px;color:var(--error);">Deductions</span>
-            <span style="font-size:12px;font-weight:700;color:var(--error);">-$${deductions.toFixed(2)}</span>
-          </div>
-          ${bonus > 0 ? `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);">
-            <span style="font-size:12px;color:var(--success);">Bonus${p.bonus_note ? ' ('+p.bonus_note+')' : ''}</span>
-            <span style="font-size:12px;font-weight:700;color:var(--success);">+$${bonus.toFixed(2)}</span>
-          </div>` : ''}
-          <div style="display:flex;justify-content:space-between;padding:8px 0 0;">
-            <span style="font-size:13px;font-weight:800;">Total Pay</span>
-            <span style="font-size:13px;font-weight:800;color:var(--success);">$${totalPay.toFixed(2)}</span>
-          </div>
-        </div>
-        <!-- Action buttons -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-          <button onclick="openAddBonus(${p.telegram_id},'${monthStr}')"
-            style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:var(--text);cursor:pointer;">
-            🎁 ${bonus > 0 ? 'Edit Bonus ($'+bonus.toFixed(0)+')' : 'Add Bonus'}
-          </button>
-          <button onclick="confirmSendPayslip(${p.telegram_id},'${monthStr}')"
-            style="background:var(--grad);border:none;border-radius:10px;padding:10px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:white;cursor:pointer;">
-            📤 Send Payslip
-          </button>
-        </div>` : `
-        <div style="background:var(--warning-bg);border-radius:10px;padding:12px;font-size:12px;color:var(--warning);font-weight:600;">
-          ⚠️ No salary set — tap "+ Set Salary" to calculate payroll
-        </div>`}
-      </div>`;
-    });
-    res.innerHTML = html;
-  } catch(e) {
-    res.innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">${e.message||'Could not load payroll.'}</div></div>`;
-  }
-}
-
-function togglePayrollDetail(id, btn) {
-  const el = document.getElementById(id);
-  const arrow = document.getElementById(id+'-arrow');
-  const isOpen = el.style.display !== 'none';
-  el.style.display = isOpen ? 'none' : 'block';
-  if (arrow) arrow.textContent = isOpen ? '▼' : '▲';
-  if (btn) btn.querySelector('span:first-child').textContent = isOpen ? 'View Breakdown' : 'Hide Breakdown';
-}
-
-function openAddBonus(tid, monthStr) {
-  const name = (_payrollStore[tid] || {}).full_name || 'Employee';
-  openModal(`
-    <div class="modal-title">Add Bonus</div>
-    <div class="modal-sub">${name} · ${monthStr}</div>
-    <div class="input-group">
-      <label class="input-label">Bonus Amount (USD)</label>
-      <input type="number" id="bonus-amount" placeholder="e.g. 50" min="0" step="1" style="font-size:18px;font-weight:700;">
-    </div>
-    <div class="input-group">
-      <label class="input-label">Note (optional)</label>
-      <input type="text" id="bonus-note" placeholder="e.g. Performance bonus, Year-end bonus">
-    </div>
-    <button class="btn btn-primary" id="bonus-submit-btn" onclick="submitBonus(${tid},'${monthStr}', this)">Add Bonus</button>
-  `);
-  setTimeout(() => document.getElementById('bonus-amount')?.focus(), 300);
-}
-
-async function submitBonus(tid, monthStr, btnEl) {
-  const name = (_payrollStore[tid] || {}).full_name || 'Employee';
-  const amount = parseFloat(document.getElementById('bonus-amount').value);
-  const note   = document.getElementById('bonus-note').value.trim() || 'Bonus';
-  if (!amount || amount <= 0) { toast('Enter a valid bonus amount', 'error'); return; }
-  const btn = btnEl || document.getElementById('bonus-submit-btn');
-  btnLoad(btn, 'Adding...');
-  try {
-    await api('mgr_add_bonus', {target_telegram_id: tid, amount, note, month: monthStr}, {cache: false});
-    toast('Bonus added for ' + name + ' ✅', 'success');
-    closeModalDirect();
-    loadPayroll(monthStr);
-  } catch(e) { toast(e.message || 'Failed', 'error'); btnReset(btn); }
-}
-
-// Store payroll data safely to avoid inline JSON issues
-const _payrollStore = {};
-function confirmSendPayslip(tid, monthStr) {
-  const payrollData = _payrollStore[tid] || {};
-  const name = payrollData.full_name || 'Employee';
-  const totalPay = ((payrollData.net_salary||0)+(payrollData.bonus||0)).toFixed(2);
-  openModal(`
-    <div class="modal-title">Send Payslip</div>
-    <div class="modal-sub">Confirm sending payslip to <strong>${name}</strong> for ${monthStr}</div>
-    <div style="background:var(--bg3);border-radius:12px;padding:16px;margin-bottom:20px;">
-      <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
-        <span style="font-size:13px;color:var(--text2);">Total Pay</span>
-        <span style="font-size:18px;font-weight:800;color:var(--success);">$${totalPay}</span>
-      </div>
-      <div style="font-size:12px;color:var(--text3);margin-top:6px;">This will be sent to ${name} via the HR Bot immediately.</div>
-    </div>
-    <button class="btn btn-primary" onclick="sendPayslip(${tid},'${monthStr}')">✅ Confirm & Send</button>
-    <button class="btn btn-ghost" onclick="closeModalDirect()" style="margin-top:0;">Cancel</button>
-  `);
-}
-
-async function sendPayslip(tid, monthStr) {
-  const payrollData = _payrollStore[tid];
-  if (!payrollData) { toast('Payroll data missing', 'error'); return; }
-  const name = payrollData.full_name || 'Employee';
-  const btn = document.querySelector('#modal-sheet .btn-primary');
-  btnLoad(btn, 'Sending...');
-  try {
-    await api('mgr_send_payslip', {target_telegram_id: tid, month: monthStr, payroll_data: payrollData}, {cache: false});
-    toast('Payslip sent to ' + name + ' ✅', 'success');
-    delete _payrollStore[tid];
-    closeModalDirect();
-  } catch(e) { toast(e.message || 'Failed to send', 'error'); btnReset(btn); }
-}
-
-// Set salary directly from payroll screen and reload
-function openSetSalaryFromPayroll(tid, monthStr) {
-  const name = (_payrollStore[tid] || {}).full_name || 'Employee';
-  openModal(`
-    <div class="modal-title">Set Salary</div>
-    <div class="modal-sub">${name}</div>
-    <div class="input-group">
-      <label class="input-label">Monthly Salary (USD)</label>
-      <input type="number" id="sal-payroll-amount" placeholder="e.g. 350" min="0" style="font-size:18px;font-weight:700;">
-    </div>
-    <button class="btn btn-primary" onclick="submitSalaryFromPayroll(${tid},'${monthStr}')">Save & Recalculate</button>
-  `);
-  setTimeout(() => document.getElementById('sal-payroll-amount')?.focus(), 300);
-}
-
-async function submitSalaryFromPayroll(tid, monthStr) {
-  const name = (_payrollStore[tid] || {}).full_name || 'Employee';
-  const salary = parseFloat(document.getElementById('sal-payroll-amount').value);
-  if (!salary || salary <= 0) { toast('Enter a valid salary', 'error'); return; }
-  const btn = document.querySelector('#modal-sheet .btn-primary');
-  btnLoad(btn, 'Saving...');
-  try {
-    await api('mgr_set_salary', {target_telegram_id: tid, salary}, {cache: false});
-    toast('Salary set for ' + name + ' ✅', 'success');
-    closeModalDirect();
-    loadPayroll(monthStr);
-  } catch(e) { toast(e.message || 'Failed', 'error'); btnReset(btn); }
-}
-
-// ── ANNOUNCE ──
-async function sendAnnouncement() {
-  const msg = document.getElementById('announce-msg').value.trim();
-  if (!msg) { toast('Please type a message', 'error'); return; }
-  const btn = document.querySelector('#screen-mgr-announce .btn-primary');
-  btnLoad(btn, 'Sending...');
-  try {
-    const r = await api('mgr_announce', {message: msg}, {cache: false});
-    toast(r.message || 'Sent! ✅', 'success');
-    document.getElementById('announce-msg').value = '';
-    btnReset(btn);
-  } catch(e) { toast(e.message || 'Failed', 'error'); btnReset(btn); }
-}
-
-// tab routing handled in switchTab/switchMgrTab above
-// ── MANAGER PROFILE ──
-async function loadMgrProfile() {
-  if (!isManager) return; // security guard
-  const body = document.getElementById('mgr-profile-body');
-  const name = currentUser?.first_name + (currentUser?.last_name ? ' ' + currentUser.last_name : '');
-  const av = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-  // Also fetch employee record if manager is registered
-  let empInfo = '';
   try {
     const r = await api('profile', {});
-    if (r.employee) {
-      const e = r.employee;
-      empInfo = `
-      <div class="info-row"><div class="info-key">Job Title</div><div class="info-val">${e.job_title || 'Manager'}</div></div>
-      <div class="info-row"><div class="info-key">Type</div><div class="info-val">${e.employment_type === 'fulltime' ? 'Full Time' : 'Part Time'}</div></div>
-      <div class="info-row"><div class="info-key">Work Hours</div><div class="info-val">${fmtTimeStr(e.work_start)} – ${fmtTimeStr(e.work_end)}</div></div>`;
+    employeeData = r.employee;
+    if (employeeData) { showScreen('screen-main'); loadMainScreen(); }
+    else { showScreen('screen-register'); }
+  } catch(e) { showScreen('screen-register'); }
+}
+window.addEventListener('load', initApp);
+
+async function api(action, data, opts={}) {
+  const cacheKey = _cacheKey(action, data);
+  // Return cached result for read-only calls (TTL: 30s)
+  const readOnly = ['today_status','attendance_history','my_leaves','leave_balance',
+                    'mgr_today_status','mgr_pending_leaves','mgr_employees','mgr_monthly_report','mgr_pending_count'];
+  if (opts.cache !== false && readOnly.includes(action) && _cache[cacheKey]) {
+    const {ts, val} = _cache[cacheKey];
+    if (Date.now() - ts < 30000) return val;
+  }
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 20000); // 20s timeout
+  try {
+    const r = await fetch(`${API_BASE}/miniapp/${action}`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({...data, telegram_id: currentUser?.id}),
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || 'Error');
+    // Cache read-only results
+    if (readOnly.includes(action)) _cache[cacheKey] = {ts: Date.now(), val: j};
+    return j;
+  } catch(e) {
+    clearTimeout(timeout);
+    if (e.name === 'AbortError') {
+      // Auto-retry once on timeout
+      if (!opts._retry) {
+        return api(action, data, {...opts, _retry:true});
+      }
+      throw new Error('Server is waking up. Please wait a moment and try again.');
     }
-  } catch(e) {}
-  body.innerHTML = `
-    <div class="profile-big-card">
-      <div class="pf-avatar">${av}</div>
-      <div class="pf-name">${name}</div>
-      <div class="pf-role">Manager · elyne</div>
-    </div>
-    <div class="info-card">
-      <div class="info-row"><div class="info-key">Role</div><div class="info-val">Manager</div></div>
-      <div class="info-row"><div class="info-key">Telegram ID</div><div class="info-val" style="font-size:12px;font-family:monospace;color:var(--text2);">${currentUser?.id}</div></div>
-      ${empInfo}
-      <div class="info-row"><div class="info-key">Leave Policy</div><div class="info-val">1.5 days / month</div></div>
-    </div>
-    <div style="margin-top:16px;">
-      <button class="btn btn-primary" onclick="switchMgrTab('announce')">📢 Send Announcement</button>
-    </div>`;
+    throw e;
+  }
 }
 
-
-
-// ── MODAL SYSTEM ──
-function openModal(html) {
-  document.getElementById('modal-content').innerHTML = html;
-  document.getElementById('modal-overlay').style.display = 'flex'; document.getElementById('modal-overlay').style.visibility = 'visible';
-  document.body.style.overflow = 'hidden';
-}
-function closeModal(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModalDirect();
-}
-function closeModalDirect() {
-  document.getElementById('modal-overlay').style.display = 'none'; document.getElementById('modal-overlay').style.visibility = 'hidden';
-  document.body.style.overflow = '';
-}
-
-// ── PENDING LEAVE BADGE ──
-async function refreshLeaveBadge() {
-  if (!isManager) return;
-  try {
-    const r = await api('mgr_pending_count', {});
-    const badge = document.getElementById('leaves-badge');
-    if (badge) {
-      if (r.count > 0) { badge.textContent = r.count; badge.style.display = 'flex'; }
-      else { badge.style.display = 'none'; }
-    }
-  } catch(e) {}
-}
-
-// ── SMART LEAVE TYPE SELECTION ──
-let leaveBalance = { remaining: 0, total: 0 };
-async function initLeaveTypes() {
-  try {
-    const r = await api('leave_balance', {});
-    leaveBalance = r;
-    const hasAL = r.remaining > 0;
-    const annualBtn = document.getElementById('lt-annual');
-    const balEl = document.getElementById('lt-annual-bal');
-    const notice = document.getElementById('leave-balance-notice');
-    if (balEl) balEl.textContent = `${r.remaining} days left`;
-    if (!hasAL) {
-      // Disable AL, auto-select unpaid
-      if (annualBtn) { annualBtn.classList.add('disabled'); annualBtn.onclick = null; annualBtn.classList.remove('selected'); }
-      const unpaidBtn = document.getElementById('lt-unpaid');
-      if (unpaidBtn) { unpaidBtn.classList.add('selected'); selectedLeaveType = 'unpaid'; }
-      if (notice) { notice.style.display = 'block'; notice.textContent = '⚠️ Annual leave balance is 0. Annual leave is disabled — please select Unpaid leave.'; }
-    } else {
-      if (annualBtn) { annualBtn.classList.remove('disabled'); annualBtn.onclick = () => selectLeaveType('annual', annualBtn); }
-      if (notice) notice.style.display = 'none';
-    }
-  } catch(e) {}
-}
-
-// ── EMPLOYEE DETAIL ──
-let currentEmpDetail = null;
-async function openEmpDetail(tid, name) {
-  currentEmpDetail = tid;
-  showScreen('screen-emp-detail');
-  const body = document.getElementById('emp-detail-body');
-  body.innerHTML = '<div class="loading"><div class="spinner"></div> Loading...</div>';
-  try {
-    const r = await api('mgr_employee_detail', { target_telegram_id: tid });
-    const e = r.employee; const bal = r.leave_balance; const m = r.this_month;
-    const pct = bal.total > 0 ? Math.round((bal.used / bal.total) * 100) : 0;
-    let html = `
-      <div class="emp-detail-hero">
-        <div class="emp-detail-avatar">${initials(e.full_name)}</div>
-        <div>
-          <div class="emp-detail-name">${e.full_name}</div>
-          <div class="emp-detail-role">${e.job_title} · ${e.employment_type === 'fulltime' ? 'Full Time' : 'Part Time'}</div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-top:4px;">${e.monthly_salary > 0 ? '$' + parseFloat(e.monthly_salary).toLocaleString() + '/mo' : 'No salary set'}</div>
-        </div>
-      </div>
-      <div class="section-label" style="margin-top:0;">This Month</div>
-      <div class="mgr-stat-grid" style="margin-bottom:20px;">
-        <div class="mgr-stat-card"><div class="mgr-stat-icon">✅</div><div class="mgr-stat-val" style="color:var(--success);">${m.present}</div><div class="mgr-stat-label">Present</div></div>
-        <div class="mgr-stat-card"><div class="mgr-stat-icon">⏰</div><div class="mgr-stat-val" style="color:var(--warning);">${m.late}</div><div class="mgr-stat-label">Late</div></div>
-        <div class="mgr-stat-card"><div class="mgr-stat-icon">❌</div><div class="mgr-stat-val" style="color:var(--error);">${m.absent}</div><div class="mgr-stat-label">Absent</div></div>
-        <div class="mgr-stat-card"><div class="mgr-stat-icon">⏱</div><div class="mgr-stat-val" style="font-size:16px;">${m.total_hours}</div><div class="mgr-stat-label">Total Hours</div></div>
-      </div>
-      <div class="section-label">Annual Leave Balance</div>
-      <div class="card" style="margin-bottom:20px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <div style="font-size:22px;font-weight:800;">${bal.remaining} <span style="font-size:13px;color:var(--text3);font-weight:400;">/ ${bal.total} days</span></div>
-          <span class="badge ${bal.remaining > 0 ? 'badge-present' : 'badge-absent'}">${bal.remaining > 0 ? 'Has Balance' : 'Empty'}</span>
-        </div>
-        <div class="al-bar-wrap"><div class="al-bar-fill" style="width:${100-pct}%;"></div></div>
-        <div style="font-size:11px;color:var(--text3);">${bal.used} used · ${bal.remaining} remaining · earns 1.5/month</div>
-      </div>
-      <div class="section-label">Manager Actions</div>
-      <div class="mgr-action-grid">
-        <div class="mgr-action-btn" onclick="openAdjustAttendance(${tid},'${e.full_name}')">
-          <div class="mgr-action-btn-icon">📋</div>
-          <div class="mgr-action-btn-label">Adjust Attendance</div>
-          <div class="mgr-action-btn-sub">Mark present/absent for a day</div>
-        </div>
-        <div class="mgr-action-btn" onclick="openAddLeave(${tid},'${e.full_name}')">
-          <div class="mgr-action-btn-icon">📅</div>
-          <div class="mgr-action-btn-label">Add Leave</div>
-          <div class="mgr-action-btn-sub">Assign leave directly</div>
-        </div>
-        <div class="mgr-action-btn" onclick="openAdjustAL(${tid},'${e.full_name}',${bal.remaining},${bal.total})">
-          <div class="mgr-action-btn-icon">📊</div>
-          <div class="mgr-action-btn-label">Adjust AL Balance</div>
-          <div class="mgr-action-btn-sub">Add or deduct days</div>
-        </div>
-        <div class="mgr-action-btn" onclick="openSetSalary(${tid},'${e.full_name}',${e.monthly_salary||0})">
-          <div class="mgr-action-btn-icon">💰</div>
-          <div class="mgr-action-btn-label">Set Salary</div>
-          <div class="mgr-action-btn-sub">${e.monthly_salary > 0 ? '$' + parseFloat(e.monthly_salary).toLocaleString() + '/mo' : 'Not set'}</div>
-        </div>
-      </div>`;
-
-    // Recent attendance
-    if (r.recent_attendance && r.recent_attendance.length > 0) {
-      html += '<div class="section-label">Recent Attendance</div><div class="att-list">';
-      const bmap = {present:['badge-present','Present','var(--success)'],late:['badge-late','Late','var(--warning)'],half_day_unpaid:['badge-half','Half Day','var(--error)'],on_leave:['badge-leave','On Leave','var(--info)'],absent:['badge-absent','Absent','var(--error)']};
-      r.recent_attendance.forEach(rec => {
-        const [cls,label,color] = bmap[rec.status] || ['badge-absent','—','#888'];
-        html += `<div class="att-row">
-          <div class="att-dot" style="background:${color};"></div>
-          <div class="att-info">
-            <div class="att-date">${fmtDate(rec.date)}</div>
-            <div class="att-times">In: ${fmtTime(rec.check_in_time)} · Out: ${fmtTime(rec.check_out_time)}${rec.note ? ' · ' + rec.note : ''}</div>
-          </div>
-          <span class="badge ${cls}">${label}</span>
-        </div>`;
-      });
-      html += '</div>';
-    }
-    body.innerHTML = html;
-  } catch(e) { body.innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load.</div></div>'; }
-}
-
-// ── ADJUST ATTENDANCE MODAL ──
-function openAdjustAttendance(tid, name) {
-  const today = new Date().toISOString().split('T')[0];
-  openModal(`
-    <div class="modal-title">Adjust Attendance</div>
-    <div class="modal-sub">For ${name}</div>
-    <div class="input-group">
-      <label class="input-label">Date</label>
-      <input type="date" id="adj-date" value="${today}" max="${today}">
-    </div>
-    <div class="input-group">
-      <label class="input-label">Status</label>
-      <div class="radio-group" style="flex-wrap:wrap;gap:8px;">
-        <div class="radio-btn selected" id="adj-present" onclick="selectAdjStatus('present')" style="flex:none;padding:10px 14px;">✅ Present</div>
-        <div class="radio-btn" id="adj-late" onclick="selectAdjStatus('late')" style="flex:none;padding:10px 14px;">⏰ Late</div>
-        <div class="radio-btn" id="adj-absent" onclick="selectAdjStatus('absent')" style="flex:none;padding:10px 14px;">❌ Absent</div>
-      </div>
-    </div>
-    <div class="input-group">
-      <label class="input-label">Note / Reason</label>
-      <input type="text" id="adj-note" placeholder="e.g. Off-site shoot, Client visit" value="Off-site work">
-    </div>
-    <button class="btn btn-primary" onclick="submitAdjAttendance(${tid},'${name}')">Save Attendance</button>
-  `);
-}
-let adjStatus = 'present';
-function selectAdjStatus(s) {
-  adjStatus = s;
-  ['present','late','absent'].forEach(x => {
-    document.getElementById('adj-'+x)?.classList.toggle('selected', x===s);
-  });
-}
-async function submitAdjAttendance(tid, name) {
-  const d = document.getElementById('adj-date').value;
-  const note = document.getElementById('adj-note').value.trim() || 'Adjusted by manager';
-  if (!d) { toast('Please select a date', 'error'); return; }
-  const btn = document.querySelector('#modal-sheet .btn-primary');
-  btnLoad(btn, 'Saving...');
-  try {
-    await api('mgr_adjust_attendance', {target_telegram_id: tid, date: d, status: adjStatus, note}, {cache: false});
-    invalidateCache('mgr_today_status','mgr_employees','mgr_employee_detail');
-    toast('Attendance updated for ' + name + ' ✅', 'success');
-    closeModalDirect();
-    openEmpDetail(tid, name);
-  } catch(e) { toast(e.message||'Failed','error'); btnReset(btn); }
-}
-
-// ── ADD LEAVE MODAL ──
-function openAddLeave(tid, name) {
-  const today = new Date().toISOString().split('T')[0];
-  openModal(`
-    <div class="modal-title">Add Leave</div>
-    <div class="modal-sub">Assign leave for ${name}</div>
-    <div class="input-group">
-      <label class="input-label">Date</label>
-      <input type="date" id="addlv-date" value="${today}">
-    </div>
-    <div class="input-group">
-      <label class="input-label">Leave Type</label>
-      <div class="radio-group" style="flex-wrap:wrap;gap:8px;">
-        <div class="radio-btn selected" id="addlv-annual" onclick="selectAddLeaveType('annual')" style="flex:none;padding:10px 14px;">🏖️ Annual</div>
-        <div class="radio-btn" id="addlv-sick" onclick="selectAddLeaveType('sick')" style="flex:none;padding:10px 14px;">🤒 Sick</div>
-        <div class="radio-btn" id="addlv-emergency" onclick="selectAddLeaveType('emergency')" style="flex:none;padding:10px 14px;">🚨 Emergency</div>
-        <div class="radio-btn" id="addlv-unpaid" onclick="selectAddLeaveType('unpaid')" style="flex:none;padding:10px 14px;">💸 Unpaid</div>
-      </div>
-    </div>
-    <div class="input-group">
-      <label class="input-label">Reason / Note</label>
-      <input type="text" id="addlv-reason" placeholder="e.g. Off-site shoot approved by manager">
-    </div>
-    <button class="btn btn-primary" onclick="submitAddLeave(${tid},'${name}')">Add Leave</button>
-  `);
-}
-let addLeaveType = 'annual';
-function selectAddLeaveType(t) {
-  addLeaveType = t;
-  ['annual','sick','emergency','unpaid'].forEach(x => {
-    document.getElementById('addlv-'+x)?.classList.toggle('selected', x===t);
-  });
-}
-async function submitAddLeave(tid, name) {
-  const d = document.getElementById('addlv-date').value;
-  const reason = document.getElementById('addlv-reason').value.trim() || 'Added by manager';
-  if (!d) { toast('Please select a date', 'error'); return; }
-  const btn = document.querySelector('#modal-sheet .btn-primary');
-  btnLoad(btn, 'Adding...');
-  try {
-    await api('mgr_add_leave', {target_telegram_id: tid, date: d, leave_type: addLeaveType, reason}, {cache: false});
-    invalidateCache('mgr_today_status','mgr_employees','mgr_employee_detail','mgr_pending_leaves');
-    toast('Leave added for ' + name + ' ✅', 'success');
-    closeModalDirect();
-    openEmpDetail(tid, name);
-  } catch(e) { toast(e.message||'Failed','error'); btnReset(btn); }
-}
-
-// ── ADJUST AL BALANCE MODAL ──
-function openAdjustAL(tid, name, remaining, total) {
-  openModal(`
-    <div class="modal-title">Adjust AL Balance</div>
-    <div class="modal-sub">${name} — Current: ${remaining}/${total} days</div>
-    <div class="input-group">
-      <label class="input-label">Action</label>
-      <div class="radio-group">
-        <div class="radio-btn selected" id="al-add" onclick="selectALAction('add')">➕ Add Days</div>
-        <div class="radio-btn" id="al-deduct" onclick="selectALAction('deduct')">➖ Deduct Days</div>
-      </div>
-    </div>
-    <div class="input-group">
-      <label class="input-label">Number of Days</label>
-      <input type="number" id="al-days" placeholder="e.g. 1.5" step="0.5" min="0.5" value="1">
-    </div>
-    <div class="input-group">
-      <label class="input-label">Reason</label>
-      <input type="text" id="al-note" placeholder="e.g. Carry-over from last year, Bonus days">
-    </div>
-    <button class="btn btn-primary" onclick="submitAdjAL(${tid},'${name}')">Update Balance</button>
-  `);
-}
-let alAction = 'add';
-function selectALAction(a) {
-  alAction = a;
-  document.getElementById('al-add')?.classList.toggle('selected', a==='add');
-  document.getElementById('al-deduct')?.classList.toggle('selected', a==='deduct');
-}
-async function submitAdjAL(tid, name) {
-  const days = parseFloat(document.getElementById('al-days').value);
-  const note = document.getElementById('al-note').value.trim() || 'Manual adjustment';
-  if (!days || days <= 0) { toast('Enter valid days', 'error'); return; }
-  const btn = document.querySelector('#modal-sheet .btn-primary');
-  btnLoad(btn, 'Updating...');
-  try {
-    await api('mgr_adjust_al_balance', {target_telegram_id: tid, action: alAction, days, note}, {cache: false});
-    invalidateCache('mgr_employees','mgr_employee_detail');
-    toast('Balance updated for ' + name + ' ✅', 'success');
-    closeModalDirect();
-    openEmpDetail(tid, name);
-  } catch(e) { toast(e.message||'Failed','error'); btnReset(btn); }
-}
-
-// ── SET SALARY MODAL ──
-function openSetSalary(tid, name, current) {
-  openModal(`
-    <div class="modal-title">Set Monthly Salary</div>
-    <div class="modal-sub">${name}${current > 0 ? ' — Current: $' + current.toLocaleString() : ''}</div>
-    <div class="input-group">
-      <label class="input-label">Monthly Salary (USD)</label>
-      <input type="number" id="sal-amount" placeholder="e.g. 350" value="${current || ''}" min="0">
-    </div>
-    <button class="btn btn-primary" onclick="submitSetSalary(${tid},'${name}')">Save Salary</button>
-  `);
-}
-async function submitSetSalary(tid, name) {
-  const salary = parseFloat(document.getElementById('sal-amount').value);
-  if (!salary || salary < 0) { toast('Enter valid salary', 'error'); return; }
-  const btn = document.querySelector('#modal-sheet .btn-primary');
-  btnLoad(btn, 'Saving...');
-  try {
-    await api('mgr_set_salary', {target_telegram_id: tid, salary}, {cache: false});
-    invalidateCache('mgr_employees','mgr_employee_detail');
-    toast('Salary updated for ' + name + ' ✅', 'success');
-    closeModalDirect();
-    openEmpDetail(tid, name);
-  } catch(e) { toast(e.message||'Failed','error'); btnReset(btn); }
-}
 
 // ── KEEP-ALIVE: ping Railway every 4 min to prevent cold starts ──
 setInterval(async () => {
@@ -2389,80 +1052,83 @@ setInterval(async () => {
 }, 4 * 60 * 1000);
 
 
-// ── HOLIDAYS ──
-async function loadHolidays() {
-  const body = document.getElementById('holidays-body');
-  if (!body) return;
-  body.innerHTML = '<div class="loading"><div class="spinner"></div> Loading...</div>';
-  try {
-    const year = new Date().getFullYear();
-    const r = await api('get_holidays', {year}, {cache: false});
-    const holidays = r.holidays || [];
-    if (!holidays.length) {
-      body.innerHTML = '<div class="empty"><div class="empty-icon">🗓️</div><div class="empty-text">No holidays added yet.</div></div>';
-      return;
-    }
-    let html = `<div class="section-label">${holidays.length} holidays in ${year}</div>`;
-    holidays.forEach(h => {
-      const d = new Date(h.date + 'T00:00:00');
-      const label = d.toLocaleDateString('en-US', {weekday:'short', day:'numeric', month:'long'});
-      html += `<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
-        <div>
-          <div style="font-size:13px;font-weight:700;">${h.name}</div>
-          <div style="font-size:11px;color:var(--text2);margin-top:2px;">${label}</div>
-        </div>
-        <button onclick="deleteHoliday(${h.id},'${h.name}', this)"
-          style="background:var(--error-bg);color:var(--error);border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;">
-          Remove
-        </button>
-      </div>`;
-    });
-    body.innerHTML = html;
-  } catch(e) {
-    body.innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">${e.message||'Could not load.'}</div></div>`;
-  }
+// ── UNIVERSAL BUTTON LOADING HELPERS ──
+function btnLoad(btnEl, msg='Loading...') {
+  if (!btnEl) return;
+  btnEl._origText = btnEl.innerHTML;
+  btnEl.disabled = true;
+  btnEl.innerHTML = `<span style="display:flex;align-items:center;justify-content:center;gap:8px;"><span class="spinner" style="width:14px;height:14px;border-width:2px;"></span>${msg}</span>`;
+  btnEl.style.opacity = '0.85';
+}
+function btnReset(btnEl) {
+  if (!btnEl) return;
+  btnEl.disabled = false;
+  btnEl.innerHTML = btnEl._origText || btnEl.innerHTML;
+  btnEl.style.opacity = '1';
+}
+function getBtn(e) {
+  // Get the button from a click event or element
+  if (!e) return null;
+  return e.target ? e.target.closest('button') : (e.tagName === 'BUTTON' ? e : null);
 }
 
-function openAddHoliday() {
-  const today = new Date().toISOString().split('T')[0];
-  openModal(`
-    <div class="modal-title">Add Holiday</div>
-    <div class="modal-sub">Add a Cambodia public holiday</div>
-    <div class="input-group">
-      <label class="input-label">Date</label>
-      <input type="date" id="holiday-date" value="${today}">
-    </div>
-    <div class="input-group">
-      <label class="input-label">Holiday Name</label>
-      <input type="text" id="holiday-name" placeholder="e.g. Khmer New Year">
-    </div>
-    <button class="btn btn-primary" onclick="submitAddHoliday(this)">Add Holiday</button>
-  `);
+// ── NAV LOADING STATE ──
+function navLoad(tabName) {
+  // Show subtle loading on nav items when switching tabs
+  document.querySelectorAll('.nav-item').forEach(n => n.style.opacity = '0.6');
+  setTimeout(() => document.querySelectorAll('.nav-item').forEach(n => n.style.opacity = '1'), 800);
 }
 
-async function submitAddHoliday(btnEl) {
-  const d = document.getElementById('holiday-date').value;
-  const name = document.getElementById('holiday-name').value.trim();
-  if (!d || !name) { toast('Please fill in both fields', 'error'); return; }
-  btnLoad(btnEl, 'Adding...');
-  try {
-    await api('mgr_add_holiday', {date: d, name}, {cache: false});
-    toast('Holiday added ✅', 'success');
-    closeModalDirect();
-    loadHolidays();
-  } catch(e) { toast(e.message || 'Failed', 'error'); btnReset(btnEl); }
+// Invalidate cache for a specific action (call after mutations)
+function invalidateCache(...actions) {
+  actions.forEach(a => { Object.keys(_cache).forEach(k => { if (k.startsWith(a)) delete _cache[k]; }); });
 }
 
-async function deleteHoliday(id, name, btnEl) {
-  if (!confirm('Remove ' + name + '?')) return;
-  btnLoad(btnEl, '...');
-  try {
-    await api('mgr_delete_holiday', {holiday_id: id}, {cache: false});
-    toast(name + ' removed', '');
-    loadHolidays();
-  } catch(e) { toast(e.message || 'Failed', 'error'); btnReset(btnEl); }
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
 }
 
+function toast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = `toast ${type} show`;
+  setTimeout(() => t.className='toast', 3000);
+}
+
+function dist(lat1,lng1,lat2,lng2) {
+  const R=6371000, p1=lat1*Math.PI/180, p2=lat2*Math.PI/180;
+  const dp=(lat2-lat1)*Math.PI/180, dl=(lng2-lng1)*Math.PI/180;
+  const a=Math.sin(dp/2)**2+Math.cos(p1)*Math.cos(p2)*Math.sin(dl/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+function fmtTime(iso) {
+  if (!iso) return '--:--';
+  return new Date(iso).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
+}
+function fmtDate(iso) {
+  if (!iso) return '--';
+  return new Date(iso).toLocaleDateString('en-US',{weekday:'short',day:'numeric',month:'short'});
+}
+function fmtTimeStr(t) {
+  if (!t) return '--';
+  const [h,m]=t.split(':'); const hr=parseInt(h);
+  return `${hr>12?hr-12:hr||12}:${m} ${hr>=12?'PM':'AM'}`;
+}
+function initials(name) { return name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(); }
+function greet() { const h=new Date().getHours(); return h<12?'Good morning':h<17?'Good afternoon':'Good evening'; }
+
+function switchTab(tab) {
+  navLoad(tab);
+  if (tab==='leave') { loadMyLeaves(); return; }
+  const m={main:'screen-main',attendance:'screen-attendance',profile:'screen-profile'};
+  if (!m[tab]) return;
+  showScreen(m[tab]);
+  if (tab==='attendance') loadAttendance();
+  if (tab==='profile') loadProfile();
+}
 </script>
 </body>
 </html>
