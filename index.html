@@ -834,600 +834,149 @@ textarea { min-height:90px; line-height:1.6; }
 
 <!-- MGR MAIN -->
 <!-- TOAST -->
+<div class="screen" id="screen-my-leaves">
+  <div class="top-bar">
+    <button class="back-btn" onclick="switchTab('main')">‹ Back</button>
+    <div class="top-logo">elyne HR</div>
+    <div></div>
+  </div>
+  <div class="body has-nav" style="padding-top:0;">
+    <div style="font-size:22px;font-weight:800;margin-bottom:4px;">Leave</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:16px;">Your leave balance & history</div>
+    <div id="my-leaves-body"><div class="loading"><div class="spinner"></div> Loading...</div></div>
+    <button class="btn btn-primary" onclick="goApplyLeave()" style="margin-top:16px;margin-bottom:8px;">+ Apply for Leave</button>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="switchTab('main')"><div class="nav-icon">⊞</div><div class="nav-label">Overview</div></button>
+    <button class="nav-item" onclick="switchTab('attendance')"><div class="nav-icon">📊</div><div class="nav-label">History</div></button>
+    <button class="nav-item active" onclick="switchTab('leave')"><div class="nav-icon">📅</div><div class="nav-label">Leave</div></button>
+    <button class="nav-item" onclick="switchTab('profile')"><div class="nav-icon">👤</div><div class="nav-label">Profile</div></button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 // ── CONFIG ──────────────────────────────────────────────────────────────────
-const BOT_TOKEN = 'STAFF_TOKEN_PLACEHOLDER';
-const API_BASE = 'BOT_API_URL_PLACEHOLDER';
-const OFFICE_LAT = 11.5564;
-const OFFICE_LNG = 104.9282;
+const API_BASE     = 'https://elyne-hr-bot-production.up.railway.app';
+const OFFICE_LAT   = 11.5764427;
+const OFFICE_LNG   = 104.8966103;
 const OFFICE_RADIUS = 100;
 
 // ── STATE ────────────────────────────────────────────────────────────────────
-let tg = window.Telegram?.WebApp;
-let currentUser = null;
-let employeeData = null;
+let currentUser       = null;
+let employeeData      = null;
+let selType           = 'fulltime';
 let selectedLeaveType = 'annual';
 let selectedLeaveDate = null;
 let calYear, calMonth;
-let userLat = null, userLng = null;
-let checkinMode = 'in'; // 'in' or 'out'
+let userLat, userLng;
+let _submitLeaveInProgress = false;
 
-// ── INIT ─────────────────────────────────────────────────────────────────────
-window.onload = async () => {
-  if (tg) {
-    tg.ready();
-    tg.expand();
-    tg.setBackgroundColor('#faf9f7');
-    tg.setHeaderColor('#ffffff');
-    currentUser = tg.initDataUnsafe?.user;
-  }
-
-  // For testing without Telegram, use a mock user
-  if (!currentUser) {
-    currentUser = { id: 999999, first_name: 'Test', last_name: 'User' };
-  }
-
-  initCalendar();
-
-  // Check if registered
+// ── UTILS ────────────────────────────────────────────────────────────────────
+function greet() {
+  const h = new Date().getHours();
+  return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+}
+function initials(name) {
+  return (name||'').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?';
+}
+function fmtTime(t) {
+  if (!t) return '—';
+  try { return new Date(t).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true}); }
+  catch { return t; }
+}
+function fmtTimeStr(s) {
+  if (!s) return '—';
   try {
-    const resp = await apiCall('check_employee', { telegram_id: currentUser.id });
-    if (resp.registered) {
-      employeeData = resp.employee;
-      await loadMainScreen();
-      showScreen('screen-main');
-    } else {
-      showScreen('screen-register');
-    }
-  } catch(e) {
-    // If API not connected yet, show main for demo
-    showScreen('screen-register');
-  }
-};
-
-// ── API ───────────────────────────────────────────────────────────────────────
-async function apiCall(action, data) {
-  // This will call your Railway backend
-  const url = `${API_BASE}/miniapp/${action}`;
-  const resp = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...data, telegram_id: currentUser?.id })
-  });
-  if (!resp.ok) throw new Error(await resp.text());
-  return resp.json();
+    const [h,m] = s.split(':');
+    const d = new Date(); d.setHours(+h,+m,0);
+    return d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
+  } catch { return s; }
+}
+function fmtDate(d) {
+  if (!d) return '—';
+  try { return new Date(d+'T00:00:00').toLocaleDateString('en-US',{weekday:'short',day:'numeric',month:'short'}); }
+  catch { return d; }
+}
+function dist(lat1,lng1,lat2,lng2) {
+  const R=6371000, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
 
-// ── HELPERS ──────────────────────────────────────────────────────────────────
+// ── TOAST ────────────────────────────────────────────────────────────────────
+function toast(msg, type='') {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = 'toast' + (type ? ' ' + type : '');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── SCREEN ───────────────────────────────────────────────────────────────────
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0, 0);
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
 }
 
-function showToast(msg, type = '') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = `toast ${type} show`;
-  setTimeout(() => t.className = 'toast', 3000);
+// ── BUTTON LOADING ────────────────────────────────────────────────────────────
+function btnLoad(btn, msg='Loading...') {
+  if (!btn) return;
+  btn._orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = `<span style="display:flex;align-items:center;justify-content:center;gap:8px;"><span class="spinner" style="width:14px;height:14px;border-width:2px;"></span>${msg}</span>`;
+  btn.style.opacity = '0.8';
+}
+function btnReset(btn) {
+  if (!btn) return;
+  btn.disabled = false;
+  btn.innerHTML = btn._orig || btn.innerHTML;
+  btn.style.opacity = '1';
 }
 
-function haversineDistance(lat1, lng1, lat2, lng2) {
-  const R = 6371000;
-  const phi1 = lat1 * Math.PI / 180, phi2 = lat2 * Math.PI / 180;
-  const dphi = (lat2 - lat1) * Math.PI / 180;
-  const dlambda = (lng2 - lng1) * Math.PI / 180;
-  const a = Math.sin(dphi/2)**2 + Math.cos(phi1)*Math.cos(phi2)*Math.sin(dlambda/2)**2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+// ── API CACHE ─────────────────────────────────────────────────────────────────
+const _cache = {};
+function invalidateCache(...actions) {
+  actions.forEach(a => Object.keys(_cache).forEach(k => { if (k.startsWith(a)) delete _cache[k]; }));
 }
 
-function formatTime(dt) {
-  if (!dt) return '--';
-  const d = new Date(dt);
-  return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-}
-
-function formatDate(dt) {
-  if (!dt) return '--';
-  const d = new Date(dt);
-  return d.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' });
-}
-
-function getGreeting() {
-  const h = new Date().getHours();
-  if (h < 12) return 'Good morning';
-  if (h < 17) return 'Good afternoon';
-  return 'Good evening';
-}
-
-// ── MAIN SCREEN ───────────────────────────────────────────────────────────────
-async function loadMainScreen() {
-  const now = new Date();
-  document.getElementById('main-date').textContent =
-    now.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-
-  if (employeeData) {
-    const first = employeeData.full_name.split(' ')[0];
-    document.getElementById('main-greeting').innerHTML =
-      `${getGreeting()}, <em>${first}</em>`;
-    document.getElementById('main-emp-type').textContent =
-      employeeData.employment_type === 'fulltime' ? 'Full Time' : 'Part Time';
-    const ws = employeeData.work_start || '09:00:00';
-    const we = employeeData.work_end || '17:00:00';
-    document.getElementById('main-shift').textContent =
-      `Shift: ${formatTimeStr(ws)} – ${formatTimeStr(we)}`;
+async function api(action, data, opts={}) {
+  const key = action + JSON.stringify(data||{});
+  const readOnly = ['today_status','attendance_history','my_leaves','leave_balance','profile'];
+  if (opts.cache !== false && readOnly.includes(action) && _cache[key]) {
+    const {ts,val} = _cache[key];
+    if (Date.now() - ts < 30000) return val;
   }
-
-  // Load today's attendance
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 20000);
   try {
-    const resp = await apiCall('today_status', {});
-    updateStatusCard(resp);
-  } catch(e) {
-    document.getElementById('today-status-time').textContent = '--:--';
-    document.getElementById('today-status-detail').textContent = 'Tap Check In to start your day';
-  }
-}
-
-function formatTimeStr(t) {
-  if (!t) return '--';
-  const [h, m] = t.split(':');
-  const hr = parseInt(h);
-  const ampm = hr >= 12 ? 'PM' : 'AM';
-  return `${hr > 12 ? hr-12 : hr || 12}:${m} ${ampm}`;
-}
-
-function updateStatusCard(data) {
-  const card = document.getElementById('today-status-card');
-  const timeEl = document.getElementById('today-status-time');
-  const detailEl = document.getElementById('today-status-detail');
-
-  card.className = 'status-card';
-
-  if (data.on_leave) {
-    timeEl.textContent = '🏖️';
-    detailEl.textContent = `On ${data.leave_type || 'Leave'} today`;
-    return;
-  }
-
-  if (data.check_in_time) {
-    const checkinTime = formatTime(data.check_in_time);
-    timeEl.textContent = checkinTime;
-    card.classList.add(data.status === 'late' || data.status === 'half_day_unpaid' ? 'late' : 'checked-in');
-
-    let detail = `Checked in`;
-    if (data.status === 'late') detail += ` · Late by ${data.late_minutes} min`;
-    if (data.status === 'half_day_unpaid') detail += ` · Half day unpaid`;
-    if (data.check_out_time) detail += ` · Out: ${formatTime(data.check_out_time)}`;
-    detailEl.textContent = detail;
-  } else {
-    timeEl.textContent = '--:--';
-    detailEl.textContent = 'Not checked in yet';
-    card.classList.add('absent');
-  }
-}
-
-// ── REGISTRATION ──────────────────────────────────────────────────────────────
-let selectedEmpType = 'fulltime';
-function selectType(type) {
-  selectedEmpType = type;
-  document.getElementById('type-fulltime').className = 'radio-btn' + (type === 'fulltime' ? ' selected' : '');
-  document.getElementById('type-parttime').className = 'radio-btn' + (type === 'parttime' ? ' selected' : '');
-}
-
-async function submitRegistration() {
-  const name = document.getElementById('reg-name').value.trim();
-  const title = document.getElementById('reg-title').value.trim();
-  if (!name || !title) { showToast('Please fill in all fields', 'error'); return; }
-
-  try {
-    await apiCall('register', { full_name: name, job_title: title, employment_type: selectedEmpType });
-    showToast('Profile created!', 'success');
-    employeeData = { full_name: name, job_title: title, employment_type: selectedEmpType, work_start: selectedEmpType === 'fulltime' ? '09:00:00' : '13:00:00', work_end: '17:00:00' };
-    await loadMainScreen();
-    showScreen('screen-main');
-  } catch(e) {
-    showToast('Registration failed. Try again.', 'error');
-  }
-}
-
-// ── CHECK IN / OUT ────────────────────────────────────────────────────────────
-function goCheckIn() {
-  checkinMode = 'in';
-  showScreen('screen-checkin');
-  resetLocationScreen('checkin');
-  startCheckin();
-}
-
-function goCheckOut() {
-  checkinMode = 'out';
-  showScreen('screen-checkout');
-  resetLocationScreen('checkout');
-  startCheckout();
-}
-
-function resetLocationScreen(mode) {
-  document.getElementById(`${mode}-icon`).textContent = '📍';
-  document.getElementById(`${mode}-title`).textContent = 'Verifying Location';
-  document.getElementById(`${mode}-sub`).textContent = 'Getting your GPS coordinates...';
-  document.getElementById(`${mode}-distance-bar`).style.display = 'none';
-  document.getElementById(`${mode}-btn`).style.display = 'none';
-  if (document.getElementById(`${mode}-retry`)) document.getElementById(`${mode}-retry`).style.display = 'none';
-  if (mode === 'checkout') document.getElementById('early-reason-section').style.display = 'none';
-}
-
-function startCheckin() {
-  resetLocationScreen('checkin');
-  getLocation('checkin');
-}
-
-function startCheckout() {
-  resetLocationScreen('checkout');
-  getLocation('checkout');
-}
-
-function getLocation(mode) {
-  if (!navigator.geolocation) {
-    setLocationError(mode, 'GPS not available on this device.');
-    return;
-  }
-  navigator.geolocation.getCurrentPosition(
-    pos => handleLocationSuccess(mode, pos),
-    err => setLocationError(mode, 'Could not get your location. Please enable GPS.'),
-    { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
-  );
-}
-
-function handleLocationSuccess(mode, pos) {
-  userLat = pos.coords.latitude;
-  userLng = pos.coords.longitude;
-  const dist = haversineDistance(userLat, userLng, OFFICE_LAT, OFFICE_LNG);
-  const distBar = document.getElementById(`${mode}-distance-bar`);
-  const distEl = document.getElementById(`${mode}-distance`);
-
-  distBar.style.display = 'flex';
-  distEl.textContent = `${Math.round(dist)}m away`;
-
-  if (dist <= OFFICE_RADIUS) {
-    distEl.className = 'distance-value ok';
-    document.getElementById(`${mode}-icon`).textContent = '✅';
-    document.getElementById(`${mode}-title`).textContent = 'You\'re at the office';
-    document.getElementById(`${mode}-sub`).textContent = `Within ${Math.round(dist)}m of the office. Ready to ${mode === 'checkin' ? 'check in' : 'check out'}.`;
-
-    if (mode === 'checkout') {
-      // Check if early leave
-      const now = new Date();
-      const workEnd = employeeData?.work_end || '17:00:00';
-      const [wh, wm] = workEnd.split(':');
-      const endTime = new Date(); endTime.setHours(parseInt(wh), parseInt(wm), 0);
-      if (now < new Date(endTime.getTime() - 15*60*1000)) {
-        document.getElementById('early-reason-section').style.display = 'block';
-      }
-    }
-
-    document.getElementById(`${mode}-btn`).style.display = 'block';
-  } else {
-    distEl.className = 'distance-value far';
-    setLocationError(mode, `You are ${Math.round(dist)}m from the office. You must be within ${OFFICE_RADIUS}m to check ${mode === 'checkin' ? 'in' : 'out'}.`);
-    document.getElementById(`${mode}-retry`).style.display = 'block';
-  }
-}
-
-function setLocationError(mode, msg) {
-  document.getElementById(`${mode}-icon`).textContent = '❌';
-  document.getElementById(`${mode}-title`).textContent = 'Location Error';
-  document.getElementById(`${mode}-sub`).textContent = msg;
-}
-
-async function confirmCheckIn() {
-  document.getElementById('checkin-btn').disabled = true;
-  document.getElementById('checkin-btn').textContent = 'Checking in...';
-  try {
-    const resp = await apiCall('checkin', { lat: userLat, lng: userLng });
-    showToast(resp.message || 'Checked in!', 'success');
-    await loadMainScreen();
-    showScreen('screen-main');
-  } catch(e) {
-    showToast(e.message || 'Check-in failed', 'error');
-    document.getElementById('checkin-btn').disabled = false;
-    document.getElementById('checkin-btn').textContent = 'Confirm Check In';
-  }
-}
-
-async function confirmCheckOut() {
-  const earlyReason = document.getElementById('early-reason').value.trim();
-  const earlySection = document.getElementById('early-reason-section');
-
-  if (earlySection.style.display !== 'none' && !earlyReason) {
-    showToast('Please provide a reason for early leave', 'error');
-    return;
-  }
-
-  document.getElementById('checkout-btn').disabled = true;
-  document.getElementById('checkout-btn').textContent = 'Checking out...';
-
-  try {
-    const resp = await apiCall('checkout', { lat: userLat, lng: userLng, early_reason: earlyReason || null });
-    showToast(resp.message || 'Checked out!', 'success');
-    await loadMainScreen();
-    showScreen('screen-main');
-  } catch(e) {
-    showToast(e.message || 'Check-out failed', 'error');
-    document.getElementById('checkout-btn').disabled = false;
-    document.getElementById('checkout-btn').textContent = 'Confirm Check Out';
-  }
-}
-
-// ── CALENDAR ──────────────────────────────────────────────────────────────────
-function initCalendar() {
-  const now = new Date();
-  calYear = now.getFullYear();
-  calMonth = now.getMonth();
-  renderCalendar();
-}
-
-function changeMonth(dir) {
-  calMonth += dir;
-  if (calMonth > 11) { calMonth = 0; calYear++; }
-  if (calMonth < 0) { calMonth = 11; calYear--; }
-  renderCalendar();
-}
-
-function renderCalendar() {
-  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('cal-title').textContent = `${months[calMonth]} ${calYear}`;
-
-  const grid = document.getElementById('cal-grid');
-  grid.innerHTML = '';
-
-  ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(d => {
-    const el = document.createElement('div');
-    el.className = 'cal-day-name';
-    el.textContent = d;
-    grid.appendChild(el);
-  });
-
-  const firstDay = new Date(calYear, calMonth, 1).getDay();
-  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
-  const today = new Date();
-
-  for (let i = 0; i < firstDay; i++) {
-    grid.appendChild(document.createElement('div'));
-  }
-
-  for (let d = 1; d <= daysInMonth; d++) {
-    const el = document.createElement('div');
-    el.className = 'cal-day';
-    el.textContent = d;
-
-    const thisDate = new Date(calYear, calMonth, d);
-    const isToday = thisDate.toDateString() === today.toDateString();
-    const isPast = thisDate < new Date(today.setHours(0,0,0,0));
-    const isSelected = selectedLeaveDate &&
-      thisDate.toDateString() === new Date(selectedLeaveDate).toDateString();
-
-    if (isToday) el.classList.add('today');
-    if (isPast) el.classList.add('past');
-    if (isSelected) el.classList.add('selected');
-
-    if (!isPast) {
-      el.onclick = () => selectDate(calYear, calMonth, d);
-    }
-    grid.appendChild(el);
-  }
-}
-
-function selectDate(y, m, d) {
-  selectedLeaveDate = new Date(y, m, d);
-  renderCalendar();
-
-  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  document.getElementById('selected-date-text').textContent =
-    `${days[selectedLeaveDate.getDay()]}, ${d} ${months[m]} ${y}`;
-  document.getElementById('selected-date-display').style.display = 'block';
-}
-
-function selectLeaveType(type, el) {
-  selectedLeaveType = type;
-  document.querySelectorAll('.leave-type-btn').forEach(b => b.classList.remove('selected'));
-  el.classList.add('selected');
-}
-
-async function submitLeave() {
-  if (!selectedLeaveDate) { showToast('Please select a date', 'error'); return; }
-  const reason = document.getElementById('leave-reason').value.trim();
-  if (!reason) { showToast('Please provide a reason', 'error'); return; }
-
-  const dateStr = selectedLeaveDate.toISOString().split('T')[0];
-
-  try {
-    await apiCall('apply_leave', { leave_type: selectedLeaveType, date: dateStr, reason });
-    showToast('Leave request submitted!', 'success');
-    selectedLeaveDate = null;
-    document.getElementById('leave-reason').value = '';
-    document.getElementById('selected-date-display').style.display = 'none';
-    renderCalendar();
-    setTimeout(() => showScreen('screen-main'), 1500);
-  } catch(e) {
-    showToast('Failed to submit. Try again.', 'error');
-  }
-}
-
-// ── ATTENDANCE HISTORY ────────────────────────────────────────────────────────
-async function goAttendance() {
-  showScreen('screen-attendance');
-  const body = document.getElementById('attendance-body');
-  body.innerHTML = '<div class="loading"><div class="spinner"></div> Loading...</div>';
-
-  try {
-    const resp = await apiCall('attendance_history', {});
-    const records = resp.records || [];
-
-    if (records.length === 0) {
-      body.innerHTML = '<div class="empty"><div class="empty-icon">📊</div>No attendance records yet.</div>';
-      return;
-    }
-
-    const badgeMap = {
-      present: ['badge-present', 'Present'],
-      late: ['badge-late', 'Late'],
-      half_day_unpaid: ['badge-half', 'Half Day'],
-      on_leave: ['badge-leave', 'On Leave'],
-      absent: ['badge-absent', 'Absent'],
-    };
-
-    let html = '<div class="section-title">Recent Attendance</div><div class="attendance-list">';
-    records.forEach(r => {
-      const [cls, label] = badgeMap[r.status] || ['badge-absent', 'Unknown'];
-      const checkin = r.check_in_time ? formatTime(r.check_in_time) : '--';
-      const checkout = r.check_out_time ? formatTime(r.check_out_time) : '--';
-      html += `
-        <div class="att-row">
-          <div>
-            <div class="att-date">${formatDate(r.date)}</div>
-            <div class="att-times">In: ${checkin} · Out: ${checkout}</div>
-          </div>
-          <div class="att-badge ${cls}">${label}</div>
-        </div>`;
+    const r = await fetch(`${API_BASE}/miniapp/${action}`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({...data, telegram_id: currentUser?.id}),
+      signal: ctrl.signal
     });
-    html += '</div>';
-    body.innerHTML = html;
+    clearTimeout(timer);
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || 'Error');
+    if (readOnly.includes(action)) _cache[key] = {ts: Date.now(), val: j};
+    return j;
   } catch(e) {
-    body.innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div>Could not load records.</div>';
-  }
-}
-
-// ── PROFILE ───────────────────────────────────────────────────────────────────
-async function goProfile() {
-  showScreen('screen-profile');
-  const body = document.getElementById('profile-body');
-
-  if (!employeeData) {
-    body.innerHTML = '<div class="empty"><div class="empty-icon">👤</div>Not registered yet.</div>';
-    return;
-  }
-
-  const ws = formatTimeStr(employeeData.work_start || '09:00:00');
-  const we = formatTimeStr(employeeData.work_end || '17:00:00');
-
-  body.innerHTML = `
-    <div style="text-align:center;padding:32px 0 24px;">
-      <div style="width:72px;height:72px;background:var(--cream);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;">🌿</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;">${employeeData.full_name}</div>
-      <div style="font-size:13px;color:var(--mid);margin-top:4px;">${employeeData.job_title}</div>
-    </div>
-    <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:24px;">
-      <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-        <div style="font-size:12px;color:var(--mid);">Employment Type</div>
-        <div style="font-size:13px;font-weight:500;">${employeeData.employment_type === 'fulltime' ? 'Full Time' : 'Part Time'}</div>
-      </div>
-      <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-        <div style="font-size:12px;color:var(--mid);">Work Hours</div>
-        <div style="font-size:13px;font-weight:500;">${ws} – ${we}</div>
-      </div>
-      <div style="padding:16px 20px;display:flex;justify-content:space-between;align-items:center;">
-        <div style="font-size:12px;color:var(--mid);">Work Days</div>
-        <div style="font-size:13px;font-weight:500;">Mon – Fri</div>
-      </div>
-    </div>
-    <div style="background:var(--cream);border-radius:var(--radius);padding:16px 20px;text-align:center;">
-      <div style="font-size:12px;color:var(--mid);margin-bottom:4px;">Telegram ID</div>
-      <div style="font-size:13px;font-family:monospace;color:var(--charcoal);">${currentUser?.id}</div>
-    </div>
-  `;
-}
-
-function switchTab(tab) {
-  navLoad(tab);
-  if (tab==='leave') { loadMyLeaves(); return; }
-  const m={main:'screen-main',attendance:'screen-attendance',profile:'screen-profile'};
-  if (!m[tab]) return;
-  showScreen(m[tab]);
-  if (tab==='attendance') loadAttendance();
-  if (tab==='profile') loadProfile();
-}
-// ── REGISTRATION ──
-let selType = 'fulltime';
-function selectType(t) {
-  selType = t;
-  document.getElementById('type-fulltime').classList.toggle('selected', t==='fulltime');
-  document.getElementById('type-parttime').classList.toggle('selected', t==='parttime');
-}
-
-// ── GPS / CHECK-IN ──
-function onGPS(p, pos) {
-  const dow = new Date().getDay();
-  if (dow === 0 || dow === 6) {
-    document.getElementById(`${p}-ring`).className='loc-ring';
-    document.getElementById(`${p}-ring`).textContent='🌴';
-    document.getElementById(`${p}-title`).textContent='Weekend!';
-    document.getElementById(`${p}-sub`).textContent='Today is a weekend — no attendance required.';
-    return;
-  }
-  userLat=pos.coords.latitude; userLng=pos.coords.longitude;
-  const d=dist(userLat,userLng,OFFICE_LAT,OFFICE_LNG);
-  document.getElementById(`${p}-pill`).style.display='flex';
-  const dv=document.getElementById(`${p}-dist`);
-  dv.textContent=`${Math.round(d)}m away`;
-  const ring=document.getElementById(`${p}-ring`);
-  const title=document.getElementById(`${p}-title`);
-  const sub=document.getElementById(`${p}-sub`);
-  const btn=document.getElementById(`${p}-btn`);
-  if (d<=OFFICE_RADIUS) {
-    ring.className='loc-ring in-range'; ring.textContent='✓';
-    title.textContent='You're at the office';
-    sub.textContent='GPS verified — ready to '+(p==='ci'?'check in':'check out');
-    if(btn){btn.style.display='block';}
-  } else {
-    ring.className='loc-ring out-range'; ring.textContent='✗';
-    title.textContent='Too far from office';
-    sub.textContent=`${Math.round(d)}m away — must be within ${OFFICE_RADIUS}m`;
-    if(btn){btn.style.display='none';}
-  }
-}
-
-// ── LEAVE TYPE SCREEN ──
-async function goApplyLeave() {
-  showScreen('screen-leave');
-  initLeaveTypes();
-  initCalendar();
-  selectedLeaveDate = null;
-  document.getElementById('sel-date-chip').style.display = 'none';
-  document.getElementById('leave-reason').value = '';
-}
-
-async function initLeaveTypes() {
-  try {
-    const r = await api('leave_balance', {});
-    const hasAL = r.remaining > 0;
-    const annualBtn = document.getElementById('lt-annual');
-    const balEl = document.getElementById('lt-annual-bal');
-    const notice = document.getElementById('leave-balance-notice');
-    if (balEl) balEl.textContent = `${r.remaining} days left`;
-    if (!hasAL) {
-      if (annualBtn) { annualBtn.classList.add('disabled'); annualBtn.onclick = null; annualBtn.classList.remove('selected'); }
-      const unpaidBtn = document.getElementById('lt-unpaid');
-      if (unpaidBtn) { unpaidBtn.classList.add('selected'); selectedLeaveType = 'unpaid'; }
-      if (notice) { notice.style.display='block'; notice.textContent='⚠️ Annual leave balance is 0 — please select Unpaid leave.'; }
-    } else {
-      if (annualBtn) { annualBtn.classList.remove('disabled'); annualBtn.onclick = () => selectLeaveType('annual', annualBtn); }
-      if (notice) notice.style.display = 'none';
+    clearTimeout(timer);
+    if (e.name === 'AbortError') {
+      if (!opts._retry) return api(action, data, {...opts, _retry:true});
+      throw new Error('Server is waking up. Please try again.');
     }
-  } catch(e) {}
+    throw e;
+  }
 }
 
-// ── CALENDAR DATE SELECT ──
-function selectLeaveDate(dateStr) {
-  selectedLeaveDate = new Date(dateStr + 'T00:00:00');
-  const chip = document.getElementById('sel-date-chip');
-  const txt  = document.getElementById('sel-date-text');
-  if (chip) chip.style.display = 'flex';
-  if (txt) txt.textContent = selectedLeaveDate.toLocaleDateString('en-US',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  renderCalendar();
-}
+// ── KEEP-ALIVE ────────────────────────────────────────────────────────────────
+setInterval(async () => { try { await fetch(API_BASE+'/health'); } catch(e) {} }, 4*60*1000);
 
+// ── INIT APP ─────────────────────────────────────────────────────────────────
 async function initApp() {
   const tg = window.Telegram?.WebApp;
   if (tg) { tg.ready(); tg.expand(); currentUser = tg.initDataUnsafe?.user; }
@@ -1444,122 +993,322 @@ async function initApp() {
 }
 window.addEventListener('load', initApp);
 
-async function api(action, data, opts={}) {
-  const cacheKey = _cacheKey(action, data);
-  // Return cached result for read-only calls (TTL: 30s)
-  const readOnly = ['today_status','attendance_history','my_leaves','leave_balance',
-                    'mgr_today_status','mgr_pending_leaves','mgr_employees','mgr_monthly_report','mgr_pending_count'];
-  if (opts.cache !== false && readOnly.includes(action) && _cache[cacheKey]) {
-    const {ts, val} = _cache[cacheKey];
-    if (Date.now() - ts < 30000) return val;
-  }
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 20000); // 20s timeout
-  try {
-    const r = await fetch(`${API_BASE}/miniapp/${action}`, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({...data, telegram_id: currentUser?.id}),
-      signal: controller.signal
-    });
-    clearTimeout(timeout);
-    const j = await r.json();
-    if (!j.ok) throw new Error(j.error || 'Error');
-    // Cache read-only results
-    if (readOnly.includes(action)) _cache[cacheKey] = {ts: Date.now(), val: j};
-    return j;
-  } catch(e) {
-    clearTimeout(timeout);
-    if (e.name === 'AbortError') {
-      // Auto-retry once on timeout
-      if (!opts._retry) {
-        return api(action, data, {...opts, _retry:true});
-      }
-      throw new Error('Server is waking up. Please wait a moment and try again.');
-    }
-    throw e;
-  }
-}
-
-
-// ── KEEP-ALIVE: ping Railway every 4 min to prevent cold starts ──
-setInterval(async () => {
-  try { await fetch(API_BASE + '/health'); } catch(e) {}
-}, 4 * 60 * 1000);
-
-
-// ── UNIVERSAL BUTTON LOADING HELPERS ──
-function btnLoad(btnEl, msg='Loading...') {
-  if (!btnEl) return;
-  btnEl._origText = btnEl.innerHTML;
-  btnEl.disabled = true;
-  btnEl.innerHTML = `<span style="display:flex;align-items:center;justify-content:center;gap:8px;"><span class="spinner" style="width:14px;height:14px;border-width:2px;"></span>${msg}</span>`;
-  btnEl.style.opacity = '0.85';
-}
-function btnReset(btnEl) {
-  if (!btnEl) return;
-  btnEl.disabled = false;
-  btnEl.innerHTML = btnEl._origText || btnEl.innerHTML;
-  btnEl.style.opacity = '1';
-}
-function getBtn(e) {
-  // Get the button from a click event or element
-  if (!e) return null;
-  return e.target ? e.target.closest('button') : (e.tagName === 'BUTTON' ? e : null);
-}
-
-// ── NAV LOADING STATE ──
-function navLoad(tabName) {
-  // Show subtle loading on nav items when switching tabs
-  document.querySelectorAll('.nav-item').forEach(n => n.style.opacity = '0.6');
-  setTimeout(() => document.querySelectorAll('.nav-item').forEach(n => n.style.opacity = '1'), 800);
-}
-
-// Invalidate cache for a specific action (call after mutations)
-function invalidateCache(...actions) {
-  actions.forEach(a => { Object.keys(_cache).forEach(k => { if (k.startsWith(a)) delete _cache[k]; }); });
-}
-
-
-
-
-function toast(msg, type='') {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.className = `toast ${type} show`;
-  setTimeout(() => t.className='toast', 3000);
-}
-
-function dist(lat1,lng1,lat2,lng2) {
-  const R=6371000, p1=lat1*Math.PI/180, p2=lat2*Math.PI/180;
-  const dp=(lat2-lat1)*Math.PI/180, dl=(lng2-lng1)*Math.PI/180;
-  const a=Math.sin(dp/2)**2+Math.cos(p1)*Math.cos(p2)*Math.sin(dl/2)**2;
-  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-}
-
-function fmtTime(iso) {
-  if (!iso) return '--:--';
-  return new Date(iso).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
-}
-function fmtDate(iso) {
-  if (!iso) return '--';
-  return new Date(iso).toLocaleDateString('en-US',{weekday:'short',day:'numeric',month:'short'});
-}
-function fmtTimeStr(t) {
-  if (!t) return '--';
-  const [h,m]=t.split(':'); const hr=parseInt(h);
-  return `${hr>12?hr-12:hr||12}:${m} ${hr>=12?'PM':'AM'}`;
-}
-function initials(name) { return name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(); }
-function greet() { const h=new Date().getHours(); return h<12?'Good morning':h<17?'Good afternoon':'Good evening'; }
-
+// ── NAV ──────────────────────────────────────────────────────────────────────
 function switchTab(tab) {
-  navLoad(tab);
-  if (tab==='leave') { loadMyLeaves(); return; }
-  const m={main:'screen-main',attendance:'screen-attendance',profile:'screen-profile'};
+  const m = {main:'screen-main', attendance:'screen-attendance', leave:'screen-my-leaves', profile:'screen-profile'};
   if (!m[tab]) return;
   showScreen(m[tab]);
+  if (tab==='main') loadMainScreen();
   if (tab==='attendance') loadAttendance();
   if (tab==='profile') loadProfile();
+  if (tab==='leave') loadMyLeaves();
 }
+
+// ── REGISTRATION ──────────────────────────────────────────────────────────────
+function selectType(t) {
+  selType = t;
+  document.getElementById('type-fulltime').classList.toggle('selected', t==='fulltime');
+  document.getElementById('type-parttime').classList.toggle('selected', t==='parttime');
+}
+
+async function submitRegistration() {
+  const name  = document.getElementById('reg-name').value.trim();
+  const title = document.getElementById('reg-title').value.trim();
+  if (!name || !title) { toast('Please fill in all fields','error'); return; }
+  const btn = document.querySelector('#screen-register .btn-primary');
+  btnLoad(btn, 'Creating...');
+  try {
+    await api('register', {full_name:name, job_title:title, employment_type:selType}, {cache:false});
+    const r = await api('profile', {}, {cache:false});
+    employeeData = r.employee;
+    toast('Welcome to elyne! 🌿','success');
+    setTimeout(() => { showScreen('screen-main'); loadMainScreen(); }, 1000);
+  } catch(e) { toast(e.message||'Failed','error'); btnReset(btn); }
+}
+
+// ── MAIN SCREEN ───────────────────────────────────────────────────────────────
+async function loadMainScreen() {
+  if (!employeeData) return;
+  const first = employeeData.full_name.split(' ')[0];
+  const dow = new Date().getDay();
+  const isWeekend = dow===0||dow===6;
+  const el = id => document.getElementById(id);
+
+  if (el('main-welcome-line')) el('main-welcome-line').textContent = isWeekend ? `Happy weekend, ${first}! 🌴` : `${greet()}, ${first}!`;
+  if (el('main-name'))   el('main-name').textContent  = employeeData.full_name;
+  if (el('main-role'))   el('main-role').textContent  = employeeData.job_title;
+  if (el('main-avatar')) el('main-avatar').textContent = initials(employeeData.full_name);
+  if (el('ov-date'))  el('ov-date').textContent  = new Date().toLocaleDateString('en-US',{day:'numeric',month:'long',year:'numeric'});
+  if (el('ov-now'))   el('ov-now').textContent   = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
+
+  if (!isWeekend) {
+    try {
+      const ts = await api('today_status', {});
+      if (ts.is_holiday) {
+        if (el('main-welcome-line')) el('main-welcome-line').textContent = `Happy Holiday, ${first}! 🎉`;
+        const body = document.querySelector('#screen-main .body');
+        if (body && !document.getElementById('holiday-banner')) {
+          const banner = document.createElement('div');
+          banner.id = 'holiday-banner';
+          banner.style.cssText = 'background:linear-gradient(135deg,#f5a623,#f7c948);border-radius:16px;padding:18px;margin-bottom:16px;text-align:center;';
+          banner.innerHTML = `<div style="font-size:24px;margin-bottom:6px;">🎉</div><div style="font-size:15px;font-weight:800;color:#7a4800;">${ts.holiday_name}</div><div style="font-size:12px;color:#a06000;margin-top:4px;">Public Holiday — Enjoy your day!</div>`;
+          body.prepend(banner);
+        }
+        document.querySelectorAll('.action-card').forEach(c => c.style.display='none');
+        return;
+      }
+      if (el('ov-checkin'))  el('ov-checkin').textContent  = ts.check_in_time  ? fmtTime(ts.check_in_time)  : '—';
+      if (el('ov-checkout')) el('ov-checkout').textContent = ts.check_out_time ? fmtTime(ts.check_out_time) : '—';
+    } catch(e) {}
+  }
+}
+
+// ── CHECK-IN/OUT ──────────────────────────────────────────────────────────────
+async function goCheckIn() {
+  if (new Date().getDay()===0||new Date().getDay()===6) { toast('Weekend — no attendance required 🌴',''); return; }
+  showScreen('screen-checkin'); resetLoc('ci'); startCheckin();
+}
+async function goCheckOut() {
+  if (new Date().getDay()===0||new Date().getDay()===6) { toast('Weekend — no attendance required 🌴',''); return; }
+  showScreen('screen-checkout'); resetLoc('co'); startCheckout();
+}
+function resetLoc(p) {
+  const el = id => document.getElementById(id);
+  if(el(`${p}-ring`)) { el(`${p}-ring`).className='loc-ring'; el(`${p}-ring`).textContent='📍'; }
+  if(el(`${p}-title`)) el(`${p}-title`).textContent = 'Getting your location...';
+  if(el(`${p}-sub`))   el(`${p}-sub`).textContent   = 'Please wait';
+  if(el(`${p}-pill`))  el(`${p}-pill`).style.display = 'none';
+  if(el(`${p}-btn`))   el(`${p}-btn`).style.display  = 'none';
+  if(el(`${p}-retry`)) el(`${p}-retry`).style.display= 'none';
+}
+function startCheckin()  { navigator.geolocation.getCurrentPosition(p=>onGPS('ci',p), ()=>onGPSErr('ci'), {timeout:10000,enableHighAccuracy:true}); }
+function startCheckout() { navigator.geolocation.getCurrentPosition(p=>onGPS('co',p), ()=>onGPSErr('co'), {timeout:10000,enableHighAccuracy:true}); }
+function onGPSErr(p) {
+  const el = id => document.getElementById(id);
+  if(el(`${p}-title`)) el(`${p}-title`).textContent = 'Location access denied';
+  if(el(`${p}-sub`))   el(`${p}-sub`).textContent   = 'Please enable location access';
+  if(el(`${p}-retry`)) el(`${p}-retry`).style.display = 'block';
+}
+function onGPS(p, pos) {
+  const dow = new Date().getDay();
+  const el  = id => document.getElementById(id);
+  if (dow===0||dow===6) {
+    if(el(`${p}-title`)) el(`${p}-title`).textContent = 'Weekend!';
+    if(el(`${p}-sub`))   el(`${p}-sub`).textContent   = 'No attendance required today 🌴';
+    return;
+  }
+  userLat = pos.coords.latitude; userLng = pos.coords.longitude;
+  const d = dist(userLat, userLng, OFFICE_LAT, OFFICE_LNG);
+  if(el(`${p}-pill`)) el(`${p}-pill`).style.display = 'flex';
+  if(el(`${p}-dist`)) el(`${p}-dist`).textContent   = `${Math.round(d)}m away`;
+  const inRange = d <= OFFICE_RADIUS;
+  if(el(`${p}-ring`))  { el(`${p}-ring`).className = 'loc-ring '+(inRange?'in-range':'out-range'); el(`${p}-ring`).textContent = inRange?'✓':'✗'; }
+  if(el(`${p}-title`)) el(`${p}-title`).textContent = inRange ? 'You\'re at the office' : 'Too far from office';
+  if(el(`${p}-sub`))   el(`${p}-sub`).textContent   = inRange ? `Ready to ${p==='ci'?'check in':'check out'}` : `${Math.round(d)}m — must be within ${OFFICE_RADIUS}m`;
+  if(el(`${p}-btn`))   el(`${p}-btn`).style.display  = inRange ? 'block' : 'none';
+}
+async function confirmCheckIn() {
+  if (!userLat) { toast('Location not ready','error'); return; }
+  const btn = document.getElementById('ci-btn');
+  btnLoad(btn, 'CHECKING IN...');
+  try {
+    const r = await api('checkin', {lat:userLat, lng:userLng}, {cache:false});
+    toast(r.message||'Checked in! ✅','success');
+    invalidateCache('today_status');
+    employeeData = (await api('profile',{},{cache:false})).employee;
+    showScreen('screen-main'); loadMainScreen();
+  } catch(e) { toast(e.message||'Failed','error'); btnReset(btn); }
+}
+async function confirmCheckOut() {
+  if (!userLat) { toast('Location not ready','error'); return; }
+  const btn = document.getElementById('co-btn');
+  btnLoad(btn, 'CHECKING OUT...');
+  const reason = document.getElementById('early-reason')?.value?.trim()||'';
+  try {
+    const r = await api('checkout', {lat:userLat, lng:userLng, early_reason:reason}, {cache:false});
+    toast(r.message||'Checked out! ✅','success');
+    invalidateCache('today_status');
+    showScreen('screen-main'); loadMainScreen();
+  } catch(e) { toast(e.message||'Failed','error'); btnReset(btn); }
+}
+
+// ── ATTENDANCE HISTORY ────────────────────────────────────────────────────────
+async function loadAttendance() {
+  const body = document.getElementById('att-body');
+  if (!body) return;
+  body.innerHTML = '<div class="loading"><div class="spinner"></div> Loading...</div>';
+  try {
+    const r = await api('attendance_history', {});
+    const records = r.records||[];
+    if (!records.length) { body.innerHTML='<div class="empty"><div class="empty-icon">📊</div><div class="empty-text">No records yet.</div></div>'; return; }
+    const bmap = {present:['badge-present','Present','#4ecb8d'],late:['badge-late','Late','#f5a623'],half_day_unpaid:['badge-half','Half Day','#e05c7a'],on_leave:['badge-leave','On Leave','#5b8def'],absent:['badge-absent','Absent','#e05c7a']};
+    let html = '<div class="att-list">';
+    records.forEach(r => {
+      const [cls,label,color] = bmap[r.status]||['badge-absent','Unknown','#888'];
+      html += `<div class="att-row"><div class="att-dot" style="background:${color};"></div><div class="att-info"><div class="att-date">${fmtDate(r.date)}</div><div class="att-times">In: ${fmtTime(r.check_in_time)} · Out: ${fmtTime(r.check_out_time)}</div></div><span class="badge ${cls}">${label}</span></div>`;
+    });
+    html += '</div>';
+    body.innerHTML = html;
+  } catch(e) { body.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load.</div></div>'; }
+}
+
+// ── PROFILE ───────────────────────────────────────────────────────────────────
+async function loadProfile() {
+  const body = document.getElementById('profile-body');
+  if (!body) return;
+  if (!employeeData) { body.innerHTML='<div class="empty"><div class="empty-icon">👤</div><div class="empty-text">Not registered.</div></div>'; return; }
+  const e = employeeData;
+  body.innerHTML = `
+    <div class="profile-big-card">
+      <div class="pf-avatar">${initials(e.full_name)}</div>
+      <div class="pf-name">${e.full_name}</div>
+      <div class="pf-role">${e.job_title}</div>
+    </div>
+    <div class="info-card">
+      <div class="info-row"><div class="info-key">Employment</div><div class="info-val">${e.employment_type==='fulltime'?'Full Time':'Part Time'}</div></div>
+      <div class="info-row"><div class="info-key">Work Hours</div><div class="info-val">${fmtTimeStr(e.work_start)} – ${fmtTimeStr(e.work_end)}</div></div>
+      <div class="info-row"><div class="info-key">Telegram ID</div><div class="info-val" style="font-family:monospace;font-size:12px;color:var(--text2);">${currentUser?.id}</div></div>
+    </div>`;
+}
+
+// ── MY LEAVES ────────────────────────────────────────────────────────────────
+async function loadMyLeaves() {
+  showScreen('screen-my-leaves');
+  const body = document.getElementById('my-leaves-body');
+  if (!body) return;
+  body.innerHTML = '<div class="loading"><div class="spinner"></div> Loading...</div>';
+  try {
+    const [lr, br] = await Promise.all([api('my_leaves',{}), api('leave_balance',{})]);
+    const leaves = lr.leaves||[];
+    const bal = br;
+    const pct = bal.total>0 ? Math.round((bal.used/bal.total)*100) : 0;
+    let html = `
+      <div class="section-label" style="margin-top:0;">Annual Leave Balance</div>
+      <div class="card" style="margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div style="font-size:24px;font-weight:800;">${bal.remaining} <span style="font-size:13px;color:var(--text3);font-weight:400;">/ ${bal.total} days</span></div>
+          <span class="badge ${bal.remaining>0?'badge-present':'badge-absent'}">${bal.remaining>0?'Has Balance':'Empty'}</span>
+        </div>
+        <div class="al-bar-wrap"><div class="al-bar-fill" style="width:${100-pct}%;"></div></div>
+        <div style="font-size:11px;color:var(--text3);">${bal.used} used · ${bal.remaining} remaining</div>
+      </div>
+      <div class="section-label">Leave History</div>`;
+    if (!leaves.length) { html += '<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">No leave requests yet.</div></div>'; }
+    else {
+      const smap = {pending:['badge-late','Pending'],approved:['badge-present','Approved'],rejected:['badge-absent','Rejected']};
+      leaves.forEach(l => {
+        const [cls,label] = smap[l.status]||['badge-absent','Unknown'];
+        html += `<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;margin-bottom:10px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div style="font-weight:700;font-size:13px;">${l.leave_type.charAt(0).toUpperCase()+l.leave_type.slice(1)} Leave</div><div style="font-size:12px;color:var(--text2);margin-top:4px;">${fmtDate(l.date)}</div><div style="font-size:12px;color:var(--text3);margin-top:4px;">📝 ${l.reason||''}</div></div><span class="badge ${cls}">${label}</span></div></div>`;
+      });
+    }
+    body.innerHTML = html;
+    initLeaveTypes();
+  } catch(e) { body.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load.</div></div>'; }
+}
+
+function goApplyLeave() {
+  showScreen('screen-leave');
+  initLeaveTypes();
+  initCalendar();
+  selectedLeaveDate = null;
+  const chip = document.getElementById('sel-date-chip');
+  const reason = document.getElementById('leave-reason');
+  if (chip) chip.style.display = 'none';
+  if (reason) reason.value = '';
+}
+
+async function initLeaveTypes() {
+  try {
+    const r = await api('leave_balance', {});
+    const hasAL = r.remaining > 0;
+    const annualBtn = document.getElementById('lt-annual');
+    const balEl     = document.getElementById('lt-annual-bal');
+    const notice    = document.getElementById('leave-balance-notice');
+    if (balEl) balEl.textContent = `${r.remaining} days left`;
+    if (!hasAL) {
+      if (annualBtn) { annualBtn.classList.add('disabled'); annualBtn.onclick=null; annualBtn.classList.remove('selected'); }
+      const unpaidBtn = document.getElementById('lt-unpaid');
+      if (unpaidBtn) { unpaidBtn.classList.add('selected'); selectedLeaveType='unpaid'; }
+      if (notice) { notice.style.display='block'; notice.textContent='⚠️ Annual leave balance is 0 — please select Unpaid leave.'; }
+    } else {
+      if (annualBtn) { annualBtn.classList.remove('disabled'); annualBtn.onclick=()=>selectLeaveType('annual',annualBtn); }
+      if (notice) notice.style.display='none';
+    }
+  } catch(e) {}
+}
+
+function selectLeaveType(t, el) {
+  if (el?.classList.contains('disabled')) return;
+  selectedLeaveType = t;
+  document.querySelectorAll('.leave-type-btn').forEach(b=>b.classList.remove('selected'));
+  if (el) el.classList.add('selected');
+}
+
+// ── CALENDAR ─────────────────────────────────────────────────────────────────
+function initCalendar() {
+  const now = new Date();
+  calYear = now.getFullYear(); calMonth = now.getMonth();
+  renderCalendar();
+}
+function changeMonth(dir) { calMonth+=dir; if(calMonth>11){calMonth=0;calYear++;}else if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
+function renderCalendar() {
+  const title = document.getElementById('cal-title');
+  const grid  = document.getElementById('cal-grid');
+  if (!title||!grid) return;
+  title.textContent = new Date(calYear,calMonth,1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
+  const firstDay = new Date(calYear,calMonth,1).getDay();
+  const daysInMonth = new Date(calYear,calMonth+1,0).getDate();
+  const today = new Date(); today.setHours(0,0,0,0);
+  let html = '<div class="cal-row cal-header">'+['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>`<div class="cal-cell cal-day-label">${d}</div>`).join('')+'</div><div class="cal-row">';
+  for(let i=0;i<firstDay;i++) html+=`<div class="cal-cell"></div>`;
+  for(let d=1;d<=daysInMonth;d++) {
+    const dt=new Date(calYear,calMonth,d); dt.setHours(0,0,0,0);
+    const isToday=dt.getTime()===today.getTime();
+    const isSel=selectedLeaveDate&&dt.getTime()===selectedLeaveDate.getTime();
+    const isPast=dt<today;
+    const dow=dt.getDay(); const isWknd=dow===0||dow===6;
+    const cls=['cal-cell cal-day',isToday?'today':'',isSel?'selected':'',isPast||isWknd?'disabled':''].filter(Boolean).join(' ');
+    const ds=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    html+=`<div class="${cls}" ${!isPast&&!isWknd?`onclick="selectLeaveDate('${ds}')"`:''} >${d}</div>`;
+    if((firstDay+d)%7===0&&d<daysInMonth) html+='</div><div class="cal-row">';
+  }
+  html+='</div>';
+  grid.innerHTML=html;
+}
+function selectLeaveDate(ds) {
+  selectedLeaveDate = new Date(ds+'T00:00:00');
+  const chip = document.getElementById('sel-date-chip');
+  const txt  = document.getElementById('sel-date-text');
+  if (chip) chip.style.display='flex';
+  if (txt)  txt.textContent = selectedLeaveDate.toLocaleDateString('en-US',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  renderCalendar();
+}
+
+// ── SUBMIT LEAVE ──────────────────────────────────────────────────────────────
+async function submitLeave() {
+  if (_submitLeaveInProgress) return;
+  if (!selectedLeaveDate) { toast('Please select a date','error'); return; }
+  const reason = document.getElementById('leave-reason')?.value?.trim();
+  if (!reason) { toast('Please provide a reason','error'); return; }
+  _submitLeaveInProgress = true;
+  const btn = document.getElementById('submit-leave-btn');
+  btnLoad(btn, 'SUBMITTING...');
+  try {
+    await api('apply_leave', {leave_type:selectedLeaveType, date:selectedLeaveDate.toISOString().split('T')[0], reason}, {cache:false});
+    toast('Leave request submitted! ✅','success');
+    invalidateCache('my_leaves','leave_balance');
+    selectedLeaveDate = null;
+    if (document.getElementById('leave-reason')) document.getElementById('leave-reason').value='';
+    if (document.getElementById('sel-date-chip')) document.getElementById('sel-date-chip').style.display='none';
+    renderCalendar();
+    setTimeout(() => { _submitLeaveInProgress=false; switchTab('main'); }, 1500);
+  } catch(e) {
+    toast(e.message||'Failed. Please try again.','error');
+    _submitLeaveInProgress=false;
+    btnReset(btn);
+  }
+}
+
 </script>
 </body>
 </html>
