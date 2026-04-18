@@ -568,10 +568,10 @@ textarea { min-height:90px; line-height:1.6; }
 <div class="screen" id="screen-mgr-main">
   <div class="profile-header">
     <div class="profile-info">
-      <div class="profile-avatar-sm" style="font-size:14px;">KV</div>
+      <div class="profile-avatar-sm" style="font-size:14px;" id="mgr-avatar">--</div>
       <div>
-        <div class="profile-name-sm">Kevin</div>
-        <div class="profile-role-sm">Managing Director</div>
+        <div class="profile-name-sm" id="mgr-header-name">Manager</div>
+        <div class="profile-role-sm">elyne HR</div>
       </div>
     </div>
     <div style="font-size:22px;">👔</div>
@@ -950,7 +950,7 @@ async function api(action, data, opts={}) {
   try {
     const r = await fetch(`${API_BASE}/miniapp/${action}`, {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({...data, telegram_id: currentUser?.id}),
+      body: JSON.stringify({...data, telegram_id: currentUser?.id ? parseInt(currentUser.id) : null}),
       signal: controller.signal
     });
     clearTimeout(timeout);
@@ -1306,16 +1306,19 @@ async function loadProfile() {
 // ── MANAGER DASHBOARD ──
 async function loadMgrDashboard() {
   const now = new Date();
-  document.getElementById('mgr-welcome').textContent = `${greet()}.`;
-  document.getElementById('mgr-ov-date').textContent = now.toLocaleDateString('en-US',{day:'numeric',month:'long',year:'numeric'});
-  document.getElementById('mgr-ov-now').textContent = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
-  const list = document.getElementById('mgr-main-list');
-  list.innerHTML = '<div class="loading"><div class="spinner"></div> Loading...</div>';
+  const el = id => document.getElementById(id);
+  // Safe setters — don't crash on null
+  if(el('mgr-welcome'))  el('mgr-welcome').textContent  = `${greet()}.`;
+  if(el('mgr-ov-date'))  el('mgr-ov-date').textContent  = now.toLocaleDateString('en-US',{day:'numeric',month:'long',year:'numeric'});
+  if(el('mgr-ov-now'))   el('mgr-ov-now').textContent   = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
+  const list = el('mgr-main-list');
+  if (!list) return;
+  list.innerHTML = '<div class="loading"><div class="spinner"></div> Loading dashboard...</div>';
   try {
-    const r = await api('mgr_today_status', {});
+    const r = await api('mgr_today_status', {}, {cache:false});
     if (r.is_holiday) {
       ['mgr-stat-present','mgr-stat-late','mgr-stat-leave','mgr-stat-absent'].forEach(id => {
-        document.getElementById(id).textContent = '—';
+        if(el(id)) el(id).textContent = '—';
       });
       list.innerHTML = `<div style="background:linear-gradient(135deg,#f5a623,#f7c948);border-radius:18px;padding:28px;text-align:center;margin:8px 0;">
         <div style="font-size:40px;margin-bottom:12px;">🎉</div>
@@ -1324,29 +1327,43 @@ async function loadMgrDashboard() {
       </div>`;
       return;
     }
-    const {present=[],late=[],absent=[],on_leave=[]}=r;
-    document.getElementById('mgr-stat-present').textContent=present.length;
-    document.getElementById('mgr-stat-late').textContent=late.length;
-    document.getElementById('mgr-stat-leave').textContent=on_leave.length;
-    document.getElementById('mgr-stat-absent').textContent=absent.length;
-    const sections=[
-      {label:'✅ Present',list:present,color:'var(--success)',bg:'var(--success-bg)'},
-      {label:'⏰ Late',list:late,color:'var(--warning)',bg:'var(--warning-bg)'},
-      {label:'🏖️ On Leave',list:on_leave,color:'var(--info)',bg:'var(--info-bg)'},
-      {label:'❌ Absent',list:absent,color:'var(--error)',bg:'var(--error-bg)'},
+    const present  = r.present   || [];
+    const late     = r.late      || [];
+    const absent   = r.absent    || [];
+    const on_leave = r.on_leave  || [];
+    if(el('mgr-stat-present')) el('mgr-stat-present').textContent = present.length;
+    if(el('mgr-stat-late'))    el('mgr-stat-late').textContent    = late.length;
+    if(el('mgr-stat-leave'))   el('mgr-stat-leave').textContent   = on_leave.length;
+    if(el('mgr-stat-absent'))  el('mgr-stat-absent').textContent  = absent.length;
+    const sections = [
+      {label:'✅ Present',  list:present,  color:'var(--success)', bg:'var(--success-bg)'},
+      {label:'⏰ Late',     list:late,     color:'var(--warning)', bg:'var(--warning-bg)'},
+      {label:'🏖️ On Leave', list:on_leave, color:'var(--info)',    bg:'var(--info-bg)'},
+      {label:'❌ Absent',   list:absent,   color:'var(--error)',   bg:'var(--error-bg)'},
     ];
-    let html='';
-    sections.forEach(s=>{
-      if(!s.list.length) return;
-      html+=`<div class="section-label">${s.label}</div><div class="emp-list">`;
-      s.list.forEach(e=>{
-        html+=`<div class="emp-row"><div class="emp-avatar" style="background:${s.bg};color:${s.color};">${initials(e.full_name)}</div><div class="emp-info"><div class="emp-name">${e.full_name}</div><div class="emp-role">${e.job_title}</div></div>${e.check_in_time?`<div style="font-size:12px;font-weight:700;color:${s.color};">${fmtTime(e.check_in_time)}</div>`:''}</div>`;
+    let html = '';
+    sections.forEach(s => {
+      if (!s.list.length) return;
+      html += `<div class="section-label">${s.label}</div><div class="emp-list">`;
+      s.list.forEach(e => {
+        html += `<div class="emp-row">
+          <div class="emp-avatar" style="background:${s.bg};color:${s.color};">${initials(e.full_name)}</div>
+          <div class="emp-info"><div class="emp-name">${e.full_name}</div><div class="emp-role">${e.job_title}</div></div>
+          ${e.check_in_time ? `<div style="font-size:12px;font-weight:700;color:${s.color};">${fmtTime(e.check_in_time)}</div>` : ''}
+        </div>`;
       });
-      html+='</div>';
+      html += '</div>';
     });
-    if(!html) html='<div class="empty"><div class="empty-icon">🌿</div><div class="empty-text">All good — no activity yet.</div></div>';
-    list.innerHTML=html;
-  } catch(e){list.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load dashboard.</div></div>';}
+    if (!html) html = '<div class="empty"><div class="empty-icon">🌿</div><div class="empty-text">No activity yet today.</div></div>';
+    list.innerHTML = html;
+  } catch(e) {
+    console.error('Dashboard load error:', e);
+    list.innerHTML = `<div class="empty">
+      <div class="empty-icon">⚠️</div>
+      <div class="empty-text" style="color:var(--error);">${e.message || 'Could not load dashboard.'}</div>
+      <button class="btn btn-primary" onclick="loadMgrDashboard()" style="margin-top:16px;">Retry</button>
+    </div>`;
+  }
 }
 
 
@@ -1373,7 +1390,6 @@ async function loadMgrLeaves() {
     body.innerHTML=html;
   } catch(e){body.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load.</div></div>';}
 }
-const _processingLeaves = new Set();
 async function processLeave(id, action, btn) {
   if (_processingLeaves.has(id)) return; // prevent double tap
   _processingLeaves.add(id);
@@ -1687,7 +1703,6 @@ async function submitBonus(tid, monthStr, btnEl) {
 }
 
 // Store payroll data safely to avoid inline JSON issues
-const _payrollStore = {};
 function confirmSendPayslip(tid, monthStr) {
   const payrollData = _payrollStore[tid] || {};
   const name = payrollData.full_name || 'Employee';
@@ -2198,7 +2213,20 @@ async function initApp() {
     document.body.innerHTML = '<div style="display:flex;height:100vh;align-items:center;justify-content:center;font-family:Montserrat,sans-serif;text-align:center;padding:24px;"><div><div style="font-size:40px;margin-bottom:16px;">🔒</div><div style="font-size:16px;font-weight:700;">Access Restricted</div><div style="font-size:13px;color:#888;margin-top:8px;">This app is for managers only.</div></div></div>';
     return;
   }
+  // Populate header with real Telegram user data
+  const firstName = currentUser.first_name || '';
+  const lastName  = currentUser.last_name  || '';
+  const fullName  = (firstName + ' ' + lastName).trim();
+  const av        = (firstName[0]||'') + (lastName[0]||'');
+  const avatarEl  = document.getElementById('mgr-avatar');
+  const nameEl    = document.getElementById('mgr-header-name');
+  if (avatarEl) avatarEl.textContent = av.toUpperCase() || 'MG';
+  if (nameEl)   nameEl.textContent   = firstName || 'Manager';
+
   showScreen('screen-mgr-main');
+  // Show loading state immediately so screen isn't blank
+  const list = document.getElementById('mgr-main-list');
+  if (list) list.innerHTML = '<div class="loading"><div class="spinner"></div> Loading dashboard...</div>';
   loadMgrDashboard();
   refreshLeaveBadge();
   setInterval(refreshLeaveBadge, 30000);
