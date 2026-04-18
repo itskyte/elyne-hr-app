@@ -872,6 +872,7 @@ textarea { min-height:90px; line-height:1.6; }
 
 <script>
 
+
 const API_BASE = 'https://elyne-hr-bot-production.up.railway.app';
 const MANAGER_ID = 315830657;
 
@@ -1063,273 +1064,6 @@ function switchMgrTab(tab) {
 }
 
 // ── REGISTER ──
-let selType = 'fulltime';
-function selectType(t) {
-  selType = t;
-  document.getElementById('type-fulltime').className='radio-btn'+(t==='fulltime'?' selected':'');
-  document.getElementById('type-parttime').className='radio-btn'+(t==='parttime'?' selected':'');
-}
-async function submitRegistration() {
-  const name=document.getElementById('reg-name').value.trim();
-  const title=document.getElementById('reg-title').value.trim();
-  if (!name||!title) { toast('Please fill in all fields','error'); return; }
-  const btn = document.querySelector('#screen-register .btn-primary');
-  btnLoad(btn, 'Creating...');
-  try {
-    await api('register',{full_name:name,job_title:title,employment_type:selType},{cache:false});
-    employeeData={full_name:name,job_title:title,employment_type:selType,work_start:selType==='fulltime'?'09:00:00':'13:00:00',work_end:'17:00:00'};
-    toast('Profile created!','success');
-    showScreen('screen-mgr-main'); loadMgrDashboard();
-    else { showScreen('screen-main'); loadMainScreen(); }
-  } catch(e) { toast(e.message||'Failed','error'); }
-}
-
-// ── MAIN ──
-async function loadMainScreen() {
-  const now = new Date();
-  const dow = now.getDay();
-  const isWeekend = dow === 0 || dow === 6;
-  const name = employeeData?.full_name || '';
-  const first = name.split(' ')[0];
-  const av = initials(name||'?');
-  document.getElementById('main-avatar').textContent = av;
-  document.getElementById('main-name').textContent = name;
-  document.getElementById('main-role').textContent = employeeData?.job_title || '';
-  document.getElementById('main-welcome-line').textContent = isWeekend ? `Happy weekend, ${first}! 🌴` : `${greet()}, ${first}!`;
-  // Check for holiday
-  if (!isWeekend) {
-    try {
-      const ts = await api('today_status', {});
-      if (ts.is_holiday) {
-        document.getElementById('main-welcome-line').textContent = `Happy Holiday, ${first}! 🎉`;
-        const body = document.getElementById('main-body');
-        const existing = document.getElementById('holiday-banner');
-        if (!existing) {
-          const banner = document.createElement('div');
-          banner.id = 'holiday-banner';
-          banner.style.cssText = 'background:linear-gradient(135deg,#f5a623,#f7c948);border-radius:16px;padding:18px;margin-bottom:16px;text-align:center;';
-          banner.innerHTML = `<div style="font-size:24px;margin-bottom:6px;">🎉</div>
-            <div style="font-size:15px;font-weight:800;color:#7a4800;">Today is ${ts.holiday_name}</div>
-            <div style="font-size:12px;color:#a06000;margin-top:4px;">Public Holiday — Enjoy your day!</div>`;
-          body.prepend(banner);
-        }
-        // Hide check-in/out cards on holiday
-        document.querySelectorAll('.action-card').forEach(c => c.style.display = 'none');
-        return;
-      }
-    } catch(e) {}
-  }
-  document.getElementById('ov-date').textContent = now.toLocaleDateString('en-US',{day:'numeric',month:'long',year:'numeric'});
-  document.getElementById('ov-now').textContent = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
-  try {
-    const r = await api('today_status',{});
-    document.getElementById('ov-checkin').textContent = r.check_in_time ? fmtTime(r.check_in_time) : '--:--';
-    document.getElementById('ov-checkout').textContent = r.check_out_time ? fmtTime(r.check_out_time) : '--:--';
-  } catch(e) {}
-}
-
-// ── CHECK IN / OUT ──
-async function goCheckIn() {
-  const dow = new Date().getDay();
-  if (dow === 0 || dow === 6) { toast('Today is a weekend — no attendance required 🌴', ''); return; }
-  showScreen('screen-checkin'); resetLoc('ci'); startCheckin();
-}
-async function goCheckOut() {
-  const dow = new Date().getDay();
-  if (dow === 0 || dow === 6) { toast('Today is a weekend — no attendance required 🌴', ''); return; }
-  showScreen('screen-checkout'); resetLoc('co'); startCheckout();
-}
-
-function resetLoc(p) {
-  document.getElementById(`${p}-ring`).className='loc-ring';
-  document.getElementById(`${p}-ring`).textContent='📍';
-  document.getElementById(`${p}-title`).textContent='Locating You...';
-  document.getElementById(`${p}-sub`).textContent='Getting your GPS. Please wait.';
-  document.getElementById(`${p}-pill`).style.display='none';
-  document.getElementById(`${p}-btn`).style.display='none';
-  document.getElementById(`${p}-retry`).style.display='none';
-  if (p==='co') document.getElementById('early-section').style.display='none';
-}
-function startCheckin() { resetLoc('ci'); gps('ci'); }
-function startCheckout() { resetLoc('co'); gps('co'); }
-
-function gps(p) {
-  if (!navigator.geolocation) { locErr(p,'GPS not available.'); return; }
-  navigator.geolocation.getCurrentPosition(
-    pos => onGPS(p,pos),
-    () => locErr(p,'Could not get location. Enable GPS and try again.'),
-    {enableHighAccuracy:true,timeout:15000,maximumAge:0}
-  );
-}
-function onGPS(p,pos) {
-  // Weekend check
-  const dow = new Date().getDay(); // 0=Sun, 6=Sat
-  if (dow === 0 || dow === 6) {
-    document.getElementById(`${p}-ring`).className='loc-ring';
-    document.getElementById(`${p}-ring`).textContent='🌴';
-    document.getElementById(`${p}-title`).textContent='Weekend!';
-    document.getElementById(`${p}-sub`).textContent='Today is a weekend — no attendance required. Enjoy your day off!';
-    return;
-  }
-  userLat=pos.coords.latitude; userLng=pos.coords.longitude;
-  const d=dist(userLat,userLng,OFFICE_LAT,OFFICE_LNG);
-  document.getElementById(`${p}-pill`).style.display='flex';
-  const dv=document.getElementById(`${p}-dist`);
-  dv.textContent=`${Math.round(d)}m away`;
-  if (d<=OFFICE_RADIUS) {
-    dv.className='dist-val ok';
-    document.getElementById(`${p}-ring`).className='loc-ring ok';
-    document.getElementById(`${p}-ring`).textContent='✅';
-    document.getElementById(`${p}-title`).textContent="You're at the office";
-    document.getElementById(`${p}-sub`).textContent=`Confirmed — ${Math.round(d)}m from office.`;
-    if (p==='co') {
-      const now=new Date(); const we=employeeData?.work_end||'17:00:00';
-      const [wh,wm]=we.split(':'); const end=new Date(); end.setHours(parseInt(wh),parseInt(wm),0);
-      if (now<new Date(end.getTime()-15*60*1000)) document.getElementById('early-section').style.display='block';
-    }
-    document.getElementById(`${p}-btn`).style.display='block';
-  } else {
-    dv.className='dist-val far';
-    locErr(p,`You are ${Math.round(d)}m from office. Must be within ${OFFICE_RADIUS}m.`);
-    document.getElementById(`${p}-retry`).style.display='block';
-  }
-}
-function locErr(p,msg) {
-  document.getElementById(`${p}-ring`).className='loc-ring fail';
-  document.getElementById(`${p}-ring`).textContent='❌';
-  document.getElementById(`${p}-title`).textContent='Location Error';
-  document.getElementById(`${p}-sub`).textContent=msg;
-}
-async function confirmCheckIn() {
-  const btn=document.getElementById('ci-btn'); btn.disabled=true; btn.textContent='CHECKING IN...';
-  try {
-    const r=await api('checkin',{lat:userLat,lng:userLng});
-    toast(r.message||'Checked in!','success'); invalidateCache('today_status','mgr_today_status'); await loadMainScreen(); showScreen('screen-main');
-  } catch(e) { toast(e.message,'error'); btn.disabled=false; btn.textContent='CONFIRM CHECK IN'; }
-}
-async function confirmCheckOut() {
-  const er=document.getElementById('early-reason').value.trim();
-  if (document.getElementById('early-section').style.display!=='none'&&!er) { toast('Please provide early leave reason','error'); return; }
-  const btn=document.getElementById('co-btn'); btn.disabled=true; btn.textContent='CHECKING OUT...';
-  try {
-    const r=await api('checkout',{lat:userLat,lng:userLng,early_reason:er||null});
-    toast(r.message||'Checked out!','success'); invalidateCache('today_status','mgr_today_status'); await loadMainScreen(); showScreen('screen-main');
-  } catch(e) { toast(e.message,'error'); btn.disabled=false; btn.textContent='CONFIRM CHECK OUT'; }
-}
-
-// ── CALENDAR ──
-function initCalendar() { const n=new Date(); calYear=n.getFullYear(); calMonth=n.getMonth(); renderCalendar(); }
-function changeMonth(d) { calMonth+=d; if(calMonth>11){calMonth=0;calYear++;} if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
-function renderCalendar() {
-  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('cal-title').textContent=`${months[calMonth]} ${calYear}`;
-  const grid=document.getElementById('cal-grid'); grid.innerHTML='';
-  ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(d=>{const e=document.createElement('div');e.className='cal-day-name';e.textContent=d;grid.appendChild(e);});
-  const first=new Date(calYear,calMonth,1).getDay();
-  const dim=new Date(calYear,calMonth+1,0).getDate();
-  const today=new Date(); today.setHours(0,0,0,0);
-  for(let i=0;i<first;i++) grid.appendChild(document.createElement('div'));
-  for(let d=1;d<=dim;d++) {
-    const el=document.createElement('div'); el.className='cal-day'; el.textContent=d;
-    const td=new Date(calYear,calMonth,d);
-    if(td.toDateString()===new Date().toDateString()) el.classList.add('today');
-    if(td<today) el.classList.add('past');
-    if(selectedLeaveDate&&td.toDateString()===new Date(selectedLeaveDate).toDateString()) el.classList.add('selected');
-    if(td>=today) el.onclick=()=>selDate(calYear,calMonth,d);
-    grid.appendChild(el);
-  }
-}
-function selDate(y,m,d) {
-  selectedLeaveDate=new Date(y,m,d); renderCalendar();
-  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  document.getElementById('sel-date-text').textContent=`${days[selectedLeaveDate.getDay()]}, ${d} ${months[m]} ${y}`;
-  document.getElementById('sel-date-chip').style.display='flex';
-}
-function selectLeaveType(t,el) {
-  if (el.classList.contains('disabled')) return; // blocked
-  selectedLeaveType=t;
-  document.querySelectorAll('.leave-type-btn').forEach(b=>b.classList.remove('selected'));
-  el.classList.add('selected');
-}
-// Called when apply leave button on my-leaves screen is tapped
-function goApplyLeave() {
-  showScreen('screen-leave');
-  initLeaveTypes();
-  initCalendar();
-  selectedLeaveDate = null;
-  document.getElementById('sel-date-chip').style.display = 'none';
-  document.getElementById('leave-reason').value = '';
-}
-
-let _submitLeaveInProgress = false;
-async function submitLeave() {
-  if(_submitLeaveInProgress) return; // prevent double tap
-  if(!selectedLeaveDate){toast('Please select a date','error');return;}
-  const reason=document.getElementById('leave-reason').value.trim();
-  if(!reason){toast('Please provide a reason','error');return;}
-
-  // Disable button immediately
-  _submitLeaveInProgress = true;
-  const btn = document.getElementById('submit-leave-btn');
-  if(btn) { btn.disabled = true; btn.textContent = 'SUBMITTING...'; }
-
-  try {
-    await api('apply_leave',{leave_type:selectedLeaveType,date:selectedLeaveDate.toISOString().split('T')[0],reason},{cache:false});
-    toast('Leave request submitted! ✅','success');
-    invalidateCache('my_leaves','leave_balance','mgr_pending_leaves','mgr_pending_count');
-    selectedLeaveDate=null;
-    document.getElementById('leave-reason').value='';
-    document.getElementById('sel-date-chip').style.display='none';
-    renderCalendar();
-    setTimeout(()=>{ _submitLeaveInProgress=false; switchTab('main'); },1500);
-  } catch(e){
-    toast(e.message||'Failed. Please try again.','error');
-    // Re-enable on failure
-    _submitLeaveInProgress = false;
-    if(btn) { btn.disabled = false; btn.textContent = 'SUBMIT LEAVE REQUEST'; }
-  }
-}
-
-// ── ATTENDANCE ──
-async function loadAttendance() {
-  const body=document.getElementById('att-body');
-  body.innerHTML='<div class="loading"><div class="spinner"></div> Loading...</div>';
-  try {
-    const r=await api('attendance_history',{});
-    const records=r.records||[];
-    if(!records.length){body.innerHTML='<div class="empty"><div class="empty-icon">📊</div><div class="empty-text">No records yet.</div></div>';return;}
-    const bmap={present:['badge-present','Present','#4ecb8d'],late:['badge-late','Late','#f5a623'],half_day_unpaid:['badge-half','Half Day','#e05c7a'],on_leave:['badge-leave','On Leave','#5b8def'],absent:['badge-absent','Absent','#e05c7a']};
-    let html='<div class="att-list">';
-    records.forEach(r=>{
-      const [cls,label,color]=bmap[r.status]||['badge-absent','Unknown','#888'];
-      html+=`<div class="att-row"><div class="att-dot" style="background:${color};"></div><div class="att-info"><div class="att-date">${fmtDate(r.date)}</div><div class="att-times">In: ${fmtTime(r.check_in_time)} · Out: ${fmtTime(r.check_out_time)}</div></div><span class="badge ${cls}">${label}</span></div>`;
-    });
-    html+='</div>'; body.innerHTML=html;
-  } catch(e){body.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load records.</div></div>';}
-}
-
-// ── PROFILE ──
-async function loadProfile() {
-  const body=document.getElementById('profile-body');
-  if(!employeeData){body.innerHTML='<div class="empty"><div class="empty-icon">👤</div><div class="empty-text">Not registered.</div></div>';return;}
-  const ws=fmtTimeStr(employeeData.work_start||'09:00:00');
-  const we=fmtTimeStr(employeeData.work_end||'17:00:00');
-  body.innerHTML=`
-    <div class="profile-big-card">
-      <div class="pf-avatar">${initials(employeeData.full_name)}</div>
-      <div class="pf-name">${employeeData.full_name}</div>
-      <div class="pf-role">${employeeData.job_title}</div>
-    </div>
-    <div class="info-card">
-      <div class="info-row"><div class="info-key">Employment Type</div><div class="info-val">${employeeData.employment_type==='fulltime'?'Full Time':'Part Time'}</div></div>
-      <div class="info-row"><div class="info-key">Work Hours</div><div class="info-val">${ws} – ${we}</div></div>
-      <div class="info-row"><div class="info-key">Work Days</div><div class="info-val">Mon – Fri</div></div>
-      <div class="info-row"><div class="info-key">Telegram ID</div><div class="info-val" style="font-size:12px;font-family:monospace;color:var(--text2);">${currentUser?.id}</div></div>
-    </div>`;
-}
-
-// ── MANAGER DASHBOARD ──
 async function loadMgrDashboard() {
   const now = new Date();
   const el = id => document.getElementById(id);
@@ -1416,46 +1150,6 @@ async function loadMgrLeaves() {
     body.innerHTML=html;
   } catch(e){body.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">Could not load.</div></div>';}
 }
-async function processLeave(id, action, btn) {
-  if (_processingLeaves.has(id)) return; // prevent double tap
-  _processingLeaves.add(id);
-
-  // Disable both buttons immediately and show processing state
-  const approveBtn = document.getElementById(`btn-approve-${id}`);
-  const rejectBtn  = document.getElementById(`btn-reject-${id}`);
-  const actionsDiv = document.getElementById(`leave-actions-${id}`);
-  if (approveBtn) { approveBtn.disabled = true; approveBtn.style.opacity = '0.4'; }
-  if (rejectBtn)  { rejectBtn.disabled = true;  rejectBtn.style.opacity = '0.4'; }
-  if (actionsDiv) actionsDiv.innerHTML = `<div style="text-align:center;width:100%;padding:10px;font-size:13px;color:var(--text2);font-weight:600;">Processing...</div>`;
-
-  try {
-    await api('mgr_process_leave', {leave_id:id, action}, {cache:false});
-    // Show result inline on the card before reloading
-    const card = document.getElementById(`leave-card-${id}`);
-    if (card) {
-      card.style.opacity = '0.5';
-      card.style.borderLeftColor = action === 'approved' ? 'var(--success)' : 'var(--error)';
-      const resultDiv = document.createElement('div');
-      resultDiv.style.cssText = 'text-align:center;padding:10px;font-size:13px;font-weight:700;';
-      resultDiv.style.color = action === 'approved' ? 'var(--success)' : 'var(--error)';
-      resultDiv.textContent = action === 'approved' ? '✅ Approved' : '❌ Rejected';
-      if (actionsDiv) actionsDiv.replaceWith(resultDiv);
-    }
-    toast(action === 'approved' ? 'Leave approved ✅' : 'Leave rejected', '');
-    _processingLeaves.delete(id);
-    // Reload after short delay so manager sees the result
-    setTimeout(() => loadMgrLeaves(), 1500);
-  } catch(e) {
-    toast(e.message || 'Failed. Try again.', 'error');
-    _processingLeaves.delete(id);
-    // Re-enable buttons on failure
-    if (actionsDiv) actionsDiv.innerHTML = `
-      <button class="btn-approve" id="btn-approve-${id}" onclick="processLeave(${id},'approved',this)">✅ Approve</button>
-      <button class="btn-reject"  id="btn-reject-${id}"  onclick="processLeave(${id},'rejected',this)">❌ Reject</button>`;
-  }
-}
-
-// ── MANAGER REPORT ──
 function initMonthPicker() {
   const grid=document.getElementById('month-picker-grid');
   const today=new Date();
@@ -1841,20 +1535,6 @@ async function loadMgrProfile() {
 }
 
 
-
-// ── MODAL SYSTEM ──
-function openModal(html) {
-  document.getElementById('modal-content').innerHTML = html;
-  document.getElementById('modal-overlay').style.display = 'flex'; document.getElementById('modal-overlay').style.visibility = 'visible';
-  document.body.style.overflow = 'hidden';
-}
-function closeModal(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModalDirect();
-}
-function closeModalDirect() {
-  document.getElementById('modal-overlay').style.display = 'none'; document.getElementById('modal-overlay').style.visibility = 'hidden';
-  document.body.style.overflow = '';
-}
 
 // ── PENDING LEAVE BADGE ──
 async function refreshLeaveBadge() {
@@ -2256,6 +1936,7 @@ async function initApp() {
   setInterval(refreshLeaveBadge, 30000);
 }
 window.addEventListener('load', initApp);
+
 
 </script>
 </body>
